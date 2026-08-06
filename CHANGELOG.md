@@ -2,6 +2,24 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.1.1] - 2026-08-06
+
+**打磨**：EvoSkills 审计闭环修复 + tdd 技能首轮迭代（evoskills 六步循环实战）。
+
+### 引擎修复（adapters/zcode/evoskills.py）
+- 审计闭环缺陷：`needs_revision` 仅由历史成功率判定，发布修订版后成功率不变，导致"发布后重审计确认健康度回升"永远无法达成 → 新增 `_revision_published_since_last_issue()`：技能文件在最近失败/改进记录之后被修改过即视为已发布修订版，不再重复报修订，改为等待新样本
+- 审计报告新增状态："✓ 已发布修订版，等待新样本"
+
+### 技能迭代（skills/tdd）
+- 审计触发：5 次使用 3 成功 2 失败、成功率 60% < 70%（教训：跳过测试直接改引入回归；没建反馈回路浪费两轮）
+- 双版本补"启动门槛"：动手前确认反馈回路就绪；紧急修复先写复现测试、性能优化先写基准/特征测试，禁止跳过测试直接改
+
+### 测试（首个测试框架落地）
+- `adapters/tests/test_evoskills.py`：审计闭环 4 用例（unittest 零依赖，`python3 -m unittest discover -s adapters/tests`）
+
+### 验证
+- 4/4 测试通过；`zcode skill audit tdd` 显示已发布修订版；`zcode market validate` 全部通过
+
 ## [0.1.0] - 2025-08-06
 
 **里程碑**：四层架构全部落地 + 真机端到端验证（Qwen3.6-35B / llama.cpp / 256K）。

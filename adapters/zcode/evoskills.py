@@ -36,6 +36,7 @@ class SkillAudit:
     improvements: list[str] = field(default_factory=list)  # 未处理改进建议
     success_rate: float = 0.0
     needs_revision: bool = False
+    revision_published: bool = False  # 技能文件在最近失败/改进后已修改（修订版已发布）
 
     @property
     def summary(self) -> str:
@@ -88,6 +89,30 @@ def _read_improvements(skill_name: str) -> list[str]:
     return out
 
 
+def _revision_published_since_last_issue(skill_dir: Path, log_path: Path) -> bool:
+    """技能文件是否在最近一次失败/改进记录之后被修改过（即已发布修订版）。
+
+    用于审计闭环：发布修订版后，不再仅因历史成功率建议修订，改为等待新样本。
+    无法判定（无技能文件 / 无记录 / 日期解析失败）时返回 False，退化为原逻辑。
+    """
+    skill_files = [p for p in (skill_dir / "SKILL.md", skill_dir / "SKILL.local.md") if p.exists()]
+    if not skill_files or not log_path.exists():
+        return False
+    latest_issue = datetime.min
+    for line in log_path.read_text(encoding="utf-8").splitlines():
+        m = _LOG_LINE_RE.match(line)
+        if m and m.group("result") in ("失败", "改进"):
+            try:
+                d = datetime.strptime(m.group("date"), "%Y-%m-%d")
+            except ValueError:
+                continue
+            if d > latest_issue:
+                latest_issue = d
+    if latest_issue == datetime.min:
+        return False
+    return max(p.stat().st_mtime for p in skill_files) > latest_issue.timestamp()
+
+
 def audit_skill(skill_name: str) -> SkillAudit:
     """评估技能健康度：成功率 + 未处理改进建议 → 是否需要修订。"""
     d = _skill_dir(skill_name)
@@ -106,12 +131,16 @@ def audit_skill(skill_name: str) -> SkillAudit:
     audit.improvements = _read_improvements(skill_name)
     if audit.total > 0:
         audit.success_rate = audit.results.get("成功", 0) / audit.total
+    published = _revision_published_since_last_issue(d, path)
     audit.needs_revision = (
-        audit.total > 0 and (
+        audit.total > 0
+        and not published
+        and (
             audit.success_rate < SUCCESS_RATE_THRESHOLD
             or len(audit.improvements) >= IMPROVEMENTS_THRESHOLD
         )
     )
+    audit.revision_published = published
     return audit
 
 
@@ -119,7 +148,10 @@ def print_audit(audit: SkillAudit) -> None:
     """打印审计报告。"""
     print(f"技能: {audit.skill}")
     print(f"  评估: {audit.summary}")
-    print(f"  健康度: {'⚠ 建议修订（生成改进版本）' if audit.needs_revision else '✓ 运行健康'}")
+    if audit.revision_published:
+        print("  健康度: ✓ 已发布修订版，等待新样本（不因历史低成功率重复报修订）")
+    else:
+        print(f"  健康度: {'⚠ 建议修订（生成改进版本）' if audit.needs_revision else '✓ 运行健康'}")
     if audit.lessons:
         print("  经验教训:")
         for lesson in audit.lessons[:10]:
