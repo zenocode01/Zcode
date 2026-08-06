@@ -9,7 +9,7 @@ __pycache__/
 *.egg-info/
 
 # 技能运行时记忆（经验/改进/项目快照，本地运行数据不入库）
-skills/**/.memory/
+.memory/
 # 例外：_template 的记忆模板作为规范入库
 !skills/_template/.memory/
 !skills/_template/.memory/**

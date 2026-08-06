@@ -27,6 +27,7 @@ from .metaskill import (
     run_metaskill,
 )
 from .providers import OpenAICompatProvider
+from .handoff import save_handoff, load_handoff
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -215,6 +216,37 @@ def cmd_memory_add(args: argparse.Namespace) -> int:
     return 0
 
 
+def _csv(values: str | None) -> list[str] | None:
+    """逗号分隔字符串 → 列表（去空）。"""
+    if values is None:
+        return None
+    return [v.strip() for v in values.split(",") if v.strip()]
+
+
+def cmd_handoff_save(args: argparse.Namespace) -> int:
+    path = save_handoff(
+        project_dir=args.project,
+        global_store=args.global_store,
+        goal=args.goal or "",
+        achieved=_csv(args.achieved),
+        in_progress=_csv(args.in_progress),
+        decisions=_csv(args.decisions),
+        validation=_csv(args.validation),
+        next_steps=_csv(args.next),
+    )
+    print(f"✓ 会话接力快照已保存: {path}")
+    return 0
+
+
+def cmd_handoff_load(args: argparse.Namespace) -> int:
+    content = load_handoff(project_dir=args.project, global_store=args.global_store)
+    if not content:
+        print("（无会话接力快照；用 zcode handoff save 创建）")
+        return 0
+    print(content, end="")
+    return 0
+
+
 def cmd_memory_search(args: argparse.Namespace) -> int:
     store = _load_memstore(args)
     try:
@@ -300,6 +332,23 @@ def main(argv: list[str] | None = None) -> int:
     sp_mem_list = mem_sub.add_parser("list", help="列出记忆")
     sp_mem_list.add_argument("--user", default="default")
     sp_mem_list.set_defaults(func=cmd_memory_list)
+
+    sp_handoff = sub.add_parser("handoff", help="会话接力（Layer 3）")
+    ho_sub = sp_handoff.add_subparsers(dest="handoff_command", required=True)
+    sp_ho_save = ho_sub.add_parser("save", help="保存接力快照（会话结束时）")
+    sp_ho_save.add_argument("--goal", default="", help="当前目标")
+    sp_ho_save.add_argument("--achieved", default="", help="已完成（逗号分隔）")
+    sp_ho_save.add_argument("--in-progress", default="", help="进行中（逗号分隔）")
+    sp_ho_save.add_argument("--decisions", default="", help="决策记录（逗号分隔）")
+    sp_ho_save.add_argument("--validation", default="", help="验证结果（逗号分隔）")
+    sp_ho_save.add_argument("--next", default="", help="下一步建议（逗号分隔）")
+    sp_ho_save.add_argument("--project", default=None, help="项目目录（默认当前目录）")
+    sp_ho_save.add_argument("--global", dest="global_store", action="store_true", help="存全局 ~/.zcode/handoff.md")
+    sp_ho_save.set_defaults(func=cmd_handoff_save)
+    sp_ho_load = ho_sub.add_parser("load", help="读取接力快照（会话开始时）")
+    sp_ho_load.add_argument("--project", default=None)
+    sp_ho_load.add_argument("--global", dest="global_store", action="store_true")
+    sp_ho_load.set_defaults(func=cmd_handoff_load)
 
     args = parser.parse_args(argv)
     return args.func(args)
