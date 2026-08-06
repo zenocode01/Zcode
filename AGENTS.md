@@ -27,9 +27,10 @@
   - 会话接力:`zcode handoff save/load` + `skills/handoff`(模板化快照,不依赖历史聊天)
   - 子代理编排:`skills/subagent-driven-development`(独立上下文/ledger/逐任务审查/5轮修复cap) + 3 个提示词模板 + `zcode tools list` 工具映射表
   - 自我迭代(EvoSkills):`zcode skill log/audit`(捕获使用记录/评估健康度,阈值 70%/2条) + `skills/evoskills` 元技能(监控→捕获→评估→迭代→验证→发布)
+  - 技能市场与质量评估(Phase 4 起步):`zcode market list/validate/generate` + `marketplace.json` + `.claude-plugin/`(Claude Code 深度插件,参考 mem0 格式)
   - `scripts/install.sh` —— 跨平台一键安装;`hooks/` —— git 安全守卫;`bin/zcode.js` + `package.json` —— npm 分发入口
 - Git 仓库已有提交(`main` 分支);无远程仓库
-- 尚未实现:各平台深度插件(`plugin.json`)、技能市场、技能质量评估体系
+- 尚未实现:技能市场远程分发与社区贡献、其余平台深度插件、技能市场发布
 
 任何 AI 代理在本仓库中的工作,都应从推动"实施路线图"的下一步开始,而不是假设已有功能。
 
