@@ -28,6 +28,7 @@ from .metaskill import (
 )
 from .providers import OpenAICompatProvider
 from .handoff import save_handoff, load_handoff
+from .evoskills import log_skill_use, audit_skill, print_audit
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -259,6 +260,28 @@ def cmd_tools(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_skill_log(args: argparse.Namespace) -> int:
+    """捕获技能使用记录（EvoSkills 监控/捕获）。"""
+    try:
+        path = log_skill_use(args.name, args.result, lesson=args.lesson, context=args.context)
+    except (FileNotFoundError, ValueError) as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    print(f"✓ 已记录技能使用: {path}")
+    return 0
+
+
+def cmd_skill_audit(args: argparse.Namespace) -> int:
+    """评估技能健康度（EvoSkills 评估）。"""
+    try:
+        audit = audit_skill(args.name)
+    except FileNotFoundError as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    print_audit(audit)
+    return 0
+
+
 def cmd_memory_search(args: argparse.Namespace) -> int:
     store = _load_memstore(args)
     try:
@@ -365,6 +388,18 @@ def main(argv: list[str] | None = None) -> int:
     sp_tools = sub.add_parser("tools", help="工具映射表（Layer 0）")
     sp_tools.add_argument("list", nargs="?")
     sp_tools.set_defaults(func=cmd_tools)
+
+    sp_skill = sub.add_parser("skill", help="技能自我迭代（EvoSkills, Layer 3）")
+    sk_sub = sp_skill.add_subparsers(dest="skill_command", required=True)
+    sp_sk_log = sk_sub.add_parser("log", help="记录技能使用（捕获）")
+    sp_sk_log.add_argument("name", help="技能名（如 tdd）")
+    sp_sk_log.add_argument("result", choices=["成功", "失败", "改进"], help="使用结果")
+    sp_sk_log.add_argument("--lesson", default="", help="一句话教训")
+    sp_sk_log.add_argument("--context", default="", help="使用场景")
+    sp_sk_log.set_defaults(func=cmd_skill_log)
+    sp_sk_audit = sk_sub.add_parser("audit", help="评估技能健康度")
+    sp_sk_audit.add_argument("name", help="技能名")
+    sp_sk_audit.set_defaults(func=cmd_skill_audit)
 
     args = parser.parse_args(argv)
     return args.func(args)
