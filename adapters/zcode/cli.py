@@ -247,6 +247,18 @@ def cmd_handoff_load(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_tools(args: argparse.Namespace) -> int:
+    """展示工具映射表（Layer 0：统一子代理接口 → 8 平台）。"""
+    from .tool_mapping import TOOL_MAP
+
+    print("工具映射表（统一子代理接口 → 各平台）：")
+    for platform, tools in TOOL_MAP.items():
+        print(f"  {platform}:")
+        for key, value in tools.items():
+            print(f"    {key:<9} {value}")
+    return 0
+
+
 def cmd_memory_search(args: argparse.Namespace) -> int:
     store = _load_memstore(args)
     try:
@@ -349,6 +361,10 @@ def main(argv: list[str] | None = None) -> int:
     sp_ho_load.add_argument("--project", default=None)
     sp_ho_load.add_argument("--global", dest="global_store", action="store_true")
     sp_ho_load.set_defaults(func=cmd_handoff_load)
+
+    sp_tools = sub.add_parser("tools", help="工具映射表（Layer 0）")
+    sp_tools.add_argument("list", nargs="?")
+    sp_tools.set_defaults(func=cmd_tools)
 
     args = parser.parse_args(argv)
     return args.func(args)

@@ -28,14 +28,17 @@ class Step:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Step":
-        """从 YAML 步骤构造；支持 skill/prompt/command 三种键。"""
+        """从 YAML 步骤构造；支持 skill/prompt/command/subagent 四种键。"""
         if "skill" in data:
             return cls(kind="skill", value=data["skill"], when=str(data.get("when", "true")), prompt=data.get("prompt", ""))
         if "prompt" in data:
             return cls(kind="prompt", value=data["prompt"], when=str(data.get("when", "true")))
         if "command" in data:
             return cls(kind="command", value=data["command"], when=str(data.get("when", "true")))
-        raise ValueError(f"步骤必须含 skill/prompt/command 之一: {data}")
+        if "subagent" in data:
+            # 子代理步骤：值为任务描述，实际执行由宿主子代理工具完成
+            return cls(kind="subagent", value=data["subagent"], when=str(data.get("when", "true")), prompt=data.get("prompt", ""))
+        raise ValueError(f"步骤必须含 skill/prompt/command/subagent 之一: {data}")
 
 
 @dataclass
@@ -115,6 +118,10 @@ def plan_workflow(wf: Workflow, variables: dict | None = None, skill_variant: st
             })
         elif step.kind == "prompt":
             plan.append({"index": i, "kind": "prompt", "instruction": step.value})
+        elif step.kind == "subagent":
+            # 子代理步骤：提示宿主派子代理执行（不在此处真正创建子代理）
+            note = "（此步应派子代理执行，见 skills/subagent-driven-development）"
+            plan.append({"index": i, "kind": "subagent", "instruction": f"{step.value} {note}"})
         else:  # command
             plan.append({"index": i, "kind": "command", "instruction": step.value})
     return plan

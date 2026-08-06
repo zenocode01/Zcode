@@ -14,6 +14,7 @@
 | `code-review` | 代码审查 | SHA 派审 + 分级反馈处理 | 标准 + 本地精简 |
 | `improve-arch` | 架构治理 | 浅模块→深模块，候选报告 + 逐项决策（仅用户调用） | 标准 + 本地精简 |
 | `handoff` | 会话接力 | 会话开始读快照恢复、结束存快照（目标/决策/验证） | 标准 + 本地精简 |
+| `subagent-driven-development` | 子代理编排 | 每任务派独立子代理 + 逐任务审查 + 5 轮修复 cap | 标准 + 本地精简 |
 
 **技能链依赖**（移植自 Superpowers）：`brainstorming` → `writing-plans` →（执行）→ `code-review`，交接点必须保留。
 
