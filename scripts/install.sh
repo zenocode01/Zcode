@@ -96,7 +96,7 @@ write_config() {
     if [[ ! -f "$config" ]]; then
         cat > "$config" <<EOF
 # Zcode 本地配置（首次安装自动生成）
-default_profile = "local-qwen3.6-27b"
+default_profile = "local-qwen3.6-35b"
 memory_dir = "$ZCODE_HOME/memory"
 skill_repo = "$REPO_ROOT"
 EOF

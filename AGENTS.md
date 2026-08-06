@@ -22,7 +22,7 @@
   - `docs/本地小模型优化-设计草案.md` —— 面向 Qwen3.6-27B(llama.cpp / 256K)的本地优化设计
 - 已落地:
   - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),7 个核心技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch) + `_template/` 模板
-  - `adapters/` —— Python 包 `zcode`(profile 加载、OpenAI 兼容 Provider、工具三层降级、CLI)、`profiles/local-qwen3.6-27b.yaml`、8 平台 `platforms/*/INSTALL.md`
+  - `adapters/` —— Python 包 `zcode`(profile 加载、OpenAI 兼容 Provider、工具三层降级、CLI)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
   - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` 示例 + 引擎 `zcode/workflow.py`
   - `metaskills/` —— MetaSkill 自由编排(Layer 2):模型生成计划 + 复用执行器;profile 字段 `orchestration`(本地默认 deterministic)
   - `scripts/install.sh` —— 跨平台一键安装(主目标 `~/.agents/skills` + 8 平台原生目录双保险)
@@ -130,7 +130,7 @@
 ## 构建 / 测试 / 部署
 
 - **安装 zcode CLI**:`python3 -m venv .venv && .venv/bin/pip install -e ./adapters`(PEP 668 环境必须用 venv)
-- **CLI 验证命令**:`.venv/bin/zcode skills list`、`.venv/bin/zcode --profile local-qwen3.6-27b info`、`.venv/bin/zcode platforms list`、`.venv/bin/zcode workflow list`、`.venv/bin/zcode workflow run feature-dev --dry-run`
+- **CLI 验证命令**:`.venv/bin/zcode skills list`、`.venv/bin/zcode --profile local-qwen3.6-35b info`、`.venv/bin/zcode platforms list`、`.venv/bin/zcode workflow list`、`.venv/bin/zcode workflow run feature-dev --dry-run`
 - **跨平台安装**:`bash scripts/install.sh`(全局,主目标 `~/.agents/skills`);`--project <dir>` 项目级;`--uninstall` 卸载
 - **npm 分发**:`npm link` 后 `zcode` 可用(需先安装 Python 包)
 - **测试命令**:暂无测试框架;技能质量评估体系待建立(Phase 4)

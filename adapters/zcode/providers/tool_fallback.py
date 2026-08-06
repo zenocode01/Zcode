@@ -42,7 +42,8 @@ def _format_tools_l1(tools: list[dict]) -> str:
 
 def encode_tools_l1(tools: list[dict]) -> str:
     """把工具定义编码为提示词文本（L1）。"""
-    return _TOOL_TEMPLATE.format(tools_text=_format_tools_l1(tools))
+    # 用 replace 而非 .format()，避免模板示例里的 JSON 花括号被误解析
+    return _TOOL_TEMPLATE.replace("{tools_text}", _format_tools_l1(tools))
 
 
 def parse_tool_call_l1(text: str) -> list[dict] | None:
@@ -76,7 +77,22 @@ def chat_with_tools(
     """
     tools = tools or []
     if tool_level >= 2 and tools:
-        # L2: 原生 tool calling 透传（模型支持与否由探测决定）
+        # L2: 原生 tool calling——用 chat_message 拿完整消息（tool_calls 在 content 之外）
+        if hasattr(provider, "chat_message"):
+            msg = provider.chat_message(messages, tools=tools)
+            calls = None
+            raw_calls = msg.get("tool_calls")
+            if raw_calls:
+                calls = []
+                for c in raw_calls:
+                    fn = c.get("function", {})
+                    args_raw = fn.get("arguments", "{}")
+                    try:
+                        arguments = json.loads(args_raw) if args_raw else {}
+                    except json.JSONDecodeError:
+                        arguments = args_raw
+                    calls.append({"name": fn.get("name", "?"), "arguments": arguments})
+            return {"text": msg.get("content", ""), "tool_calls": calls, "tool_level": 2}
         text = provider.chat(messages, tools=tools)
         return {"text": text, "tool_calls": None, "tool_level": 2}
 
@@ -100,8 +116,7 @@ def chat_with_tools(
 def detect_tool_level(provider, model_hint: str = "") -> int:
     """探测模型工具调用能力（一次性小基准）。
 
-    让模型调用一个"返回 42"的测试工具；能按 L1 格式输出 → 1；
-    模型家族含 qwen/glm 且声称支持 tool call → 建议 2（需实测）；其余 → 0。
+    先测 L2（原生 tool calling），失败再测 L1（提示词编码），都不行 → 0。
     端点不可用时返回 -1。
     """
     if not hasattr(provider, "_endpoint_available") or not provider._endpoint_available():
@@ -116,17 +131,23 @@ def detect_tool_level(provider, model_hint: str = "") -> int:
         },
     }]
     probe_messages = [{"role": "user", "content": "请调用 get_answer 工具。"}]
+
+    # L2 探测：原生 tool calling
+    try:
+        result = chat_with_tools(provider, probe_messages, probe_tools, tool_level=2)
+        if result["tool_calls"]:
+            return 2
+    except Exception:
+        pass
+
+    # L1 探测：提示词编码格式
     try:
         result = chat_with_tools(provider, probe_messages, probe_tools, tool_level=1)
         if result["tool_calls"]:
             return 1
-        text = result["text"].lower()
-        # 模型回复了 42 但没走格式 → 弱工具；原生 tool calling 需 L2 测试
-        if "42" in text:
-            # 家族提示：qwen/glm 系列本地版通常支持原生 tools
-            if any(k in model_hint.lower() for k in ("qwen", "glm")):
-                return 2
+        if "42" in result["text"]:
             return 1
-        return 0
     except Exception:
-        return 0
+        pass
+
+    return 0

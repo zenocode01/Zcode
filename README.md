@@ -13,7 +13,7 @@ bash scripts/install.sh
 
 # 3. 查看技能 / profile / 平台支持
 zcode skills list
-zcode --profile local-qwen3.6-27b info
+zcode --profile local-qwen3.6-35b info
 zcode platforms list
 ```
 

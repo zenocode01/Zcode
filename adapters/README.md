@@ -7,7 +7,7 @@
 | 模块 | 说明 |
 |------|------|
 | `zcode/` | Python 包：profile 加载、LLM Provider 抽象、CLI |
-| `profiles/` | 本地模型能力声明（当前：`local-qwen3.6-27b.yaml`） |
+| `profiles/` | 本地模型能力声明（当前：`local-qwen3.6-35b.yaml`） |
 | `platforms/` | 8 平台适配文档（技能目录路径 + 配置要点） |
 
 ## 安装

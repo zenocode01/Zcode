@@ -27,6 +27,31 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
 PROFILES_DIR = REPO_ROOT / "adapters" / "profiles"
 PLATFORMS_DIR = REPO_ROOT / "adapters" / "platforms"
+ZCODE_CONFIG = Path.home() / ".zcode" / "config"
+
+
+def _default_profile_name() -> str:
+    """从 ~/.zcode/config 读默认 profile 名（install.sh 生成）。"""
+    if ZCODE_CONFIG.exists():
+        for line in ZCODE_CONFIG.read_text(encoding="utf-8").splitlines():
+            if line.strip().startswith("default_profile"):
+                return line.split("=", 1)[1].strip().strip('"')
+    return "local-qwen3.6-35b"
+
+
+def _load_default_profile():
+    """加载默认 profile（metaskill 等需调用模型的命令使用）。"""
+    name = _default_profile_name()
+    return load_profile(PROFILES_DIR / f"{name}.yaml")
+
+
+def _make_provider(profile):
+    """从 profile 的 memory.llm 配置构造 OpenAI 兼容 Provider。"""
+    llm = (profile.memory.llm if profile.memory else {}) or {}
+    return OpenAICompatProvider(
+        base_url=llm.get("base_url", "http://127.0.0.1:8080/v1"),
+        model=llm.get("model", profile.model_family),
+    )
 
 # 8 平台技能目录（与 install.sh 保持一致；路径依据调查报告确认）
 PLATFORMS = {
@@ -153,7 +178,12 @@ def cmd_metaskill_run(args: argparse.Namespace) -> int:
     except (FileNotFoundError, ValueError) as e:
         print(f"错误: {e}", file=sys.stderr)
         return 1
-    provider = OpenAICompatProvider()
+    try:
+        profile = _load_default_profile()
+    except (FileNotFoundError, ValueError) as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    provider = _make_provider(profile)
     return run_metaskill(ms, provider, task=args.task or "", dry_run=args.dry_run)
 
 
@@ -164,7 +194,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--profile", "-p", default=None,
-        help="profile 名称（用于 info 子命令，如 local-qwen3.6-27b）",
+        help="profile 名称（用于 info 子命令，如 local-qwen3.6-35b）",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
