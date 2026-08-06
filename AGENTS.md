@@ -23,11 +23,12 @@
 - 已落地:
   - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),7 个核心技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch) + `_template/` 模板
   - `adapters/` —— Python 包 `zcode`(profile 加载、OpenAI 兼容 Provider、工具三层降级、CLI)、`profiles/local-qwen3.6-27b.yaml`、8 平台 `platforms/*/INSTALL.md`
-  - `workflows/` —— 确定性工作流模板(Layer 2 起步):`feature-dev` 示例 + 引擎 `zcode/workflow.py`
+  - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` 示例 + 引擎 `zcode/workflow.py`
+  - `metaskills/` —— MetaSkill 自由编排(Layer 2):模型生成计划 + 复用执行器;profile 字段 `orchestration`(本地默认 deterministic)
   - `scripts/install.sh` —— 跨平台一键安装(主目标 `~/.agents/skills` + 8 平台原生目录双保险)
   - `hooks/` —— git 安全守卫示例;`bin/zcode.js` + `package.json` —— npm 分发入口
 - Git 仓库已有提交(`main` 分支);无远程仓库
-- 尚未实现:Layer 2 编排增强(MetaSkill/子代理编排)、Layer 3 记忆层(mem0,Phase 3)、各平台深度插件、Embedding 选型
+- 尚未实现:Layer 2 子代理编排、Layer 3 记忆层(mem0,Phase 3)、各平台深度插件、Embedding 选型
 
 任何 AI 代理在本仓库中的工作,都应从推动"实施路线图"的下一步开始,而不是假设已有功能。
 

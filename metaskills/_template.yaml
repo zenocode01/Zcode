@@ -1,0 +1,12 @@
+# MetaSkill 模板：复制本文件为新 MetaSkill 起点
+name: <your-metaskill>
+description: <一句话说明何时使用>
+when: <触发场景描述>
+
+skills:
+  - <技能名1>
+  - <技能名2>
+
+rules:
+  - "<硬约束1，逐字给模型>"
+  - "<硬约束2>"

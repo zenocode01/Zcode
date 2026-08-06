@@ -6,6 +6,7 @@ context_window: 262144          # 256K
 tool_level: 1                   # 待自动探测：0=无工具 1=提示词编码 2=原生 tool calling
 json_reliability: medium        # 待部署实测：low / medium / high
 skill_variant: local            # 加载 SKILL.local.md
+orchestration: deterministic    # 本地小模型默认走确定性模板；MetaSkill 强模型才开
 
 memory:
   llm:

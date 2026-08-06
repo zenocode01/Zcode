@@ -34,6 +34,7 @@ class Profile:
     tool_level: int
     json_reliability: str = "low"
     skill_variant: str = "local"
+    orchestration: str = "deterministic"  # deterministic=模板（本地默认） meta=模型自由编排
     memory: MemoryConfig | None = None
     extra: dict = field(default_factory=dict)
 
@@ -55,7 +56,7 @@ class Profile:
             )
 
         known = {"name", "model_family", "context_window", "tool_level",
-                 "json_reliability", "skill_variant", "memory"}
+                 "json_reliability", "skill_variant", "orchestration", "memory"}
         extra = {k: v for k, v in data.items() if k not in known}
 
         return cls(
@@ -65,6 +66,7 @@ class Profile:
             tool_level=int(data["tool_level"]),
             json_reliability=data.get("json_reliability", "low"),
             skill_variant=data.get("skill_variant", "local"),
+            orchestration=data.get("orchestration", "deterministic"),
             memory=memory,
             extra=extra,
         )

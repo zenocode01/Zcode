@@ -15,6 +15,13 @@ from pathlib import Path
 
 from .profile import load_profile
 from .workflow import WORKFLOWS_DIR, list_workflows, load_workflow, run_workflow
+from .metaskill import (
+    METASKILLS_DIR,
+    list_metaskills,
+    load_metaskill,
+    run_metaskill,
+)
+from .providers import OpenAICompatProvider
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -70,6 +77,7 @@ def cmd_info(args: argparse.Namespace) -> int:
     print(f"  工具级别: {p.tool_level}  (0=无工具 1=提示词编码 2=原生 tool calling)")
     print(f"  JSON 可靠性: {p.json_reliability}")
     print(f"  技能版本: {p.skill_variant}")
+    print(f"  编排模式: {p.orchestration}  (deterministic=确定性模板 / meta=模型自由编排)")
     if p.memory:
         llm = p.memory.llm
         vs = p.memory.vector_store or {}
@@ -122,6 +130,33 @@ def cmd_workflow_run(args: argparse.Namespace) -> int:
     return run_workflow(wf, dry_run=args.dry_run)
 
 
+def cmd_metaskill_list(args: argparse.Namespace) -> int:
+    """列出可用 MetaSkill。"""
+    names = list_metaskills()
+    if not names:
+        print("（暂无 MetaSkill）")
+        return 0
+    for n in names:
+        try:
+            ms = load_metaskill(METASKILLS_DIR / f"{n}.yaml")
+            print(f"{n}  {ms.description}")
+        except (FileNotFoundError, ValueError) as e:
+            print(f"{n}  [加载失败: {e}]")
+    return 0
+
+
+def cmd_metaskill_run(args: argparse.Namespace) -> int:
+    """执行 MetaSkill：模型生成编排计划 → 复用确定性执行器。"""
+    path = METASKILLS_DIR / f"{args.name}.yaml"
+    try:
+        ms = load_metaskill(path)
+    except (FileNotFoundError, ValueError) as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    provider = OpenAICompatProvider()
+    return run_metaskill(ms, provider, task=args.task or "", dry_run=args.dry_run)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="zcode",
@@ -151,6 +186,15 @@ def main(argv: list[str] | None = None) -> int:
     sp_wf_run.add_argument("name", help="工作流名（如 feature-dev）")
     sp_wf_run.add_argument("--dry-run", action="store_true", help="只打印步骤计划，不执行命令")
     sp_wf_run.set_defaults(func=cmd_workflow_run)
+
+    sp_meta = sub.add_parser("metaskill", help="MetaSkill 自由编排（Layer 2）")
+    meta_sub = sp_meta.add_subparsers(dest="metaskill_command", required=True)
+    meta_sub.add_parser("list", help="列出 MetaSkill").set_defaults(func=cmd_metaskill_list)
+    sp_ms_run = meta_sub.add_parser("run", help="执行 MetaSkill（模型编排）")
+    sp_ms_run.add_argument("name", help="MetaSkill 名（如 feature-dev）")
+    sp_ms_run.add_argument("--task", default="", help="任务描述（可选，覆盖 when）")
+    sp_ms_run.add_argument("--dry-run", action="store_true", help="只生成编排提示，不调用模型")
+    sp_ms_run.set_defaults(func=cmd_metaskill_run)
 
     args = parser.parse_args(argv)
     return args.func(args)
