@@ -4,8 +4,14 @@
     "displayName": "Zcode 技能库"
   },
   "version": "0.1.0",
-  "count": 10,
+  "count": 11,
   "skills": [
+    {
+      "name": "ask-zcode",
+      "description": "技能索引与路由——当任务匹配多个技能、或不确定该用哪个技能时使用。列出全部技能的 flow 地图与判别条件，先查这里再行动。",
+      "valid": true,
+      "issues": []
+    },
     {
       "name": "brainstorming",
       "description": "头脑风暴——任何创造性工作之前必须先使用：澄清问题、给 2-3 个方案带权衡、分节批准、写设计文档、转 writing-plans。未获批准前禁止写代码。",

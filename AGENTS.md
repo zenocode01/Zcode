@@ -19,7 +19,7 @@
 - 需求与设计文档:
   - `docs/基本构思.md` —— 唯一权威需求来源(四层架构 + 本地小模型优化定稿 + 路线图),开发前务必先读
 - 已落地:
-  - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),10 个技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch/handoff/subagent-driven-development/evoskills) + `_template/` 模板(含 `.memory/` 记忆模板)
+  - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),11 个技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch/handoff/subagent-driven-development/evoskills/ask-zcode) + `_template/` 模板(含 `.memory/` 记忆模板)
   - `adapters/` —— Python 包 `zcode`(profile/Provider/工具三层降级/MemStore/CLI/工具映射表)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
   - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` + 引擎(支持 skill/prompt/command/subagent 步骤)
   - `metaskills/` —— MetaSkill 自由编排(Layer 2):模型生成计划 + 复用执行器

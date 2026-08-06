@@ -16,6 +16,7 @@
 | `handoff` | 会话接力 | 会话开始读快照恢复、结束存快照（目标/决策/验证） | 标准 + 本地精简 |
 | `subagent-driven-development` | 子代理编排 | 每任务派独立子代理 + 逐任务审查 + 5 轮修复 cap | 标准 + 本地精简 |
 | `evoskills` | 自我迭代 | 监控→捕获→评估→迭代→验证→发布，达阈值改进技能 | 标准 + 本地精简 |
+| `ask-zcode` | 技能索引 | 路由地图：主流程 + 入口匝道 + 判别条件，不确定时先查 | 标准 + 本地精简 |
 
 **技能链依赖**（移植自 Superpowers）：`brainstorming` → `writing-plans` →（执行）→ `code-review`，交接点必须保留。
 
