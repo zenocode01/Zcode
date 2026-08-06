@@ -1,0 +1,23 @@
+# Zcode 本地小模型 profile：Qwen3.6-27B（llama.cpp 部署，256K 上下文）
+# 字段说明见 docs/开发偏好与默认配置.md §2.1；<待定> 项部署后填实
+name: local-qwen3.6-35b
+model_family: qwen3.6-35b
+context_window: 262144          # 256K
+tool_level: 1                   # 待自动探测：0=无工具 1=提示词编码 2=原生 tool calling
+json_reliability: medium        # 待部署实测：low / medium / high
+skill_variant: local            # 加载 SKILL.local.md
+
+memory:
+  llm:
+    provider: openai            # OpenAI 兼容端点（llama.cpp llama-server /v1）
+    base_url: http://124.223.8.148:6001/v1   # 待部署时确认端口
+    model: /home/dkd/gguf-models/Qwen3.6-35B-heretic-Q5_K_M.gguf
+  embedder:
+    provider: <待定>             # 候选：llama.cpp embedding server / ollama / huggingface
+    model: <待定>
+    dims: <待定>                 # 必须与向量库已有数据一致
+  vector_store:
+    provider: qdrant            # 嵌入式，支持 BM25 混合检索
+    path: ~/.zcode/memory
+  infer_mode: simplified        # 记忆写入：简化提取提示词（四级降级 L0-L3）
+  write_frequency: low          # 低频批量回写，省本地算力

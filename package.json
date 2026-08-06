@@ -1,0 +1,13 @@
+{
+  "name": "zcode-skills",
+  "version": "0.1.0",
+  "description": "Zcode 技能运行时 CLI（跨平台技能安装与本地模型适配）——Python 适配层的 npm 分发入口",
+  "bin": {
+    "zcode": "./bin/zcode.js"
+  },
+  "scripts": {
+    "postinstall": "echo '提示: 还需执行 cd adapters && pip install -e . 安装 Python 适配层'"
+  },
+  "keywords": ["skills", "agent", "llm", "local-model", "zcode"],
+  "license": "MIT"
+}

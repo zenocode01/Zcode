@@ -1,0 +1,10 @@
+# mem0 源码：仅作记忆系统参考学习用，不提交到 git
+/mem0/
+
+# Python 虚拟环境
+/.venv/
+
+# Python 构建产物
+__pycache__/
+*.egg-info/
+
