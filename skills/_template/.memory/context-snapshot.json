@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "project": "<项目名>",
+  "language_stack": ["<语言/框架>"],
+  "last_goal": "<上次目标>",
+  "last_status": "<进行中/完成/阻塞>",
+  "updated_at": "<ISO 时间>"
+}

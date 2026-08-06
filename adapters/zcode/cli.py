@@ -1,4 +1,4 @@
-"""zcode CLI：profile / skills / platforms / workflow 子命令。
+"""zcode CLI：profile / skills / platforms / workflow / metaskill / memory 子命令。
 
 用法:
   zcode skills list
@@ -6,6 +6,11 @@
   zcode platforms list
   zcode workflow list
   zcode workflow run <name> [--dry-run]
+  zcode metaskill list
+  zcode metaskill run <name> [--dry-run]
+  zcode memory add <内容> [--user <id>]
+  zcode memory search <查询> [--user <id>] [--top-k N]
+  zcode memory list [--user <id>]
 """
 from __future__ import annotations
 
@@ -187,6 +192,61 @@ def cmd_metaskill_run(args: argparse.Namespace) -> int:
     return run_metaskill(ms, provider, task=args.task or "", dry_run=args.dry_run)
 
 
+def _load_memstore(args: argparse.Namespace):
+    """加载默认 profile 并构造 MemStore（memory 子命令共用）。"""
+    from .memory import MemStore
+
+    profile = _load_default_profile()
+    return MemStore(profile)
+
+
+def cmd_memory_add(args: argparse.Namespace) -> int:
+    store = _load_memstore(args)
+    print(f"写入记忆（infer={store.infer_mode}）...")
+    try:
+        result = store.add(args.content, user_id=args.user)
+    except Exception as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    ids = result.get("results", []) if isinstance(result, dict) else []
+    print(f"已写入 {len(ids)} 条记忆")
+    for r in ids:
+        print(f"  [{r.get('id')}] {r.get('memory', '')[:80]}")
+    return 0
+
+
+def cmd_memory_search(args: argparse.Namespace) -> int:
+    store = _load_memstore(args)
+    try:
+        results = store.search(args.query, user_id=args.user, top_k=args.top_k)
+    except Exception as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    if not results:
+        print("（无匹配记忆）")
+        return 0
+    print(f"检索到 {len(results)} 条：")
+    for r in results:
+        print(f"  [{r['id']}] (score={r.get('score', '?'):.3f}) {r['memory'][:100]}")
+    return 0
+
+
+def cmd_memory_list(args: argparse.Namespace) -> int:
+    store = _load_memstore(args)
+    try:
+        results = store.get_all(user_id=args.user)
+    except Exception as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    if not results:
+        print("（暂无记忆）")
+        return 0
+    print(f"共 {len(results)} 条记忆：")
+    for r in results:
+        print(f"  [{r['id']}] {r['memory'][:100]}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="zcode",
@@ -225,6 +285,21 @@ def main(argv: list[str] | None = None) -> int:
     sp_ms_run.add_argument("--task", default="", help="任务描述（可选，覆盖 when）")
     sp_ms_run.add_argument("--dry-run", action="store_true", help="只生成编排提示，不调用模型")
     sp_ms_run.set_defaults(func=cmd_metaskill_run)
+
+    sp_memory = sub.add_parser("memory", help="记忆层（Layer 3，mem0 本地三件套）")
+    mem_sub = sp_memory.add_subparsers(dest="memory_command", required=True)
+    sp_mem_add = mem_sub.add_parser("add", help="写入记忆")
+    sp_mem_add.add_argument("content", help="记忆内容（文本/对话）")
+    sp_mem_add.add_argument("--user", default="default", help="用户/会话 ID")
+    sp_mem_add.set_defaults(func=cmd_memory_add)
+    sp_mem_search = mem_sub.add_parser("search", help="检索记忆")
+    sp_mem_search.add_argument("query", help="查询文本")
+    sp_mem_search.add_argument("--user", default="default")
+    sp_mem_search.add_argument("--top-k", type=int, default=5)
+    sp_mem_search.set_defaults(func=cmd_memory_search)
+    sp_mem_list = mem_sub.add_parser("list", help="列出记忆")
+    sp_mem_list.add_argument("--user", default="default")
+    sp_mem_list.set_defaults(func=cmd_memory_list)
 
     args = parser.parse_args(argv)
     return args.func(args)

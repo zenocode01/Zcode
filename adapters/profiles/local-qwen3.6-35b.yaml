@@ -14,9 +14,10 @@ memory:
     base_url: http://124.223.8.148:6001/v1   # 待部署时确认端口
     model: /home/dkd/gguf-models/Qwen3.6-35B-heretic-Q5_K_M.gguf
   embedder:
-    provider: <待定>             # 候选：llama.cpp embedding server / ollama / huggingface
-    model: <待定>
-    dims: <待定>                 # 必须与向量库已有数据一致
+    provider: openai              # llama.cpp --embeddings 端点（生产）
+    model: bge-m3                 # 模型 ID 待 6006 就绪后按 /v1/models 确认
+    base_url: http://124.223.8.148:6006/v1
+    dims: 1024                    # bge-m3 维度（与向量库一致）
   vector_store:
     provider: qdrant            # 嵌入式，支持 BM25 混合检索
     path: ~/.zcode/memory

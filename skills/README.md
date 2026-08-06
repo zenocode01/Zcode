@@ -33,3 +33,16 @@
 ```bash
 cp -r skills/_template skills/<your-skill-name>
 ```
+
+## 技能级记忆（Layer 3）
+
+每个技能目录下的 `.memory/`（**本地运行数据，不提交 git**）：
+
+| 文件 | 内容 | 回写方式 |
+|------|------|---------|
+| `experience.log` | 每次使用经验：日期/场景/结果/一句话教训 | 模板化追加，低频批量 |
+| `improvements.md` | 累积改进建议（达阈值回写 SKILL.md） | 复盘时记录 |
+| `context-snapshot.json` | 项目上下文快照（固定 schema） | 由适配层按规则收集，不依赖模型生成 |
+
+- 模板见 `skills/_template/.memory/`，新技能复制 `_template/` 时自带。
+- 全局记忆（跨项目技能经验）走 `zcode memory`（mem0，~/.zcode/memory）；项目内 `.memory/` 只放轻量快照。
