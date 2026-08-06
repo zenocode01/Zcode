@@ -14,19 +14,20 @@
 
 ## 当前状态(重要)
 
-> **Phase 1 骨架已落地(2025-08):仓库结构、适配层基座、8 平台安装脚本、tdd 示例技能。**
+> **Phase 1 完整落地 + Phase 2 起步(2025-08):技能库、适配层、8 平台安装、确定性工作流模板、工具三层降级。**
 
 - 需求与设计文档:
   - `docs/基本构思.md` —— 唯一权威需求来源(四层架构 + 实施路线图),开发前务必先读
   - `docs/开发偏好与默认配置.md` —— 已确认的开发偏好与默认配置(记忆路线/技术栈/目标模型)
   - `docs/本地小模型优化-设计草案.md` —— 面向 Qwen3.6-27B(llama.cpp / 256K)的本地优化设计
 - 已落地:
-  - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),当前含 `_template/` 模板与 `tdd` 示例
-  - `adapters/` —— Python 包 `zcode`(profile 加载、OpenAI 兼容 Provider、CLI)、`profiles/local-qwen3.6-27b.yaml`、8 平台 `platforms/*/INSTALL.md`
+  - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),7 个核心技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch) + `_template/` 模板
+  - `adapters/` —— Python 包 `zcode`(profile 加载、OpenAI 兼容 Provider、工具三层降级、CLI)、`profiles/local-qwen3.6-27b.yaml`、8 平台 `platforms/*/INSTALL.md`
+  - `workflows/` —— 确定性工作流模板(Layer 2 起步):`feature-dev` 示例 + 引擎 `zcode/workflow.py`
   - `scripts/install.sh` —— 跨平台一键安装(主目标 `~/.agents/skills` + 8 平台原生目录双保险)
   - `hooks/` —— git 安全守卫示例;`bin/zcode.js` + `package.json` —— npm 分发入口
-- Git 仓库已初始化(`main` 分支),但**尚无任何提交**;无远程仓库
-- 尚未实现:Layer 2 编排引擎、Layer 3 记忆层(mem0,Phase 3)、其余 6 个技能移植、各平台深度插件
+- Git 仓库已有提交(`main` 分支);无远程仓库
+- 尚未实现:Layer 2 编排增强(MetaSkill/子代理编排)、Layer 3 记忆层(mem0,Phase 3)、各平台深度插件、Embedding 选型
 
 任何 AI 代理在本仓库中的工作,都应从推动"实施路线图"的下一步开始,而不是假设已有功能。
 
@@ -128,7 +129,7 @@
 ## 构建 / 测试 / 部署
 
 - **安装 zcode CLI**:`python3 -m venv .venv && .venv/bin/pip install -e ./adapters`(PEP 668 环境必须用 venv)
-- **CLI 验证命令**:`.venv/bin/zcode skills list`、`.venv/bin/zcode --profile local-qwen3.6-27b info`、`.venv/bin/zcode platforms list`
+- **CLI 验证命令**:`.venv/bin/zcode skills list`、`.venv/bin/zcode --profile local-qwen3.6-27b info`、`.venv/bin/zcode platforms list`、`.venv/bin/zcode workflow list`、`.venv/bin/zcode workflow run feature-dev --dry-run`
 - **跨平台安装**:`bash scripts/install.sh`(全局,主目标 `~/.agents/skills`);`--project <dir>` 项目级;`--uninstall` 卸载
 - **npm 分发**:`npm link` 后 `zcode` 可用(需先安装 Python 包)
 - **测试命令**:暂无测试框架;技能质量评估体系待建立(Phase 4)
@@ -137,6 +138,6 @@
 ## 给 AI 代理的操作指引
 
 1. 首次进入项目:先读 `docs/基本构思.md`(唯一需求来源),再读本文件
-2. 当前阶段开发工作,主要是在**推进 Phase 1 剩余部分**(批量移植核心技能)或**启动 Phase 2**(编排与工作流引擎);参考 `docs/开发偏好与默认配置.md` 与 `docs/本地小模型优化-设计草案.md` 确定方向
+2. 当前阶段开发工作,主要是在**推进 Phase 2 剩余部分**(MetaSkill 自由编排、子代理编排)或**启动 Phase 3**(记忆层 mem0);参考 `docs/开发偏好与默认配置.md` 与 `docs/本地小模型优化-设计草案.md` 确定方向
 3. 如需修改 `docs/基本构思.md`,注意它是需求源头,改动需谨慎并与用户确认
 4. 本文件(AGENTS.md)需与项目实际状态保持同步:Phase 1 已落地(目录结构、脚本、配置文件已创建),后续进展请继续更新本文件的"当前状态"、"构建/测试/部署"等章节

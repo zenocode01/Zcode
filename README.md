@@ -21,7 +21,9 @@ zcode platforms list
 
 ```
 ├── skills/        # 核心技能库（Layer 1），双版本：SKILL.md（云）/ SKILL.local.md（本地）
-├── adapters/      # 跨平台适配层（Layer 0）：profile、LLM Provider、8 平台适配文档
+│                  # 7 个技能：grill-me / brainstorming / writing-plans / tdd / diagnose / code-review / improve-arch
+├── workflows/     # 确定性工作流模板（Layer 2）：feature-dev 示例 + 引擎
+├── adapters/      # 跨平台适配层（Layer 0）：profile、LLM Provider、工具三层降级、8 平台适配文档
 │   └── platforms/ # 各平台 INSTALL.md
 ├── hooks/         # 钩子（git 安全守卫等）
 ├── scripts/       # install.sh 跨平台一键安装脚本
@@ -46,7 +48,7 @@ zcode platforms list
 
 ## 当前状态
 
-Phase 1 骨架已落地（2025-08）：仓库结构、适配层基座（profile + OpenAI 兼容 Provider）、8 平台安装脚本、tdd 示例技能。技能批量移植、记忆层（mem0）、编排引擎见 `docs/基本构思.md` 路线图。
+Phase 1 完整落地 + Phase 2 起步（2025-08）：7 个核心技能双版本、适配层基座（profile + OpenAI 兼容 Provider + 工具三层降级）、8 平台安装脚本、确定性工作流模板（feature-dev）。记忆层（mem0，Phase 3）、MetaSkill 自由编排待后续，见 `docs/基本构思.md` 路线图。
 
 ## 设计参考
 

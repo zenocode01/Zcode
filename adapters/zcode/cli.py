@@ -1,9 +1,11 @@
-"""zcode CLI：profile / skills / platforms 子命令。
+"""zcode CLI：profile / skills / platforms / workflow 子命令。
 
 用法:
   zcode skills list
   zcode --profile <name> info
   zcode platforms list
+  zcode workflow list
+  zcode workflow run <name> [--dry-run]
 """
 from __future__ import annotations
 
@@ -12,6 +14,7 @@ import sys
 from pathlib import Path
 
 from .profile import load_profile
+from .workflow import WORKFLOWS_DIR, list_workflows, load_workflow, run_workflow
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -93,6 +96,32 @@ def cmd_platforms(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_workflow_list(args: argparse.Namespace) -> int:
+    """列出可用工作流。"""
+    names = list_workflows()
+    if not names:
+        print("（暂无工作流）")
+        return 0
+    for n in names:
+        try:
+            wf = load_workflow(WORKFLOWS_DIR / f"{n}.yaml")
+            print(f"{n}  {wf.description}")
+        except (FileNotFoundError, ValueError) as e:
+            print(f"{n}  [加载失败: {e}]")
+    return 0
+
+
+def cmd_workflow_run(args: argparse.Namespace) -> int:
+    """执行工作流（--dry-run 只打印计划）。"""
+    path = WORKFLOWS_DIR / f"{args.name}.yaml"
+    try:
+        wf = load_workflow(path)
+    except (FileNotFoundError, ValueError) as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+    return run_workflow(wf, dry_run=args.dry_run)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="zcode",
@@ -114,6 +143,15 @@ def main(argv: list[str] | None = None) -> int:
 
     sp_info = sub.add_parser("info", help="查看 profile 能力（需 --profile）")
     sp_info.set_defaults(func=cmd_info)
+
+    sp_workflow = sub.add_parser("workflow", help="确定性工作流（Layer 2）")
+    wf_sub = sp_workflow.add_subparsers(dest="workflow_command", required=True)
+    wf_sub.add_parser("list", help="列出工作流").set_defaults(func=cmd_workflow_list)
+    sp_wf_run = wf_sub.add_parser("run", help="执行工作流")
+    sp_wf_run.add_argument("name", help="工作流名（如 feature-dev）")
+    sp_wf_run.add_argument("--dry-run", action="store_true", help="只打印步骤计划，不执行命令")
+    sp_wf_run.set_defaults(func=cmd_workflow_run)
+
     args = parser.parse_args(argv)
     return args.func(args)
 
