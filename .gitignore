@@ -14,3 +14,6 @@ skills/**/.memory/
 !skills/_template/.memory/
 !skills/_template/.memory/**
 
+# 防护：防止未展开 ~ 的路径误入仓库（曾发生）
+~
+

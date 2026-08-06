@@ -77,6 +77,8 @@ class MemStore:
         embedder_cfg, dims = self._embedder_config()
         vs = (self.profile.memory.vector_store if self.profile.memory else {}) or {}
         llm_cfg = self._llm_config()
+        # 关键：expanduser 展开 ~，否则会在仓库内创建字面 ~ 目录
+        vs_path = str(Path(vs.get("path", "~/.zcode/memory")).expanduser())
 
         config = MemoryConfig(
             llm=LlmConfig(provider=llm_cfg["provider"], config=llm_cfg["config"]),
@@ -88,11 +90,11 @@ class MemStore:
             vector_store=VectorStoreConfig(
                 provider=vs.get("provider", "qdrant"),
                 config={
-                    "path": vs.get("path", "~/.zcode/memory"),
+                    "path": vs_path,
                     "embedding_model_dims": dims,
                 },
             ),
-            history_db_path="~/.zcode/memory/history.db",
+            history_db_path=str(Path("~/.zcode/memory/history.db").expanduser()),
         )
         return Memory(config=config)
 
