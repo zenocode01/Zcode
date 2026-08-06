@@ -28,7 +28,8 @@
   - 记忆层(Phase 3 起步):`zcode memory add/search/list`(mem0 + 自定义 HttpEmbedder 对接 Qwen3-Embedding-8B + Qdrant 本地),真机端到端验证通过
   - `scripts/install.sh` —— 跨平台一键安装;`hooks/` —— git 安全守卫;`bin/zcode.js` + `package.json` —— npm 分发入口
 - Git 仓库已有提交(`main` 分支);无远程仓库
-- 尚未实现:Layer 2 子代理编排、各平台深度插件、会话接力(agent-handoff)、记忆 BM25/实体增强(需 NLP 依赖,国内网络受限暂降级)
+- 尚未实现:Layer 2 子代理编排、各平台深度插件、会话接力(agent-handoff)
+- 已启用:记忆 BM25 词形还原 + 实体增强(spaCy en_core_web_sm,经 gitproxy 代理下载安装,2025-08)
 
 任何 AI 代理在本仓库中的工作,都应从推动"实施路线图"的下一步开始,而不是假设已有功能。
 
