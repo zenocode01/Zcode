@@ -9,7 +9,7 @@
 | 确定性模板（workflows/） | 外部 runner | 本地小模型（默认） | `orchestration: deterministic` |
 | MetaSkill 自由编排（metaskills/） | 模型自己 | 云端/强模型 | `orchestration: meta` |
 
-> 本地小模型默认走确定性模板（草案 §3.4）；MetaSkill 是强模型的可选增强，可用 `zcode metaskill run <name> --force-meta` 强制试用。
+> 本地小模型默认走确定性模板（见 `docs/基本构思.md` §5.4）；MetaSkill 是强模型的可选增强，可用 `zcode metaskill run <name> --force-meta` 强制试用。
 
 ## MetaSkill 文件格式（YAML）
 

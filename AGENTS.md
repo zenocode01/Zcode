@@ -17,9 +17,7 @@
 > **Phase 1/2/3 核心能力全部落地(2025-08):技能库、适配层、8 平台安装、工作流/编排、子代理驱动开发、记忆层(mem0)真机验证、会话接力。**
 
 - 需求与设计文档:
-  - `docs/基本构思.md` —— 唯一权威需求来源(四层架构 + 实施路线图),开发前务必先读
-  - `docs/开发偏好与默认配置.md` —— 已确认的开发偏好与默认配置(记忆路线/技术栈/目标模型)
-  - `docs/本地小模型优化-设计草案.md` —— 面向 Qwen3.6-35B(llama.cpp / 256K)的本地优化设计
+  - `docs/基本构思.md` —— 唯一权威需求来源(四层架构 + 本地小模型优化定稿 + 路线图),开发前务必先读
 - 已落地:
   - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),9 个技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch/handoff/subagent-driven-development) + `_template/` 模板(含 `.memory/` 记忆模板)
   - `adapters/` —— Python 包 `zcode`(profile/Provider/工具三层降级/MemStore/CLI/工具映射表)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
@@ -30,7 +28,7 @@
   - 子代理编排:`skills/subagent-driven-development`(独立上下文/ledger/逐任务审查/5轮修复cap) + 3 个提示词模板 + `zcode tools list` 工具映射表
   - `scripts/install.sh` —— 跨平台一键安装;`hooks/` —— git 安全守卫;`bin/zcode.js` + `package.json` —— npm 分发入口
 - Git 仓库已有提交(`main` 分支);无远程仓库
-- 尚未实现:各平台深度插件(`plugin.json`)、草案定稿并入 `docs/基本构思.md`、EvoSkills 自我迭代循环
+- 尚未实现:各平台深度插件(`plugin.json`)、EvoSkills 自我迭代循环
 
 任何 AI 代理在本仓库中的工作,都应从推动"实施路线图"的下一步开始,而不是假设已有功能。
 
@@ -141,6 +139,6 @@
 ## 给 AI 代理的操作指引
 
 1. 首次进入项目:先读 `docs/基本构思.md`(唯一需求来源),再读本文件
-2. 当前阶段开发工作,主要是在**推进 Phase 2 剩余部分**(MetaSkill 自由编排、子代理编排)或**启动 Phase 3**(记忆层 mem0);参考 `docs/开发偏好与默认配置.md` 与 `docs/本地小模型优化-设计草案.md` 确定方向
+2. 当前阶段开发工作,主要是在**推进 Phase 4 剩余项**(EvoSkills 自我迭代、各平台深度插件、技能市场)或**打磨已落地能力**;参考 `docs/基本构思.md` 第五节(本地小模型优化定稿)与 `docs/开发偏好与默认配置.md` 确定方向
 3. 如需修改 `docs/基本构思.md`,注意它是需求源头,改动需谨慎并与用户确认
 4. 本文件(AGENTS.md)需与项目实际状态保持同步:Phase 1 已落地(目录结构、脚本、配置文件已创建),后续进展请继续更新本文件的"当前状态"、"构建/测试/部署"等章节
