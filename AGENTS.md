@@ -14,21 +14,21 @@
 
 ## 当前状态(重要)
 
-> **Phase 1 完整落地 + Phase 2 起步(2025-08):技能库、适配层、8 平台安装、确定性工作流模板、工具三层降级。**
+> **Phase 1/2 完整落地 + Phase 3 起步(2025-08):技能库、适配层、8 平台安装、工作流/编排、记忆层(mem0)真机验证。**
 
 - 需求与设计文档:
   - `docs/基本构思.md` —— 唯一权威需求来源(四层架构 + 实施路线图),开发前务必先读
   - `docs/开发偏好与默认配置.md` —— 已确认的开发偏好与默认配置(记忆路线/技术栈/目标模型)
-  - `docs/本地小模型优化-设计草案.md` —— 面向 Qwen3.6-27B(llama.cpp / 256K)的本地优化设计
+  - `docs/本地小模型优化-设计草案.md` —— 面向 Qwen3.6-35B(llama.cpp / 256K)的本地优化设计
 - 已落地:
-  - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),7 个核心技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch) + `_template/` 模板
-  - `adapters/` —— Python 包 `zcode`(profile 加载、OpenAI 兼容 Provider、工具三层降级、CLI)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
-  - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` 示例 + 引擎 `zcode/workflow.py`
-  - `metaskills/` —— MetaSkill 自由编排(Layer 2):模型生成计划 + 复用执行器;profile 字段 `orchestration`(本地默认 deterministic)
-  - `scripts/install.sh` —— 跨平台一键安装(主目标 `~/.agents/skills` + 8 平台原生目录双保险)
-  - `hooks/` —— git 安全守卫示例;`bin/zcode.js` + `package.json` —— npm 分发入口
+  - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),7 个核心技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch) + `_template/` 模板(含 `.memory/` 记忆模板)
+  - `adapters/` —— Python 包 `zcode`(profile/Provider/工具三层降级/MemStore/CLI)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
+  - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` + 引擎
+  - `metaskills/` —— MetaSkill 自由编排(Layer 2):模型生成计划 + 复用执行器
+  - 记忆层(Phase 3 起步):`zcode memory add/search/list`(mem0 + 自定义 HttpEmbedder 对接 Qwen3-Embedding-8B + Qdrant 本地),真机端到端验证通过
+  - `scripts/install.sh` —— 跨平台一键安装;`hooks/` —— git 安全守卫;`bin/zcode.js` + `package.json` —— npm 分发入口
 - Git 仓库已有提交(`main` 分支);无远程仓库
-- 尚未实现:Layer 2 子代理编排、Layer 3 记忆层(mem0,Phase 3)、各平台深度插件、Embedding 选型
+- 尚未实现:Layer 2 子代理编排、各平台深度插件、会话接力(agent-handoff)、记忆 BM25/实体增强(需 NLP 依赖,国内网络受限暂降级)
 
 任何 AI 代理在本仓库中的工作,都应从推动"实施路线图"的下一步开始,而不是假设已有功能。
 
