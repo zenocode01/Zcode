@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -29,6 +30,7 @@ from .metaskill import (
 from .providers import OpenAICompatProvider
 from .handoff import save_handoff, load_handoff
 from .evoskills import log_skill_use, audit_skill, print_audit
+from .marketplace import build_marketplace, validate_all, write_marketplace, generate_claude_plugin, generate_opencode_config, generate_kimi_plugin
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -282,6 +284,53 @@ def cmd_skill_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_market_list(args: argparse.Namespace) -> int:
+    """展示技能市场清单（含质量状态）。"""
+    market = build_marketplace()
+    print(f"技能市场: {market['interface']['displayName']} v{market['version']}（{market['count']} 个技能）")
+    valid = 0
+    for s in market["skills"]:
+        mark = "✓" if s["valid"] else "⚠"
+        valid += 1 if s["valid"] else 0
+        print(f"  {mark} {s['name']}  {s['description'][:50]}")
+    print(f"质量: {valid}/{market['count']} 通过校验")
+    return 0
+
+
+def cmd_market_validate(args: argparse.Namespace) -> int:
+    """全量质量校验。"""
+    results = validate_all()
+    all_ok = True
+    for name, issues in results.items():
+        if issues:
+            all_ok = False
+            print(f"⚠ {name}:")
+            for issue in issues:
+                print(f"    - {issue}")
+        else:
+            print(f"✓ {name}")
+    print("== 全部通过 ==" if all_ok else f"== 有 {sum(1 for i in results.values() if i)} 个技能存在问题 ==")
+    return 0 if all_ok else 1
+
+
+def cmd_market_generate(args: argparse.Namespace) -> int:
+    """生成平台深度插件文件。"""
+    platform = args.platform
+    if platform == "claude-code":
+        path = generate_claude_plugin()
+        print(f"✓ Claude Code 插件已生成: {path}/marketplace.json + plugin.json")
+    elif platform == "opencode":
+        print(json.dumps(generate_opencode_config(), ensure_ascii=False, indent=2))
+        print("\n（把以上内容合并进 ~/.config/opencode/opencode.json 的顶层）")
+    elif platform == "kimi-code":
+        print(json.dumps(generate_kimi_plugin(), ensure_ascii=False, indent=2))
+        print("\n（把以上内容合并进 ~/.kimi-code/plugins/installed.json）")
+    else:
+        print(f"不支持的平台: {platform}（支持: claude-code / opencode / kimi-code）", file=sys.stderr)
+        return 1
+    return 0
+
+
 def cmd_memory_search(args: argparse.Namespace) -> int:
     store = _load_memstore(args)
     try:
@@ -400,6 +449,14 @@ def main(argv: list[str] | None = None) -> int:
     sp_sk_audit = sk_sub.add_parser("audit", help="评估技能健康度")
     sp_sk_audit.add_argument("name", help="技能名")
     sp_sk_audit.set_defaults(func=cmd_skill_audit)
+
+    sp_market = sub.add_parser("market", help="技能市场与质量评估（Phase 4）")
+    mkt_sub = sp_market.add_subparsers(dest="market_command", required=True)
+    mkt_sub.add_parser("list", help="市场清单（含质量状态）").set_defaults(func=cmd_market_list)
+    mkt_sub.add_parser("validate", help="全量质量校验").set_defaults(func=cmd_market_validate)
+    sp_mkt_gen = mkt_sub.add_parser("generate", help="生成平台深度插件")
+    sp_mkt_gen.add_argument("platform", choices=["claude-code", "opencode", "kimi-code"])
+    sp_mkt_gen.set_defaults(func=cmd_market_generate)
 
     args = parser.parse_args(argv)
     return args.func(args)
