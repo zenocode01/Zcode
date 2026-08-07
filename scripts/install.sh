@@ -106,6 +106,26 @@ EOF
     fi
 }
 
+install_cli() {
+    # 全局 CLI 包装器: 任何目录直接 `zcode`（依赖 zcode 包已装入 python3 环境）
+    local bindir="$HOME/.local/bin"
+    mkdir -p "$bindir"
+    local wrapper="$bindir/zcode"
+    cat > "$wrapper" <<EOF
+#!/bin/sh
+# Zcode CLI 包装器（install.sh 生成）。若 python3 环境未装 zcode 包，先:
+#   python3 -m pip install -e "$REPO_ROOT/adapters"
+exec python3 -m zcode.cli "\$@"
+EOF
+    chmod +x "$wrapper"
+    echo "  ✓ 已安装 CLI 包装器: $wrapper（任何目录直接 \`zcode\`）"
+    if ! command -v python3 >/dev/null 2>&1; then
+        echo "  ⚠ 未找到 python3，请先安装 Python 3.10+ 后重跑"
+    elif ! python3 -c "import zcode" >/dev/null 2>&1; then
+        echo "  ⚠ zcode 包未装入 python3 环境，先执行: python3 -m pip install -e '$REPO_ROOT/adapters'"
+    fi
+}
+
 main() {
     if [[ $UNINSTALL -eq 1 ]]; then
         echo "== Zcode 卸载 =="
@@ -149,8 +169,11 @@ main() {
         fi
     done
 
-    echo "[3/3] 写入本地配置"
+    echo "[3/4] 写入本地配置"
     write_config
+
+    echo "[4/4] 安装全局 CLI（任意目录直接 \`zcode\`）"
+    install_cli
 
     echo "== 完成 =="
 }

@@ -13,7 +13,7 @@ python3 -m venv .venv && .venv/bin/pip install -e ./adapters
 # 2. 跨平台安装技能（全局，软链到 ~/.agents/skills 等；--project <dir> 项目级）
 bash scripts/install.sh
 
-# 3. 常用命令（npm link 后可直接用全局 zcode）
+# 3. 常用命令（`install.sh` 已装全局命令,任何目录直接 `zcode`；npm link 后亦可）
 .venv/bin/zcode skills list                      # 技能清单
 .venv/bin/zcode --profile local-qwen3.6-35b info # 本地小模型 profile
 .venv/bin/zcode platforms list                   # 8 平台支持

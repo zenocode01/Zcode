@@ -3,12 +3,18 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: analyze
-Current Ticket: 
+Phase: commit
+Current Ticket: T-015
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 14 条 (docs/UBIQUITOUS_LANGUAGE.md)
+
+## 当前工单 T-015 (上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装) [review]
+## T-015 上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装
+Resolution: 根因: 新项目要手动编辑 CONTEXT/AGENTS, --existing 提示人工并入协议段, install.sh 不装 CLI; 修复: init 交互引导 Domain/TestCommand(非交互跳过), --existing 自动追加协议段到 AGENTS.md(幂等), install.sh 装 ~/.local/bin/zcode 包装器, 手册/README 更新 1 分钟上手路径; 验证: 64 用例绿, 实机嵌入验证通过
+Status: review
+
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -25,6 +31,7 @@ BranchMode: auto
 - [x] **T-012** 通俗版使用说明: 面向非技术读者的功能与框架说明 — done  ✓已记录修复
 - [x] **T-013** 术语表欠账补齐 + 登记时机改为 close 前人工核对 — done  ✓已记录修复
 - [x] **T-014** 普通用户实操手册: 零基础照做指南 — done  ✓已记录修复
+- [ ] **T-015** 上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装 — review  ✓已记录修复
 
 ## 阻塞
 (无)

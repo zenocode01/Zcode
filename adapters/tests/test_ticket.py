@@ -411,7 +411,9 @@ class TestInitExisting(TicketBase):
         (proj / "src").mkdir()
         (proj / "src" / "main.py").write_text("print(1)", encoding="utf-8")
         ticket.cmd_init([str(proj), "--existing"])
-        self.assertEqual((proj / "AGENTS.md").read_text(encoding="utf-8"), "原内容")
+        agents = (proj / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertTrue(agents.startswith("原内容"))  # 原内容保留在开头
+        self.assertIn("工单工作台协议", agents)  # 协议段自动追加
         self.assertEqual((proj / "src" / "main.py").read_text(encoding="utf-8"), "print(1)")
         self.assertTrue((proj / "tickets.md").exists())
         self.assertTrue((proj / "docs/CONTEXT.md").exists())
@@ -424,6 +426,28 @@ class TestInitExisting(TicketBase):
         (proj / "x").write_text("1", encoding="utf-8")
         with self.assertRaises(ticket.TicketError):
             ticket.cmd_init([str(proj)])
+
+    def test_existing_auto_appends_agents_protocol(self):
+        proj = self.base / "p"
+        proj.mkdir()
+        (proj / "AGENTS.md").write_text("# 我的项目\n\n原内容\n", encoding="utf-8")
+        ticket.cmd_init([str(proj), "--existing"])
+        text = (proj / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("# 我的项目", text)
+        self.assertIn("原内容", text)  # 原内容保留
+        self.assertIn("工单工作台协议", text)  # 自动追加
+        # 幂等：再跑一次不重复追加
+        ticket.cmd_init([str(proj), "--existing"])
+        self.assertEqual((proj / "AGENTS.md").read_text(encoding="utf-8").count("工单工作台协议"), 1)
+
+    def test_init_guided_setup_writes_domain_and_testcommand(self):
+        proj = self.base / "g"
+        ticket.cmd_init([str(proj)])
+        ticket._ask = lambda prompt: "记账项目" if "Domain" in prompt else "pytest"
+        ticket._init_guided_setup(proj)
+        ctx = proj / "docs/CONTEXT.md"
+        self.assertEqual(ticket.get_anchor(ctx, "Domain"), "记账项目")
+        self.assertEqual(ticket.get_anchor(ctx, "TestCommand"), "pytest")
 
 
 # ---------- check-commit 门禁 ----------

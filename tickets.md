@@ -70,3 +70,7 @@ Status: done
 ## T-014 普通用户实操手册: 零基础照做指南
 Resolution: 根因: 通俗说明只讲概念无操作步骤, 无零基础实操指南; 修复: docs/使用手册.md(安装4步/建工作台/完整走一遍/对话驱动/看进度/接力/FAQ/速查表), README 入口引导+目录结构同步; 验证: 62 用例绿
 Status: done
+
+## T-015 上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装
+Resolution: 根因: 新项目要手动编辑 CONTEXT/AGENTS, --existing 提示人工并入协议段, install.sh 不装 CLI; 修复: init 交互引导 Domain/TestCommand(非交互跳过), --existing 自动追加协议段到 AGENTS.md(幂等), install.sh 装 ~/.local/bin/zcode 包装器, 手册/README 更新 1 分钟上手路径; 验证: 64 用例绿, 实机嵌入验证通过
+Status: review
