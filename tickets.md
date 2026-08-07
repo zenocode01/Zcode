@@ -53,4 +53,4 @@ Status: done
 
 ## T-010 close 自动化: 状态文件自动提交 + CHANGELOG 自动生成, 消灭收尾/欠账工单
 Resolution: 根因: close 后状态文件残留+CHANGELOG 欠账, 产生 T-004/T-006/T-007/T-009 类低价值补丁工单; 修复: close 自动提交状态文件(T-XXX 状态收尾, 绕 hook) + CHANGELOG 缺工单号自动从 Resolution 补录(版本自动 bump 不重复); 文档同步; 验证: 59 用例绿, 3 新增用例覆盖
-Status: review
+Status: done

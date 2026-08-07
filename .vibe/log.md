@@ -100,3 +100,5 @@
 2026-08-07 10:51:17 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-105116-verify-review.txt
 2026-08-07 10:51:17 | phase | verify -> review --green
 2026-08-07 10:51:17 | phase | review -> commit --pass
+2026-08-07 10:51:18 | branch | merged vibe/T-010 -> main and deleted
+2026-08-07 10:51:18 | close | T-010 (close 自动化: 状态文件自动提交 + CHANGELOG 自动生成, 消灭收尾/欠账工单)
