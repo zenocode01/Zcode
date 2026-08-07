@@ -31,7 +31,7 @@ from .providers import OpenAICompatProvider
 from .handoff import save_handoff, load_handoff
 from .evoskills import log_skill_use, audit_skill, print_audit
 from .marketplace import build_marketplace, validate_all, write_marketplace, generate_claude_plugin, generate_opencode_config, generate_kimi_plugin
-from . import ticket
+from . import __version__, ticket
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -287,6 +287,12 @@ def cmd_skill_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_version(args: argparse.Namespace) -> int:
+    """显示 zcode 版本（代码内 __version__，与 pyproject 等四文件一致）。"""
+    print(f"zcode {__version__}")
+    return 0
+
+
 def cmd_ticket(args: argparse.Namespace) -> int:
     """工单驱动开发工作台（Layer 2，vibe-workbench 移植）。"""
     return ticket.run(args.raw)
@@ -392,6 +398,9 @@ def main(argv: list[str] | None = None) -> int:
 
     sp_info = sub.add_parser("info", help="查看 profile 能力（需 --profile）")
     sp_info.set_defaults(func=cmd_info)
+
+    sp_version = sub.add_parser("version", help="显示 zcode 版本")
+    sp_version.set_defaults(func=cmd_version)
 
     sp_workflow = sub.add_parser("workflow", help="确定性工作流（Layer 2）")
     wf_sub = sp_workflow.add_subparsers(dest="workflow_command", required=True)

@@ -284,3 +284,15 @@
 2026-08-07 14:46:26 | phase | review -> commit --pass
 2026-08-07 14:46:37 | branch | merged vibe/T-023 -> main and deleted
 2026-08-07 14:46:37 | close | T-023 (install.sh 包装器生成逻辑修复: 优先项目 venv)
+2026-08-07 14:49:53 | add | T-024 (zcode version 子命令 + __version__ 第五处版本统一)
+2026-08-07 14:49:53 | add | T-025 (zcode update 自更新命令)
+2026-08-07 14:50:01 | branch | created vibe/T-024 (from main)
+2026-08-07 14:50:01 | begin | T-024 (zcode version 子命令 + __version__ 第五处版本统一)
+2026-08-07 14:50:01 | phase | analyze -> plan
+2026-08-07 14:50:01 | phase | plan -> implement
+2026-08-07 14:51:03 | phase | implement -> verify
+2026-08-07 14:51:03 | transition | T-024: in-progress -> review
+2026-08-07 14:51:06 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-145103-verify-review.txt
+2026-08-07 14:51:06 | phase | verify -> review --green
+2026-08-07 14:51:06 | resolve | T-024 (zcode version 子命令 + __version__ 第五处版本统一)
+2026-08-07 14:51:06 | phase | review -> commit --pass
