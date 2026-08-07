@@ -282,3 +282,5 @@
 2026-08-07 14:46:25 | phase | verify -> review --green
 2026-08-07 14:46:26 | resolve | T-023 (install.sh 包装器生成逻辑修复: 优先项目 venv)
 2026-08-07 14:46:26 | phase | review -> commit --pass
+2026-08-07 14:46:37 | branch | merged vibe/T-023 -> main and deleted
+2026-08-07 14:46:37 | close | T-023 (install.sh 包装器生成逻辑修复: 优先项目 venv)

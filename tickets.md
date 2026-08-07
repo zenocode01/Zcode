@@ -114,7 +114,7 @@ Status: done
 
 ## T-023 install.sh 包装器生成逻辑修复: 优先项目 venv
 Resolution: 根因: install.sh 的 install_cli 写死 exec python3(系统解释器), 且包检查基于系统 python3; 重跑 install.sh 会覆盖手工修好的 venv 包装器(Bug 1 复发, ModuleNotFoundError); 修复: 解释器优先 REPO_ROOT/.venv/bin/python(PEP 668 环境), 回退 python3; 包装器与检查逻辑同步用实际解释器; 验证: 重跑 install.sh 后包装器指向 venv 且任意目录 zcode 可用(无 ModuleNotFoundError), 76 用例全绿
-Status: review
+Status: done
 
 - [ ] - [ ] 修复: install.sh 生成 CLI 包装器时写死 exec python3(系统解释器), 重跑 install.sh 会覆盖已修好的 venv 包装器(Bug 1 复发); 改为优先 REPO_ROOT/.venv/bin/python(PEP 668 环境必须 venv), 回退 python3; 包检查逻辑同步用实际解释器
 - [ ] 验证: 重跑 install.sh 后包装器指向 venv, 任意目录 zcode 可用, 无 ModuleNotFoundError

@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.12] - 2026-08-07
+
+**install.sh 包装器生成逻辑修复: 优先项目 venv**（T-023）：根因: install.sh 的 install_cli 写死 exec python3(系统解释器), 且包检查基于系统 python3; 重跑 install.sh 会覆盖手工修好的 venv 包装器(Bug 1 复发, ModuleNotFoundError); 修复: 解释器优先 REPO_ROOT/.venv/bin/python(PEP 668 环境), 回退 python3; 包装器与检查逻辑同步用实际解释器; 验证: 重跑 install.sh 后包装器指向 venv 且任意目录 zcode 可用(无 ModuleNotFoundError), 76 用例全绿
+
 ## [0.3.11] - 2026-08-07
 
 **memory add 静默 0 条: infer 提取失败自动降级 + 提示**（T-022）：根因: MemStore.add 在 infer(simplified) 模式下直接透传 mem0, LLM 提取返回 0 条时静默返回空 results, CLI 只打印『已写入 0 条记忆』无任何提示/降级, 用户感知为写入失败且记忆丢失; 修复: ① MemStore.add 在 infer 且提取 0 条时自动降级 L0(原文纯 embedding 第二次写入, 参数透传), 返回 dict 附 degraded=True; ② CLI 检测 degraded 向 stderr 打印明确提示; 验证: 76 用例绿(新增 4: 降级两次调用/成功不降级/L0 不重试/CLI 提示), 真机 memory add 触发降级提示+写入成功; 已知环境限制: BM25 encoder 加载失败(fastembed 下载被 Steam++ 证书拦截), 检索降级纯 embedding 不影响核心
