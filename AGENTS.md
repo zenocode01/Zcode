@@ -21,7 +21,8 @@
 - 已落地:
   - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),11 个技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch/handoff/subagent-driven-development/evoskills/ask-zcode) + `_template/` 模板(含 `.memory/` 记忆模板)
   - `adapters/` —— Python 包 `zcode`(profile/Provider/工具三层降级/MemStore/CLI/工具映射表)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
-  - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` + 引擎(支持 skill/prompt/command/subagent 步骤)
+  - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` / `ticket-dev` + 引擎(支持 skill/prompt/command/subagent 步骤)
+  - 工单驱动工作台(Layer 2,移植 vibe-workbench):`zcode ticket` 命令族(init/add/begin/phase/transition/close/resolve/context/gloss/status/validate/next/log/install/projects/switch/ask)——双状态机(Agent 阶段机 + 工单生命周期机) + 可执行强制(守卫/依赖环检测/验证证据/STATUS 自刷新/pre-commit 闸门/自动分支) + `skills/workbench` 技能;与 vibe-workbench 文件格式与注册表兼容,两 CLI 可混用
   - `metaskills/` —— MetaSkill 自由编排(Layer 2):模型生成计划 + 复用执行器
   - 记忆层(Phase 3):`zcode memory add/search/list`(mem0 + 自定义 HttpEmbedder 对接 Qwen3-Embedding-8B + Qdrant 本地),BM25/实体增强已启用(spaCy),真机端到端验证通过
   - 会话接力:`zcode handoff save/load` + `skills/handoff`(模板化快照,不依赖历史聊天)

@@ -1,0 +1,26 @@
+#!/bin/sh
+# zcode 工单工作台 pre-commit hook
+# 提交前强制校验状态机；非法状态直接拦截提交。
+# 由 `zcode ticket install` 安装，路径: .vibe/hooks/pre-commit
+
+# 定位 zcode CLI：优先用 git config 里记录的（含解释器前缀），退回 PATH 中的 zcode
+ZCODE_CLI=$(git config --get zcode.cli 2>/dev/null)
+if [ -z "$ZCODE_CLI" ]; then
+  ZCODE_CLI=zcode
+fi
+
+# 校验 CLI 存在（ZCODE_CLI 可能带参数，如 "python -m zcode.cli"）
+FIRST_WORD=$(echo "$ZCODE_CLI" | awk '{print $1}')
+if ! command -v "$FIRST_WORD" >/dev/null 2>&1 && [ ! -f "$FIRST_WORD" ]; then
+  echo "zcode: 找不到 CLI ($ZCODE_CLI)，跳过 pre-commit 校验"
+  exit 0
+fi
+
+eval "$ZCODE_CLI ticket check-commit"
+RC=$?
+
+if [ $RC -ne 0 ]; then
+  echo "zcode: 提交被拦截 — 请先满足状态机要求（见上方提示）"
+fi
+
+exit $RC

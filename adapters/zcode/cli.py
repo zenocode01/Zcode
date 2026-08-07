@@ -31,6 +31,7 @@ from .providers import OpenAICompatProvider
 from .handoff import save_handoff, load_handoff
 from .evoskills import log_skill_use, audit_skill, print_audit
 from .marketplace import build_marketplace, validate_all, write_marketplace, generate_claude_plugin, generate_opencode_config, generate_kimi_plugin
+from . import ticket
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -284,6 +285,11 @@ def cmd_skill_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_ticket(args: argparse.Namespace) -> int:
+    """工单驱动开发工作台（Layer 2，vibe-workbench 移植）。"""
+    return ticket.run(args.raw)
+
+
 def cmd_market_list(args: argparse.Namespace) -> int:
     """展示技能市场清单（含质量状态）。"""
     market = build_marketplace()
@@ -437,6 +443,10 @@ def main(argv: list[str] | None = None) -> int:
     sp_tools = sub.add_parser("tools", help="工具映射表（Layer 0）")
     sp_tools.add_argument("list", nargs="?")
     sp_tools.set_defaults(func=cmd_tools)
+
+    sp_ticket = sub.add_parser("ticket", help="工单驱动开发工作台（Layer 2，vibe-workbench 移植）")
+    sp_ticket.add_argument("raw", nargs=argparse.REMAINDER, help="子命令及参数（见 zcode ticket help）")
+    sp_ticket.set_defaults(func=cmd_ticket)
 
     sp_skill = sub.add_parser("skill", help="技能自我迭代（EvoSkills, Layer 3）")
     sk_sub = sp_skill.add_subparsers(dest="skill_command", required=True)

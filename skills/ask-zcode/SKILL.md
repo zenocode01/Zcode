@@ -37,15 +37,17 @@ code-review —— 分级反馈（Critical 立即修 / Important 修完再继续
 | **有实现计划、任务相互独立、宿主支持子代理** | `subagent-driven-development` → 每任务独立子代理 + 逐任务审查 |
 | **会话交接 / 新会话恢复上下文** | `handoff` → 会话开始 load、结束 save |
 | **技能反复失败 / 质量下滑** | `evoskills` → audit → 达阈值生成改进版本 |
+| **项目里有 tickets.md 工作台 / 要拾取工单、推进阶段、关单** | `workbench` → `zcode ticket` 命令推进两个状态机（守卫强制、状态自刷新） |
 
 ## 独立技能（Standalone）
 
 - **`grill-me`**（仅用户调用）：与 brainstorming 的澄清不同——它是**无状态的拷问**，对已有计划/决定压力测试，挖沉默假设。有具体计划要拷问时用。
 - **`brainstorming`** vs **`writing-plans`**：有想法无设计 → brainstorming；有设计无实现计划 → writing-plans。前者产出设计文档，后者产出可执行计划。
+- **`workbench`**（Layer 2）：有工作台项目时包住主流程——主流程技能（brainstorming→writing-plans→tdd→code-review）在 analyze/plan/implement/review 各阶段内嵌使用；状态推进一律走 `zcode ticket` 命令。
 
 ## 路由规则（判别条件）
 
-1. **先命名你的处境**，不按关键词匹配——"功能开发"落在主流程起点（brainstorming 或已有设计则 writing-plans）；"修 bug"走 diagnose 匝道；"跨会话"走 handoff。
+1. **先命名你的处境**，不按关键词匹配——"功能开发"落在主流程起点（brainstorming 或已有设计则 writing-plans）；"修 bug"走 diagnose 匝道；"跨会话"走 handoff；"在工单工作台里干活"走 workbench（主流程技能在各阶段内嵌）。
 2. 不确定时**打开候选技能的 SKILL.md 读 description**，不凭本索引的一句话断言其行为（索引可能滞后）。
 3. 用户主动点名（"用 grill-me"）时，尊重调用，即使本索引建议不同。
 

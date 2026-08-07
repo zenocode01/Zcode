@@ -2,6 +2,25 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.2.0] - 2026-08-07
+
+**新增**：工单驱动开发工作台（Layer 2，vibe-workbench 移植）——双状态机 + 可执行强制。
+
+### 新命令（adapters/zcode/ticket.py + cli.py）
+- `zcode ticket <cmd>`：init / add / begin / phase / transition / close / resolve / context / gloss / status / validate / next / log / install / projects / switch / project-add / ask / check-commit
+- 两个状态机：Agent 阶段机（analyze→plan→implement→verify→review→commit）+ 工单生命周期机（backlog→in-progress→review→done，blocked→backlog）
+- 可执行强制：阶段/流转守卫（非法跃迁拒绝）、依赖守卫与环检测、验证证据（TestCommand 真实执行 + `.vibe/evidence/` 留痕）、STATUS.md 状态自刷新与保鲜拦截、pre-commit hook 提交闸门、分支耦合（begin 自动开 `vibe/T-XXX`、close 自动 merge --no-ff 删除）
+- 修复记录（`Resolution:` 锚点，close 前强制）与术语表（`vibe gloss add`，Domain 非空时强制非空）
+- 兼容：与 vibe-workbench 文件格式（tickets.md / docs/CONTEXT.md / STATUS.md / `.vibe/`）与 `~/.vibe/projects.json` 注册表完全一致，两 CLI 可混用；STATUS 保鲜判定对生成器注释与 CRLF 行尾归一化
+
+### 新技能与工作流
+- `skills/workbench`（SKILL.md + SKILL.local.md）：工单驱动开发技能，入 ask-zcode 路由（匝道 + 独立技能 + 判别条件）
+- `workflows/ticket-dev.yaml`：确定性工作流模板（workbench 技能 + context/next 命令 + 循环推进提示）
+
+### 验证
+- 端到端全流程：init → add → begin（自动开分支）→ phase 全链路（守卫拦截非法跃迁）→ transition → resolve → commit（pre-commit hook 拦截 Phase=analyze/in-progress 非法提交）→ close（校验 Resolution + 提交 + 自动合并分支）
+- `zcode market validate` 12/12 通过
+
 ## [0.1.1] - 2026-08-06
 
 **打磨**：EvoSkills 审计闭环修复 + tdd 技能首轮迭代（evoskills 六步循环实战）。

@@ -4,7 +4,7 @@
     "displayName": "Zcode 技能库"
   },
   "version": "0.1.0",
-  "count": 11,
+  "count": 12,
   "skills": [
     {
       "name": "ask-zcode",
@@ -63,6 +63,12 @@
     {
       "name": "tdd",
       "description": "测试驱动开发——先写失败测试（红），再最小实现（绿），最后重构。当用户要求开发新功能、修复 Bug 或尚未写测试时使用。",
+      "valid": true,
+      "issues": []
+    },
+    {
+      "name": "workbench",
+      "description": "工单驱动开发——用两个状态机（Agent 阶段机 + 工单生命周期机）+ 可执行强制管理 AI 工作流。当项目里有 tickets.md/docs/CONTEXT.md 工作台、用户提到\"拾取工单\"、\"推进阶段\"、\"zcode ticket begin/phase/transition/close\"、或要在工作台项目中规范地完成一段工作时使用。",
       "valid": true,
       "issues": []
     },
