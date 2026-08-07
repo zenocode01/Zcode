@@ -3,7 +3,7 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: analyze
+Phase: commit
 Current Ticket: T-018
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
