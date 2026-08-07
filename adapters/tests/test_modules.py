@@ -346,3 +346,100 @@ class TestVersion(unittest.TestCase):
             rc = cli.main(["version"])
         self.assertEqual(rc, 0)
         self.assertRegex(buf.getvalue(), r"^zcode \d+\.\d+\.\d+")
+
+
+# ---------- update 自更新命令 ----------
+class TestUpdate(unittest.TestCase):
+    """update.py：dry-run / 前置检查 / 分步执行与失败中止。"""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.root = Path(self._tmp.name)
+        _git = lambda *a: subprocess.run(
+            ["git", "-C", str(self.root), *a], capture_output=True, text=True).returncode
+        _git("init", "-q", ".")
+        _git("config", "user.email", "t@t")
+        _git("config", "user.name", "t")
+        (self.root / "a.txt").write_text("x", encoding="utf-8")
+        (self.root / "package.json").write_text("{}", encoding="utf-8")
+        (self.root / "scripts").mkdir()
+        (self.root / "scripts" / "install.sh").write_text("#!/bin/sh\n", encoding="utf-8")
+        _git("add", "-A")
+        _git("commit", "-q", "-m", "seed")
+
+    def test_precheck_rejects_dirty(self):
+        from zcode import update
+        (self.root / "dirty.txt").write_text("x", encoding="utf-8")
+        reason = update.precheck(self.root)
+        self.assertIn("未提交改动", reason)
+
+    def test_precheck_passes_clean(self):
+        from zcode import update
+        self.assertIsNone(update.precheck(self.root))
+
+    def test_dry_run_prints_plan_only(self):
+        """dry-run 打印全部步骤（含可选），不执行任何命令。"""
+        import contextlib
+        import io
+        from unittest import mock
+        from zcode import update
+        buf = io.StringIO()
+        with mock.patch.object(update, "_run", wraps=update._run) as m, \
+                contextlib.redirect_stdout(buf):
+            rc = update.run_update(dry_run=True, root=self.root)
+        self.assertEqual(rc, 0)
+        out = buf.getvalue()
+        self.assertIn("git fetch origin", out)
+        self.assertIn("npm link", out)          # package.json 存在 → 可选步列出
+        self.assertIn("install.sh", out)
+        m.assert_not_called()                    # 零执行
+
+    def test_update_success_sequence(self):
+        """成功路径：按序执行各步骤，末尾打印版本提示。"""
+        import contextlib
+        import io
+        from unittest import mock
+        from zcode import update
+        # 序列: status → fetch → rev-list(有更新) → pull → pip → npm → install.sh → log
+        seq = [(0, [])] * 2 + [(0, ["3"])] + [(0, [])] * 4 + [(0, ["abc123 提交"])]
+        buf = io.StringIO()
+        with mock.patch.object(update, "_run", side_effect=seq) as m, \
+                contextlib.redirect_stdout(buf):
+            rc = update.run_update(dry_run=False, root=self.root)
+        self.assertEqual(rc, 0)
+        cmds = [call.args[0][0:2] for call in m.call_args_list]
+        self.assertEqual(cmds[1], ["git", "fetch"])
+        self.assertEqual(cmds[3], ["git", "pull"])
+        calls = [call.args[0] for call in m.call_args_list]
+        self.assertTrue(any(c[:2] == [sys.executable, "-m"] and c[2] == "pip" for c in calls))
+        self.assertIn("已更新", buf.getvalue())
+
+    def test_update_already_latest(self):
+        """fetch 后无新提交 → 提示已是最新并退出，不执行重装步骤。"""
+        import contextlib
+        import io
+        from unittest import mock
+        from zcode import update
+        buf = io.StringIO()
+        # 序列: status → fetch → rev-list(=0 无更新)
+        with mock.patch.object(update, "_run", side_effect=[(0, []), (0, []), (0, ["0"])]) as m, \
+                contextlib.redirect_stdout(buf):
+            rc = update.run_update(dry_run=False, root=self.root)
+        self.assertEqual(rc, 0)
+        self.assertIn("已是最新", buf.getvalue())
+        cmds = [call.args[0][0:2] for call in m.call_args_list]
+        self.assertNotIn(["git", "pull"], cmds)  # 不执行重装步骤
+
+    def test_update_failure_stops_with_guidance(self):
+        """中间步骤失败 → UpdateError 含失败步骤与已完成列表。"""
+        from unittest import mock
+        from zcode import update
+        # 序列: status → fetch → rev-list(有更新) → pull(1 失败)
+        with mock.patch.object(update, "_run", side_effect=[(0, []), (0, []), (0, ["3"]), (1, ["conflict!"])]):
+            with self.assertRaises(update.UpdateError) as ctx:
+                update.run_update(dry_run=False, root=self.root)
+        msg = str(ctx.exception)
+        self.assertIn("git pull", msg)       # 失败步骤
+        self.assertIn("已完成: git fetch origin", msg)  # 已完成列表
+        self.assertIn("重跑 zcode update", msg)         # 恢复指引

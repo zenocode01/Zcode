@@ -128,7 +128,8 @@ Status: done
 - [ ] 验证: zcode version 输出正确; 全量测试绿
 
 ## T-025 zcode update 自更新命令
-Status: backlog
+Resolution: 根因: CLI 无自更新命令, 用户需手动 git pull + 重装多步; 实现: 新增 adapters/zcode/update.py + zcode update [--dry-run]——前置检查(工作区干净, 未提交改动拒绝防覆盖)→ git fetch(失败附网络/凭据提示)→ rev-list 已最新退出→ pull --ff-only→ 当前解释器 pip install -e→ npm link(可选, 失败仅警告)→ scripts/install.sh→ 变更摘要; 每步失败即停报告已完成步骤+重跑指引; 验证: 84 用例绿(新增 6: precheck 脏/净/dry-run 零执行/成功序列/已最新退出/失败中止), 真机 dry-run 与脏工作区拦截实测通过
+Status: review
 
 - [ ] - [ ] 实现: zcode update [--dry-run]——前置检查(仓库根/工作区干净/分支 main)→ git fetch 对比(已最新退出)→ git pull --ff-only → 当前解释器 pip install -e adapters → npm link(失败仅警告) → bash scripts/install.sh 刷新技能/钩子 → 输出变更摘要(git log 最近条目)
 - [ ] 每步失败即停并报告已完成步骤与手动处理提示; 非 TTY 直接执行
