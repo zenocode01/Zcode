@@ -14,3 +14,14 @@
 2026-08-07 09:24:33 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-092432-verify-review.txt
 2026-08-07 09:24:33 | phase | verify -> review --green
 2026-08-07 09:24:33 | phase | review -> commit --pass
+2026-08-07 09:24:50 | close | T-003 (启用工单工作台于本仓库)
+2026-08-07 09:33:57 | add | T-004 (同步 README 与 AGENTS.md 文档)
+2026-08-07 09:34:08 | begin | T-004 (同步 README 与 AGENTS.md 文档)
+2026-08-07 09:34:08 | phase | analyze -> plan
+2026-08-07 09:34:08 | phase | plan -> implement
+2026-08-07 09:34:08 | phase | implement -> verify --green
+2026-08-07 09:34:08 | transition | T-004: in-progress -> review
+2026-08-07 09:34:08 | resolve | T-004 (同步 README 与 AGENTS.md 文档)
+2026-08-07 09:34:09 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-093408-verify-review.txt
+2026-08-07 09:34:09 | phase | verify -> review --green
+2026-08-07 09:34:09 | phase | review -> commit --pass

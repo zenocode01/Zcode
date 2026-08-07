@@ -25,4 +25,8 @@ Status: backlog
 
 ## T-003 启用工单工作台于本仓库
 Resolution: 根因: 仓库无工作台纪律; 修复: init --existing 铺骨架+协议并入 AGENTS.md+全局技能同步; 验证: validate/回归通过
+Status: done
+
+## T-004 同步 README 与 AGENTS.md 文档
+Resolution: 根因: README/AGENTS.md 未反映工单工作台落地; 修复: 技能数 11→12、目录结构补 tickets/STATUS/.vibe、新增 ticket 命令与工作台 bullet、测试命令更新; 验证: market validate 12/12 + unittest 4/4
 Status: review
