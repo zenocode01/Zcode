@@ -153,3 +153,14 @@
 2026-08-07 11:09:58 | phase | review -> commit --pass
 2026-08-07 11:09:59 | branch | merged vibe/T-013 -> main and deleted
 2026-08-07 11:09:59 | close | T-013 (术语表欠账补齐 + 登记时机改为 close 前人工核对)
+2026-08-07 11:12:16 | add | T-014 (普通用户实操手册: 零基础照做指南)
+2026-08-07 11:12:16 | branch | created vibe/T-014 (from main)
+2026-08-07 11:12:16 | begin | T-014 (普通用户实操手册: 零基础照做指南)
+2026-08-07 11:13:02 | phase | analyze -> plan
+2026-08-07 11:13:02 | phase | plan -> implement
+2026-08-07 11:13:02 | phase | implement -> verify --green
+2026-08-07 11:13:02 | transition | T-014: in-progress -> review
+2026-08-07 11:13:02 | resolve | T-014 (普通用户实操手册: 零基础照做指南)
+2026-08-07 11:13:03 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-111302-verify-review.txt
+2026-08-07 11:13:03 | phase | verify -> review --green
+2026-08-07 11:13:03 | phase | review -> commit --pass
