@@ -106,7 +106,7 @@ Status: done
 
 ## T-022 memory add 静默 0 条: infer 提取失败自动降级 + 提示
 Resolution: 根因: MemStore.add 在 infer(simplified) 模式下直接透传 mem0, LLM 提取返回 0 条时静默返回空 results, CLI 只打印『已写入 0 条记忆』无任何提示/降级, 用户感知为写入失败且记忆丢失; 修复: ① MemStore.add 在 infer 且提取 0 条时自动降级 L0(原文纯 embedding 第二次写入, 参数透传), 返回 dict 附 degraded=True; ② CLI 检测 degraded 向 stderr 打印明确提示; 验证: 76 用例绿(新增 4: 降级两次调用/成功不降级/L0 不重试/CLI 提示), 真机 memory add 触发降级提示+写入成功; 已知环境限制: BM25 encoder 加载失败(fastembed 下载被 Steam++ 证书拦截), 检索降级纯 embedding 不影响核心
-Status: review
+Status: done
 
 - [ ] - [ ] 修复: MemStore.add 在 infer 提取返回 0 条时自动降级 L0(原文纯 embedding 写入, 记忆不丢), 返回带 degraded 标记; CLI 打印明确提示(提取失败/降级原因)
 - [ ] 验证: mock mem0.add 两次调用(infer=True 空 → infer=False 成功), 全量测试绿; 真机 memory add 走降级路径写入成功

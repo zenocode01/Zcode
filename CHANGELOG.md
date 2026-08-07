@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.11] - 2026-08-07
+
+**memory add 静默 0 条: infer 提取失败自动降级 + 提示**（T-022）：根因: MemStore.add 在 infer(simplified) 模式下直接透传 mem0, LLM 提取返回 0 条时静默返回空 results, CLI 只打印『已写入 0 条记忆』无任何提示/降级, 用户感知为写入失败且记忆丢失; 修复: ① MemStore.add 在 infer 且提取 0 条时自动降级 L0(原文纯 embedding 第二次写入, 参数透传), 返回 dict 附 degraded=True; ② CLI 检测 degraded 向 stderr 打印明确提示; 验证: 76 用例绿(新增 4: 降级两次调用/成功不降级/L0 不重试/CLI 提示), 真机 memory add 触发降级提示+写入成功; 已知环境限制: BM25 encoder 加载失败(fastembed 下载被 Steam++ 证书拦截), 检索降级纯 embedding 不影响核心
+
 ## [0.3.10] - 2026-08-07
 
 **gloss list 报「术语『list』不存在」应提示用法**（T-021）：根因: ① cmd_add 条件反写——有参时取空串、无参才提问(dep_input/body), Depends 与描述参数静默丢失(登记工单时描述从未写入); ② gloss list 把 list 当术语查询报不存在, 查询未命中提示不完整; ③ add --help 把 --help 当标题建空单; 修复: ① 条件修正为有参取参、无参提问; ② gloss list/ls 识别为列出全部, 未命中提示完整用法(列出/添加); ③ run() 统一处理子命令 -h/--help 显示帮助, show_help 同步 add/gloss 用法; 验证: 72 用例绿(新增 4: add 依赖+描述写入/--help 不建单/gloss list 列出/未命中提示), 真机冒烟 add 带参写入成功

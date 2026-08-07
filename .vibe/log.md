@@ -269,3 +269,5 @@
 2026-08-07 14:41:55 | phase | verify -> review --green
 2026-08-07 14:42:07 | resolve | T-022 (memory add 静默 0 条: infer 提取失败自动降级 + 提示)
 2026-08-07 14:42:07 | phase | review -> commit --pass
+2026-08-07 14:42:28 | branch | merged vibe/T-022 -> main and deleted
+2026-08-07 14:42:28 | close | T-022 (memory add 静默 0 条: infer 提取失败自动降级 + 提示)
