@@ -5,7 +5,7 @@
 ## Status
 
 Phase: commit
-Current Ticket: T-008
+Current Ticket: T-009
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 
 ## 配置

@@ -14,7 +14,7 @@
 
 ## 当前状态(重要)
 
-> **Phase 1/2/3 核心能力全部落地(2025-08):技能库、适配层、8 平台安装、工作流/编排、工单驱动工作台、子代理驱动开发、记忆层(mem0)真机验证、会话接力。**
+> **Phase 1/2/3 核心能力全部落地(2026-08):技能库、适配层、8 平台安装、工作流/编排、工单驱动工作台、子代理驱动开发、记忆层(mem0)真机验证、会话接力。**
 
 - 需求与设计文档:
   - `docs/基本构思.md` —— 唯一权威需求来源(四层架构 + 本地小模型优化定稿 + 路线图),开发前务必先读
@@ -30,7 +30,7 @@
   - 自我迭代(EvoSkills):`zcode skill log/audit`(捕获使用记录/评估健康度,阈值 70%/2条) + `skills/evoskills` 元技能(监控→捕获→评估→迭代→验证→发布)
   - 技能市场与质量评估(Phase 4 起步):`zcode market list/validate/generate` + `marketplace.json` + `.claude-plugin/`(Claude Code 深度插件,参考 mem0 格式)
   - `scripts/install.sh` —— 跨平台一键安装;`hooks/` —— git 安全守卫;`bin/zcode.js` + `package.json` —— npm 分发入口
-- Git 仓库已有提交(`main` 分支);无远程仓库
+- Git 仓库已有提交(`main` 分支);远程 `origin` 指向 `https://github.com/zenocode01/Zcode.git`
 - 尚未实现:技能市场远程分发与社区贡献、其余平台深度插件、技能市场发布
 
 任何 AI 代理在本仓库中的工作,都应从推动"实施路线图"的下一步开始,而不是假设已有功能。
@@ -154,6 +154,8 @@
 2. **状态推进一律走命令**，绝不手动改锚点行（`Phase:` / `Status:` / `Current Ticket:` / `Domain:` / `Resolution:` / `TestCommand:` / `BranchMode:`）。
 3. 干活前 `zcode ticket begin T-XXX`；修复类工单 close 前必须 `zcode ticket resolve T-XXX "根因+修复+验证"`；`zcode ticket validate` 通过后才提交。
 4. pre-commit hook 会拦截：Phase 未到 verify/review/commit、当前工单 in-progress、STATUS.md 过期、Domain 已填但术语表为空、TestCommand 运行失败（测试门禁，`git config zcode.test-gate false` 可关）。
-5. **close 前文档同步**：`CHANGELOG.md` 条目必须含本工单号 `T-XXX`（close 守卫强制，缺则拒绝）；README / AGENTS.md / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步，并随工单一起提交——**不允许关单后文档未更新**。
+5. **close 前文档同步**：
+   - **命令自动管理**（不用人工）：`tickets.md` / `STATUS.md` / `docs/CONTEXT.md` 锚点 / `docs/UBIQUITOUS_LANGUAGE.md` / `.vibe/`——由 `zcode ticket` 命令维护，过期/非法会被校验拦截。
+   - **人工同步**（随工单一起提交）：`CHANGELOG.md` 条目必须含本工单号 `T-XXX`（close 守卫强制，缺则拒绝）；`README.md` / `AGENTS.md` / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步——**不允许关单后文档未更新**。
 6. 新术语立即 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
 7. 当前工单在 `tickets.md`；`zcode ticket next` 看可拾取项。

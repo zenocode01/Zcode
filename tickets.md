@@ -45,4 +45,8 @@ Status: done
 
 ## T-008 close 前文档同步强制: CHANGELOG 必须含工单号
 Resolution: 根因: 文档同步靠事后追补(T-005 漏 CHANGELOG 被质疑), 无强制; 修复: close 守卫检查 CHANGELOG 含工单号(缺则拒), workbench/模板/AGENTS/README 同步文档同步条款, 新增 2 测试; 验证: 57 用例绿, 拒绝/放行路径测试覆盖
+Status: done
+
+## T-009 文档同步清单完整化: 六文件职责分类 + 修欠账
+Resolution: 根因: 文档同步清单只列人工文件, 未说明自动管理文件; 修欠账: AGENTS 无远程仓库过时(有 origin), README 用例数 55→57 且 CHANGELOG 引用缺 0.2.2, 日期 2025→2026; 修复: workbench/模板/协议段补六文件职责分类(A 命令自动管理/B 人工同步), README 版本引用改为指向文件顶部根治数字脱节; 验证: 57 用例绿, market 12/12
 Status: review

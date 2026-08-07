@@ -2,6 +2,18 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.2.3] - 2026-08-07
+
+**文档同步清单完整化**（T-009）：六类相关文件职责分类 + 修历史欠账。
+
+### 职责分类（workbench 双版本 / 模板 AGENTS.md / 本仓库 AGENTS.md 协议段）
+- **命令自动管理**（无需人工，校验拦截）：`tickets.md`、`STATUS.md`、`docs/CONTEXT.md` 锚点、`docs/UBIQUITOUS_LANGUAGE.md`、`.vibe/`
+- **人工同步**（随工单提交）：`CHANGELOG.md`（硬强制，close 守卫）＋ `README.md` / `AGENTS.md` / 技能清单（ask-zcode / skills/README / marketplace.json）
+
+### 修欠账
+- `AGENTS.md`："无远程仓库" → `origin` 指向 `https://github.com/zenocode01/Zcode.git`；日期 2025-08 → 2026-08
+- `README.md`：测试用例 55 → 57；CHANGELOG 引用补 0.2.2；日期 2025-08 → 2026-08
+
 ## [0.2.2] - 2026-08-07
 
 **文档同步强制**（T-008）：close 前相关文档必须随工单更新，杜绝"关了单文档没更新"。

@@ -41,7 +41,9 @@ backlog → in-progress → review → done
 5. 状态文件（`docs/CONTEXT.md`、`tickets.md`）的**内容**可以自由写，但**锚点行**（`Phase:`、`Status:`、`Current Ticket:`、`Domain:`、`Depends:`、`Resolution:`、`TestCommand:`、`BranchMode:`）必须格式正确。
 6. `BranchMode: auto` 时，`begin` 自动切到 `vibe/T-XXX` 分支、`close` 自动合并回主分支——**不要手动改分支**，除非工作流出错。
 7. 遇到领域术语（歧义、专有名词、命名约定）立即用 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
-8. **close 前文档同步**：仓库存在 `CHANGELOG.md` 时，条目必须含本工单号 `T-XXX`（close 守卫强制，缺则拒绝）；README / AGENTS / 技能清单等按本次变更同步，并随工单一起提交。
+8. **close 前文档同步**：
+   - **命令自动管理**（不用人工）：`tickets.md` / `STATUS.md` / `docs/CONTEXT.md` 锚点 / `docs/UBIQUITOUS_LANGUAGE.md` / `.vibe/`——由 `zcode ticket` 命令维护，过期/非法会被校验拦截。
+   - **人工同步**（随工单提交）：`CHANGELOG.md` 条目必须含本工单号 `T-XXX`（close 守卫强制，缺则拒绝）；`README.md` / `AGENTS.md` / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步。
 
 ## 修复类工单流程（记录修复情况）
 1. `zcode ticket add "修复: <问题>"` → `zcode ticket begin T-XXX`
