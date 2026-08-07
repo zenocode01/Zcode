@@ -335,20 +335,43 @@ class TestLifecycle(TicketBase):
         (root / "src_code.py").write_text("print(1)", encoding="utf-8")
         self.assertFalse(ticket.repo_clean(root))  # 源码改动算脏
 
-    def test_close_requires_changelog_entry(self):
+    def test_close_auto_appends_changelog_and_commits(self):
+        """缺 CHANGELOG 记录 → 自动补录（含 T-XXX）+ 状态文件自动提交，close 通过。"""
         root = self._full_project()
-        (root / "CHANGELOG.md").write_text("# Changelog\n\n## [0.0.1]\n- 其他变更\n", encoding="utf-8")
+        (root / "CHANGELOG.md").write_text("# Changelog\n\n## [0.5.0]\n- 其他变更\n", encoding="utf-8")
         ticket.cmd_begin(["T-001"])
         self._drive_to_commit_phase(root)
         self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
-        with self.assertRaises(ticket.TicketError):
-            ticket.cmd_close(["T-001"])  # CHANGELOG 无 T-001 → 拒绝
-        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "review")
-        # 补记 CHANGELOG 后可 close
-        changelog = root / "CHANGELOG.md"
-        changelog.write_text("# Changelog\n\n## [0.0.2]\n- T-001 实现 foo\n", encoding="utf-8")
-        self.assertEqual(self._commit_no_hook(root, "T-001 changelog"), 0)
+        ticket.cmd_close(["T-001"])  # 不再拒绝：自动补录
+        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
+        changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertIn("T-001", changelog)
+        self.assertIn("## [0.5.1]", changelog)  # 版本自动 bump
+        # 状态文件已自动提交：工作区无状态文件残留
+        _, out = ticket.run_git(root, ["status", "--porcelain"])
+        self.assertFalse(any("tickets.md" in l or "STATUS.md" in l for l in out))
+        # 自动提交的 message 含工单号
+        code, out = ticket.run_git(root, ["log", "--oneline", "--grep=T-001", "-1"])
+        self.assertEqual(code, 0)
+
+    def test_close_changelog_no_duplicate(self):
+        """CHANGELOG 已有记录 → 不重复追加。"""
+        root = self._full_project()
+        (root / "CHANGELOG.md").write_text("# Changelog\n\n## [0.1.0]\n- T-001 已记录\n", encoding="utf-8")
+        ticket.cmd_begin(["T-001"])
+        self._drive_to_commit_phase(root)
+        self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
         ticket.cmd_close(["T-001"])
+        text = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertEqual(text.count("T-001"), 1)  # 只保留原有那条
+
+    def test_close_no_changelog_file_no_create(self):
+        root = self._full_project()  # 无 CHANGELOG.md
+        ticket.cmd_begin(["T-001"])
+        self._drive_to_commit_phase(root)
+        self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
+        ticket.cmd_close(["T-001"])
+        self.assertFalse((root / "CHANGELOG.md").exists())  # 不创建
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
 
     def test_close_allows_no_changelog_file(self):
