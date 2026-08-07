@@ -166,7 +166,7 @@ def parse_tickets(file: Path) -> list[Ticket]:
                 current.status = strip_inline_comment(line[len("Status:"):])
             elif line.startswith("Depends:"):
                 dep_str = strip_inline_comment(line[len("Depends:"):])
-                current.depends = [d for d in re.split(r"[,;]", dep_str) if d.strip()]
+                current.depends = [d.strip() for d in re.split(r"[,;]", dep_str) if d.strip()]
             elif line.startswith("Resolution:"):
                 current.resolution = strip_inline_comment(line[len("Resolution:"):])
     if current:
@@ -885,6 +885,11 @@ def cmd_validate(args: list[str]) -> None:
     print("✓ validate 通过")
 
 
+def _git_config(root: Path, key: str) -> str:
+    code, out = run_git(root, ["config", "--get", key])
+    return out[0].strip() if code == 0 and out else ""
+
+
 def cmd_check_commit(args: list[str]) -> None:
     root = find_repo_root()
     if root is None or not (root / "docs/CONTEXT.md").exists():
@@ -903,7 +908,7 @@ def cmd_check_commit(args: list[str]) -> None:
     if not (root / "STATUS.md").exists():
         problems.append("STATUS.md 缺失，先运行 zcode ticket status 生成")
     elif not status_fresh(root):
-        problems.append("STATUS.md 已过期（状态文件有改动但未刷新），先运行 zcode ticket status")
+        problems.append("STATUS.md 已过期（状态有改动但未刷新），先运行 zcode ticket status")
     domain = get_anchor(ctx_file, "Domain")
     if domain:
         gloss_file = root / "docs/UBIQUITOUS_LANGUAGE.md"
@@ -911,6 +916,16 @@ def cmd_check_commit(args: list[str]) -> None:
             problems.append("缺少 docs/UBIQUITOUS_LANGUAGE.md 术语表（Domain 已填写）")
         elif not parse_glossary(gloss_file):
             problems.append("术语表为空（Domain 已填写），用 zcode ticket gloss add <术语> <定义> 记录")
+    # 测试门禁：配了 TestCommand 则提交前真实执行，失败拦截；git config zcode.test-gate false 可关闭
+    test_cmd = get_anchor(ctx_file, "TestCommand")
+    if test_cmd and _git_config(root, "zcode.test-gate") != "false":
+        r = subprocess.run(test_cmd, shell=True, capture_output=True, text=True, errors="replace")
+        if r.returncode != 0:
+            tail = (r.stderr or r.stdout or "").strip().splitlines()[-3:]
+            problems.append(
+                f"TestCommand 运行失败 (exit {r.returncode})，提交被拦截: {test_cmd}"
+                + ("\n    " + "\n    ".join(tail) if tail else "")
+            )
     if problems:
         print("commit 被 zcode 拦截:")
         for p in problems:
@@ -919,6 +934,7 @@ def cmd_check_commit(args: list[str]) -> None:
             print(f"处理: zcode ticket phase review --green; zcode ticket transition {cur} review; zcode ticket resolve {cur} <修复说明>; zcode ticket status; zcode ticket close {cur}")
         else:
             print("处理: 先 zcode ticket add/begin 一张工单推进到 review，或先 zcode ticket status 刷新后重试")
+        print("（测试门禁可用 git config zcode.test-gate false 临时关闭）" if test_cmd else "")
         raise SystemExit(1)
 
 
