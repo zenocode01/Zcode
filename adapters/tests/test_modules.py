@@ -246,3 +246,79 @@ class TestInstallScript(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------- memory.py（MemStore 降级） ----------
+class TestMemStore(unittest.TestCase):
+    """MemStore.add 降级：infer 提取 0 条 → 自动 L0 原文写入（记忆不丢）+ degraded 标记。"""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        p = profile.Profile.from_dict({
+            "name": "test", "model_family": "qwen-test",
+            "context_window": 8192, "tool_level": 2,
+            "memory": {
+                "llm": {"base_url": "http://127.0.0.1:9/v1"},
+                "embedder": {"provider": "zcode_http", "model": "m", "base_url": "http://127.0.0.1:9"},
+                "vector_store": {"provider": "qdrant", "path": str(Path(self._tmp.name) / "mem")},
+                "infer_mode": "simplified",
+            },
+        })
+        from zcode.memory import MemStore
+        self.ms = MemStore(p)
+
+    def test_infer_empty_auto_degrade_to_l0(self):
+        """infer 提取返回 0 条 → 自动降级第二次调用（infer=False 原文写入），degraded 标记。"""
+        from unittest import mock
+        with mock.patch.object(
+            self.ms._mem, "add",
+            side_effect=[{"results": []}, {"results": [{"id": "x1", "memory": "原文"}]}],
+        ) as m:
+            r = self.ms.add("需要记忆的原文", user_id="u", metadata={"k": "v"})
+        self.assertEqual(r["results"][0]["id"], "x1")
+        self.assertTrue(r.get("degraded"))
+        self.assertEqual(len(m.call_args_list), 2)
+        first, second = m.call_args_list
+        self.assertTrue(first.kwargs["infer"])          # 第一次走 LLM 提取
+        self.assertFalse(second.kwargs["infer"])        # 降级后纯 embedding
+        self.assertEqual(second.kwargs["user_id"], "u")  # 参数透传
+        self.assertEqual(second.kwargs["metadata"], {"k": "v"})
+
+    def test_infer_success_no_degrade(self):
+        """infer 提取有结果 → 单次调用，不降级。"""
+        from unittest import mock
+        with mock.patch.object(
+            self.ms._mem, "add",
+            return_value={"results": [{"id": "x1", "memory": "提取的事实"}]},
+        ) as m:
+            r = self.ms.add("内容")
+        self.assertFalse(r.get("degraded"))
+        m.assert_called_once()
+
+    def test_l0_mode_no_retry(self):
+        """infer_mode=none（L0）→ 单次 infer=False 调用，0 条不重试、不降级标记。"""
+        from unittest import mock
+        self.ms.infer_mode = "none"
+        with mock.patch.object(self.ms._mem, "add", return_value={"results": []}) as m:
+            r = self.ms.add("内容")
+        m.assert_called_once()
+        self.assertFalse(m.call_args.kwargs["infer"])
+        self.assertFalse(r.get("degraded"))
+
+    def test_cli_warns_on_degrade(self):
+        """CLI 在降级时向 stderr 打印提示（不再静默 0 条）。"""
+        import io
+        import contextlib
+        from unittest import mock
+        from zcode import cli
+        fake = mock.MagicMock()
+        fake.infer_mode = "simplified"
+        fake.add.return_value = {"results": [{"id": "x1", "memory": "原文"}], "degraded": True}
+        with mock.patch.object(cli, "_load_memstore", return_value=fake):
+            ns = mock.MagicMock(content="内容", user="u")
+            buf = io.StringIO()
+            with contextlib.redirect_stderr(buf):
+                rc = cli.cmd_memory_add(ns)
+        self.assertEqual(rc, 0)
+        self.assertIn("降级", buf.getvalue())

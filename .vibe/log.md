@@ -258,3 +258,14 @@
 2026-08-07 13:57:13 | phase | review -> commit --pass
 2026-08-07 13:57:20 | branch | merged vibe/T-021 -> main and deleted
 2026-08-07 13:57:20 | close | T-021 (gloss list 报「术语『list』不存在」应提示用法)
+2026-08-07 14:39:28 | add | T-022 (memory add 静默 0 条: infer 提取失败自动降级 + 提示)
+2026-08-07 14:39:35 | branch | created vibe/T-022 (from main)
+2026-08-07 14:39:35 | begin | T-022 (memory add 静默 0 条: infer 提取失败自动降级 + 提示)
+2026-08-07 14:39:35 | phase | analyze -> plan
+2026-08-07 14:39:35 | phase | plan -> implement
+2026-08-07 14:41:52 | phase | implement -> verify
+2026-08-07 14:41:52 | transition | T-022: in-progress -> review
+2026-08-07 14:41:55 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-144152-verify-review.txt
+2026-08-07 14:41:55 | phase | verify -> review --green
+2026-08-07 14:42:07 | resolve | T-022 (memory add 静默 0 条: infer 提取失败自动降级 + 提示)
+2026-08-07 14:42:07 | phase | review -> commit --pass
