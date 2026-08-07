@@ -1,6 +1,8 @@
 """workflow.py / handoff.py / marketplace.py / profile.py 单元测试。"""
 from __future__ import annotations
 
+import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -186,6 +188,60 @@ class TestProfile(unittest.TestCase):
         if real.exists():
             p = profile.load_profile(real)
             self.assertEqual(p.skill_variant, "local")
+
+
+class TestPackageEntry(unittest.TestCase):
+    """回归: `python -m zcode` 必须可用（bin/zcode.js npm 入口依赖它）。"""
+
+    def test_python_dash_m_zcode_runs(self):
+        r = subprocess.run(
+            [sys.executable, "-m", "zcode", "skills", "list"],
+            capture_output=True, text=True, cwd=str(Path(__file__).resolve().parents[1]),
+        )
+        self.assertEqual(r.returncode, 0, f"stderr: {r.stderr}")
+        self.assertIn("tdd", r.stdout)
+
+
+class TestInstallScript(unittest.TestCase):
+    """回归: install.sh --project X --uninstall 必须只卸载项目目录（曾忽略
+    --project 误删全局 ~/.agents/skills）。"""
+
+    REPO = Path(__file__).resolve().parents[2]
+    SCRIPT = REPO / "scripts" / "install.sh"
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.base = Path(self._tmp.name)
+        self.addCleanup(self._tmp.cleanup)
+
+    def _run(self, *args: str, env: dict | None = None) -> subprocess.CompletedProcess:
+        full_env = dict(os.environ)
+        full_env.pop("ZCODE_HOME", None)
+        if env:
+            full_env.update(env)
+        return subprocess.run(
+            ["bash", str(self.SCRIPT), *args],
+            capture_output=True, text=True, cwd=str(self.REPO), env=full_env,
+        )
+
+    def _proj_skills(self, name: str = "proj") -> Path:
+        return self.base / name / ".agents" / "skills"
+
+    def test_project_install_then_uninstall(self):
+        if not self.SCRIPT.exists():
+            self.skipTest("scripts/install.sh 不存在")
+        proj = self._proj_skills()
+        r = self._run("--project", str(self.base / "proj"))
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertTrue(proj.is_dir(), "项目级安装应创建 .agents/skills")
+        self.assertTrue((proj / "tdd").is_symlink() or (proj / "tdd").exists())
+        r = self._run("--project", str(self.base / "proj"), "--uninstall")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertFalse((proj / "tdd").exists(), "项目软链应被移除")
+        self.assertIn("[项目级] 卸载", r.stdout, "应声明项目级卸载")
+        global_tdd = Path.home() / ".agents/skills" / "tdd"
+        if global_tdd.is_symlink():
+            self.assertTrue(global_tdd.exists(), "uninstall 不得触碰全局 ~/.agents/skills")
 
 
 if __name__ == "__main__":

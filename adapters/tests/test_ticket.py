@@ -382,6 +382,19 @@ class TestLifecycle(TicketBase):
         ticket.cmd_close(["T-001"])
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
 
+    def test_close_no_changelog_still_commits_state_files(self):
+        """回归: 无 CHANGELOG.md 的项目 close 后状态文件也必须自动提交（曾因
+        `git add -- CHANGELOG.md` 路径不存在 exit 128 而静默失败，工作区残留）。"""
+        root = self._full_project()  # 无 CHANGELOG.md
+        ticket.cmd_begin(["T-001"])
+        self._drive_to_commit_phase(root)
+        self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
+        ticket.cmd_close(["T-001"])
+        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
+        _, out = ticket.run_git(root, ["status", "--porcelain"])
+        dirty = [l for l in out if "tickets.md" in l or "STATUS.md" in l or ".vibe/" in l]
+        self.assertEqual(dirty, [], f"状态文件未自动提交: {out}")
+
     def test_auto_branch_create_and_merge(self):
         root = self.make_project()
         _git(root, "config", "user.email", "t@t")

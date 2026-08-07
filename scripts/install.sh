@@ -129,11 +129,19 @@ EOF
 main() {
     if [[ $UNINSTALL -eq 1 ]]; then
         echo "== Zcode 卸载 =="
-        unlink_skill "$HOME/.agents/skills"
-        local d
-        for d in "${PLATFORM_DIRS[@]}"; do
-            unlink_skill "$d"
-        done
+        if [[ "$MODE" == "project" ]]; then
+            [[ -n "$PROJECT_DIR" ]] || { echo "错误: --project 需要目录参数" >&2; exit 1; }
+            local pdir
+            pdir="$(realpath -m "$PROJECT_DIR")/.agents/skills"
+            echo "[项目级] 卸载: $pdir"
+            unlink_skill "$pdir"
+        else
+            unlink_skill "$HOME/.agents/skills"
+            local d
+            for d in "${PLATFORM_DIRS[@]}"; do
+                unlink_skill "$d"
+            done
+        fi
         echo "完成。~/.zcode/config 保留（含既有配置，如需删除请手动移除）。"
         exit 0
     fi
