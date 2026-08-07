@@ -118,3 +118,18 @@ Status: done
 
 - [ ] - [ ] 修复: install.sh 生成 CLI 包装器时写死 exec python3(系统解释器), 重跑 install.sh 会覆盖已修好的 venv 包装器(Bug 1 复发); 改为优先 REPO_ROOT/.venv/bin/python(PEP 668 环境必须 venv), 回退 python3; 包检查逻辑同步用实际解释器
 - [ ] 验证: 重跑 install.sh 后包装器指向 venv, 任意目录 zcode 可用, 无 ModuleNotFoundError
+
+## T-024 zcode version 子命令 + __version__ 第五处版本统一
+Resolution: 根因: CLI 无版本查看命令, 且 __init__.py __version__ 停在 0.1.0(T-019 版本统一四文件漏第五处); 修复: __version__ 同步 0.3.8(与 pyproject/package.json/marketplace/plugin 一致), 注册 zcode version 子命令输出代码内版本; 验证: 78 用例绿(新增 2: __version__ 与 pyproject 一致性防漂移/version 命令输出格式), zcode version 输出 zcode 0.3.8
+Status: review
+
+- [ ] - [ ] 修复: adapters/zcode/__init__.py __version__ 停在 0.1.0(T-019 版本统一四文件漏了这处), 且 CLI 无版本查看命令
+- [ ] 实现: __version__ 同步 0.3.8(与 pyproject/package.json/marketplace/plugin 四文件一致); cli.py 注册 version 子命令输出 __version__
+- [ ] 验证: zcode version 输出正确; 全量测试绿
+
+## T-025 zcode update 自更新命令
+Status: backlog
+
+- [ ] - [ ] 实现: zcode update [--dry-run]——前置检查(仓库根/工作区干净/分支 main)→ git fetch 对比(已最新退出)→ git pull --ff-only → 当前解释器 pip install -e adapters → npm link(失败仅警告) → bash scripts/install.sh 刷新技能/钩子 → 输出变更摘要(git log 最近条目)
+- [ ] 每步失败即停并报告已完成步骤与手动处理提示; 非 TTY 直接执行
+- [ ] 验证: --dry-run 只打印不执行; 脏工作区拒绝; 更新后 zcode version/测试可用

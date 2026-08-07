@@ -322,3 +322,27 @@ class TestMemStore(unittest.TestCase):
                 rc = cli.cmd_memory_add(ns)
         self.assertEqual(rc, 0)
         self.assertIn("降级", buf.getvalue())
+
+
+# ---------- version 子命令 / 版本源 ----------
+class TestVersion(unittest.TestCase):
+    def test_init_version_matches_pyproject(self):
+        """__version__ 与 pyproject.toml 一致（版本统一第五处，防再次漂移）。"""
+        import tomllib
+        import zcode
+        py = Path(__file__).resolve().parents[1] / "pyproject.toml"
+        with open(py, "rb") as f:
+            pyver = tomllib.load(f)["project"]["version"]
+        self.assertEqual(zcode.__version__, pyver)
+
+    def test_version_command_prints(self):
+        """zcode version 输出 zcode <版本>。"""
+        import contextlib
+        import io
+        from unittest import mock
+        from zcode import cli
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = cli.main(["version"])
+        self.assertEqual(rc, 0)
+        self.assertRegex(buf.getvalue(), r"^zcode \d+\.\d+\.\d+")
