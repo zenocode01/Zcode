@@ -244,3 +244,5 @@
 2026-08-07 13:51:23 | phase | verify -> review --green
 2026-08-07 13:51:23 | resolve | T-020 (close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过)
 2026-08-07 13:51:24 | phase | review -> commit --pass
+2026-08-07 13:51:36 | branch | merged vibe/T-020 -> main and deleted
+2026-08-07 13:51:36 | close | T-020 (close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过)
