@@ -154,7 +154,7 @@
 2. **状态推进一律走命令**，绝不手动改锚点行（`Phase:` / `Status:` / `Current Ticket:` / `Domain:` / `Resolution:` / `TestCommand:` / `BranchMode:`）。
 3. 干活前 `zcode ticket begin T-XXX`；修复类工单 close 前必须 `zcode ticket resolve T-XXX "根因+修复+验证"`；`zcode ticket validate` 通过后才提交。
 4. pre-commit hook 会拦截：Phase 未到 verify/review/commit、当前工单 in-progress、STATUS.md 过期、Domain 已填但术语表为空、TestCommand 运行失败（测试门禁，`git config zcode.test-gate false` 可关）。
-5. **close 自动收尾**（无需人工）：`CHANGELOG.md` 缺本工单号时自动从 Resolution 补录（版本自动 bump）；`tickets.md` / `STATUS.md` / `docs/CONTEXT.md` / 术语表 / `.vibe/` / `CHANGELOG.md` 自动提交（`T-XXX 状态收尾`），工作区保持干净——不再需要"状态收尾/补记录"类工单。
+5. **close 自动收尾**（无需人工）：`CHANGELOG.md` 缺本工单号时自动从 Resolution 补录（版本自动 bump；文件不存在自动创建 `[0.1.0]` 基线）；`tickets.md` / `STATUS.md` / `docs/CONTEXT.md` / 术语表 / `.vibe/` / `CHANGELOG.md` 自动提交（`T-XXX 状态收尾`），工作区保持干净——不再需要"状态收尾/补记录"类工单。
 6. **人工同步**（随工单一起提交）：`README.md` / `AGENTS.md` / **术语表（本次引入的新术语 `gloss add`——写入靠命令、登记靠核对，validate 只拦空表与格式，漏登记不会自动发现）** / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步——**不允许关单后文档未更新**。
 7. 新术语立即 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
 8. 当前工单在 `tickets.md`；`zcode ticket next` 看可拾取项。

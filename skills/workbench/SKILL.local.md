@@ -31,7 +31,7 @@ description: 工单驱动开发（本地精简版）——两个状态机推进�
 
 - 绝不手动改 `Phase:`/`Status:`/`Current Ticket:`/`Domain:`/`Resolution:` 锚点
 - close 前必须 resolve；Domain 填了术语表必须非空
-- close 自动补 CHANGELOG（缺 T-XXX 时）+ 自动提交状态文件，工作区常净
+- close 自动补 CHANGELOG（缺 T-XXX 时，文件不存在自动创建基线）+ 自动提交状态文件，工作区常净
 - 状态命令自动刷新 STATUS.md；tickets/STATUS/CONTEXT 归命令管，不用人工
 
 ## close 前文档核对

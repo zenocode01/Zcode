@@ -332,15 +332,34 @@ def branch_mode(ctx_file: Path) -> str:
     return (m or "auto").lower()
 
 
-def repo_clean(root: Path) -> bool:
+def dirty_source_paths(root: Path) -> list[str]:
+    """工作区中非状态文件（源码等）的改动路径；空列表 = 可安全自动开分支/合并。
+
+    曾名 repo_clean（只查非状态文件却名为"整仓干净"，误导）；错误文案也改为列出实际文件。"""
     _, out = run_git(root, ["status", "--porcelain"])
+    paths = []
     for line in out:
         if len(line) < 4:
             continue
         p = line[3:].strip()
         if not any(p.startswith(s) for s in STATE_PREFIXES):
-            return False
-    return True
+            paths.append(p)
+    return paths
+
+
+def _dirty_paths_missing_on_base(root: Path, base: str) -> list[str]:
+    """工作区有修改/新增、但 base 分支上不存在的路径——`git switch base` 会被拒
+    （切换会丢失这些修改）。close 合并分支前预检，避免中止在中间态。"""
+    _, out = run_git(root, ["status", "--porcelain"])
+    missing = []
+    for line in out:
+        if len(line) < 4:
+            continue
+        p = line[3:].strip()
+        code, _ = run_git(root, ["cat-file", "-e", f"{base}:{p}"])
+        if code != 0:
+            missing.append(p)
+    return missing
 
 
 def repo_has_commit(root: Path) -> bool:
@@ -725,8 +744,12 @@ def cmd_begin(args: list[str]) -> None:
         if cur_branch.startswith("vibe/") and cur_branch != f"vibe/{tid}":
             raise TicketError(f"当前已在工单分支 {cur_branch}，不能重复拾取；先 zcode ticket close 或手动切回主分支")
         if repo_has_commit(root):
-            if not repo_clean(root):
-                raise TicketError("工作区有未提交的源码改动，自动开分支前请先提交或 stash（BranchMode: manual 可关闭自动分支）")
+            dirty = dirty_source_paths(root)
+            if dirty:
+                raise TicketError(
+                    "工作区有未提交的源码改动，自动开分支前请先提交或 stash（BranchMode: manual 可关闭自动分支）: "
+                    + ", ".join(dirty)
+                )
             base = cur_branch or "HEAD"
             code, _ = run_git(root, ["switch", "-c", f"vibe/{tid}"])
             if code != 0:
@@ -821,14 +844,23 @@ def _bump_changelog_version(content: str) -> str:
 
 
 def _auto_changelog(root: Path, t: Ticket) -> str | None:
-    """CHANGELOG.md 缺工单号时自动补录，返回新条目文本；无文件/已有记录返回 None。"""
+    """CHANGELOG.md 缺工单号时自动补录，返回新条目文本；已有记录返回 None。
+
+    Bug 3 修复：文件不存在时自动创建 [0.1.0] 基线并写入条目——不再静默跳过
+    （曾与 workbench SKILL.md「自动补录（缺则加）」承诺不符）。"""
     changelog = root / "CHANGELOG.md"
+    date = datetime.now().strftime("%Y-%m-%d")
     if not changelog.exists():
-        return None
+        version = "0.1.0"
+        entry = (
+            f"## [{version}] - {date}\n\n"
+            f"**{t.title}**（{t.id}）：{t.resolution or '（无修复记录）'}\n\n"
+        )
+        write_text(changelog, "# 变更日志\n\n" + entry)
+        return entry
     content = read_text(changelog) or ""
     if t.id in content:
         return None
-    date = datetime.now().strftime("%Y-%m-%d")
     version = _bump_changelog_version(content)
     entry = (
         f"## [{version}] - {date}\n\n"
@@ -876,30 +908,49 @@ def cmd_close(args: list[str]) -> None:
         raise TicketError(f"工单 {tid} 缺少修复记录（Resolution: 为空）。先 zcode ticket resolve {tid} <根因+修复+验证> 再 close")
     if not ticket_committed(root, tid):
         raise TicketError(f"当前分支没有含 {tid} 的提交，拒绝 close（先 git commit，再 transition review + phase review）")
-    # 文档同步：CHANGELOG.md 缺工单号时自动补录（不阻塞 close，杜绝"关了单文档没更新"）
-    entry = _auto_changelog(root, t)
-    if entry:
-        print(f"✓ CHANGELOG 已自动记录 {tid}（{entry.strip().splitlines()[0]}）")
-
+    # 分支合并：必须在自动补录 CHANGELOG 之前（Bug 2 修复——曾先写 CHANGELOG 再 switch，
+    # 若 CHANGELOG 是分支独有文件则 git 拒绝切换，close 中止在中间态无恢复指引）
     mode = branch_mode(ctx_file)
     branch = get_meta(root, "branch")
     if mode == "auto" and branch:
         cur_branch = git_output(root, ["branch", "--show-current"])
         if cur_branch == branch:
             base = get_meta(root, "branch-base") or "main"
-            if not repo_clean(root):
-                raise TicketError(f"工作区有未提交的源码改动，先提交再 close（无法安全合并 {branch}）")
+            dirty = dirty_source_paths(root)
+            if dirty:
+                raise TicketError(
+                    f"工作区有未提交的源码改动，先提交再 close（无法安全合并 {branch}）: " + ", ".join(dirty)
+                )
+            missing = _dirty_paths_missing_on_base(root, base)
+            if missing:
+                raise TicketError(
+                    f"以下文件在 {base} 分支上不存在且工作区有未提交修改，git 拒绝切换（会丢失修改）:\n"
+                    + "  " + "\n  ".join(missing) + "\n"
+                    f"处理: 先 git commit 或 git stash 这些改动，再重跑 zcode ticket close {tid}（幂等可重跑）"
+                )
             code, _ = run_git(root, ["switch", base])
             if code != 0:
-                raise TicketError(f"切回 {base} 失败")
+                raise TicketError(
+                    f"切回 {base} 失败。工单状态未改变（仍 review），可安全重跑 zcode ticket close {tid}。\n"
+                    f"可能原因: {base} 上不存在的文件在工作区有未提交修改（git status 查看），先提交或 stash 后再重试。"
+                )
             code, _ = run_git(root, ["merge", "--no-ff", branch])
             if code != 0:
                 run_git(root, ["merge", "--abort"])
-                raise TicketError(f"合并 {branch} → {base} 冲突/失败，已中止。请手动处理。")
+                raise TicketError(
+                    f"合并 {branch} → {base} 冲突/失败，已中止（merge --abort）。\n"
+                    f"工单状态未改变（仍 review），解决冲突后可重跑 zcode ticket close {tid}。"
+                )
             run_git(root, ["branch", "-d", branch])
             set_meta(root, "branch", "")
             set_meta(root, "branch-base", "")
             add_log(root, "branch", f"merged {branch} -> {base} and deleted")
+
+    # 文档同步：CHANGELOG.md 缺工单号时自动补录（在合并成功后执行，不阻塞 close；
+    # 文件不存在时自动创建基线，杜绝"关了单文档没更新"）
+    entry = _auto_changelog(root, t)
+    if entry:
+        print(f"✓ CHANGELOG 已自动记录 {tid}（{entry.strip().splitlines()[0]}）")
 
     set_ticket_status(tickets_file, tid, "done")
     set_anchor(ctx_file, "Phase", "analyze")

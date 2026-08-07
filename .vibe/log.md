@@ -234,3 +234,13 @@
 2026-08-07 13:42:19 | add | T-020 (--help)
 2026-08-07 13:44:12 | add | T-020 (close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过)
 2026-08-07 13:44:20 | add | T-021 (gloss list 报「术语『list』不存在」应提示用法)
+2026-08-07 13:46:45 | branch | created vibe/T-020 (from main)
+2026-08-07 13:46:45 | begin | T-020 (close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过)
+2026-08-07 13:48:18 | phase | analyze -> plan
+2026-08-07 13:48:18 | phase | plan -> implement
+2026-08-07 13:51:22 | phase | implement -> verify
+2026-08-07 13:51:23 | transition | T-020: in-progress -> review
+2026-08-07 13:51:23 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-135123-verify-review.txt
+2026-08-07 13:51:23 | phase | verify -> review --green
+2026-08-07 13:51:23 | resolve | T-020 (close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过)
+2026-08-07 13:51:24 | phase | review -> commit --pass
