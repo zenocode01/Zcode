@@ -28,6 +28,14 @@ bash scripts/install.sh
 
 > 本项目自身也启用了工单工作台：接手先 `zcode ticket context`（或读 `STATUS.md`），状态推进一律走命令，提交由 pre-commit hook 强制校验。
 
+### 三系统分工（workbench × handoff × mem0）
+
+| 系统 | 管什么 | 接手路径 |
+|---|---|---|
+| workbench（`zcode ticket`） | 项目级状态源：工单/阶段/验证证据/术语表（单一事实来源） | `zcode ticket context` |
+| handoff（`zcode handoff`） | 会话级接力：目标/下一步；工作台项目"进行中"自动引用工单状态 | `zcode handoff load` / `save` |
+| mem0（`zcode memory`） | 跨会话语义记忆：自由事实/偏好/经验检索 | `zcode memory search` |
+
 ## 目录结构
 
 ```
