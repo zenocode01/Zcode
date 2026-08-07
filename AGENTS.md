@@ -145,3 +145,14 @@
 2. 当前阶段开发工作,主要是在**推进 Phase 4 剩余项**(EvoSkills 自我迭代、各平台深度插件、技能市场)或**打磨已落地能力**;参考 `docs/基本构思.md` 第五节(本地小模型优化定稿)与 `docs/开发偏好与默认配置.md` 确定方向
 3. 如需修改 `docs/基本构思.md`,注意它是需求源头,改动需谨慎并与用户确认
 4. 本文件(AGENTS.md)需与项目实际状态保持同步:Phase 1 已落地(目录结构、脚本、配置文件已创建),后续进展请继续更新本文件的"当前状态"、"构建/测试/部署"等章节
+
+## 工单工作台协议（本仓库已启用）
+
+本仓库已启用工单驱动工作台（Layer 2，`zcode ticket`）：双状态机 + 可执行强制。任何 Agent 在本仓库干活时：
+
+1. **接手先看**：`zcode ticket context`（或读 `STATUS.md`），一屏拿全貌，细节按需再读。
+2. **状态推进一律走命令**，绝不手动改锚点行（`Phase:` / `Status:` / `Current Ticket:` / `Domain:` / `Resolution:` / `TestCommand:` / `BranchMode:`）。
+3. 干活前 `zcode ticket begin T-XXX`；修复类工单 close 前必须 `zcode ticket resolve T-XXX "根因+修复+验证"`；`zcode ticket validate` 通过后才提交。
+4. pre-commit hook 会拦截：Phase 未到 verify/review/commit、当前工单 in-progress、STATUS.md 过期、Domain 已填但术语表为空。
+5. 新术语立即 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
+6. 当前工单在 `tickets.md`；`zcode ticket next` 看可拾取项。

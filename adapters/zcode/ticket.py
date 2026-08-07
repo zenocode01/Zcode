@@ -513,10 +513,30 @@ def status_fresh(root: Path) -> bool:
 
 
 # ---------- 命令实现 ----------
+def _copy_missing(src: Path, dst: Path, skipped: list[str]) -> None:
+    """递归复制模板：已存在的文件跳过，目录递归合并（不覆盖任何已有文件）。"""
+    for item in src.iterdir():
+        target = dst / item.name
+        if item.is_dir():
+            if not target.exists():
+                shutil.copytree(item, target)
+            else:
+                _copy_missing(item, target, skipped)
+        else:
+            if target.exists():
+                skipped.append(str(target.relative_to(dst.parent)))
+            else:
+                shutil.copy2(item, target)
+
+
 def cmd_init(args: list[str]) -> None:
     if len(args) < 1:
-        raise TicketError("用法: zcode ticket init <project> 或 zcode ticket init .（当前目录）")
-    target = args[0]
+        raise TicketError("用法: zcode ticket init <project> 或 zcode ticket init .（当前目录）[--existing]")
+    existing = "--existing" in args
+    positional = [a for a in args if not a.startswith("--")]
+    if len(positional) < 1:
+        raise TicketError("用法: zcode ticket init <project> 或 zcode ticket init .（当前目录）[--existing]")
+    target = positional[0]
     if target == ".":
         dest = Path.cwd()
     elif Path(target).is_absolute():
@@ -524,14 +544,20 @@ def cmd_init(args: list[str]) -> None:
     else:
         dest = Path.cwd() / target
     dest.mkdir(parents=True, exist_ok=True)
-    if any(dest.iterdir()):
-        raise TicketError(f"目录非空，拒绝覆盖: {dest}")
 
     template = template_dir()
     if not template.is_dir():
         raise TicketError(f"找不到工作台模板: {template}（设置 ZCODE_TICKET_TEMPLATE 可覆盖）")
-    for item in template.iterdir():
-        shutil.copytree(item, dest / item.name) if item.is_dir() else shutil.copy2(item, dest / item.name)
+
+    if any(dest.iterdir()):
+        if not existing:
+            raise TicketError(f"目录非空，拒绝覆盖: {dest}（在已有项目上启用请加 --existing，只补缺失文件不覆盖）")
+        skipped: list[str] = []
+        _copy_missing(template, dest, skipped)
+        if skipped:
+            print(f"已跳过 {len(skipped)} 个已存在文件（不覆盖）；只新增缺失文件: {', '.join(sorted(set(skipped)))}")
+    else:
+        _copy_missing(template, dest, [])
 
     meta_text = "\n".join([
         f"project: {dest.name}",
@@ -551,6 +577,8 @@ def cmd_init(args: list[str]) -> None:
     cmd_status(["-q"], root=dest)
     print(f"✓ 工单工作台已就绪: {dest}")
     print(f"  已登记到项目注册表 (~/.vibe/projects.json)")
+    if existing:
+        print("  已在已有项目上启用；AGENTS.md 已存在未覆盖，协议入口需手动并入")
     print("下一步: 写 docs/CONTEXT.md 的 Domain:，然后 zcode ticket add / zcode ticket begin")
 
 
@@ -1174,7 +1202,7 @@ def show_help() -> None:
     print()
     print("用法: zcode ticket <command> [args]")
     print()
-    print("  init <project|.>      铺工作台骨架（含 git init + hook + 项目登记）")
+    print("  init <project|.>      铺工作台骨架（含 git init + hook + 项目登记；已有项目加 --existing）")
     print("  ask [topic]           情境路由：这个情况该用什么（如 zcode ticket ask commit）")
     print("  add [title]           交互式新增工单（自动编号，可带标题跳过提问）")
     print("  begin <ticket>        拾取工单 → in-progress, Phase=analyze（依赖守卫 + 自动开分支）")
