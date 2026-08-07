@@ -218,3 +218,14 @@
 2026-08-07 11:44:50 | phase | review -> commit --pass
 2026-08-07 11:44:56 | branch | merged vibe/T-018 -> main and deleted
 2026-08-07 11:44:56 | close | T-018 (完整测试发现的 3 个缺陷修复)
+2026-08-07 11:46:45 | add | T-019 (正式发布 0.3.8: 版本统一 + Release)
+2026-08-07 11:47:27 | branch | created vibe/T-019 (from main)
+2026-08-07 11:47:27 | begin | T-019 (正式发布 0.3.8: 版本统一 + Release)
+2026-08-07 11:47:37 | phase | analyze -> plan
+2026-08-07 11:47:43 | phase | plan -> implement
+2026-08-07 11:47:44 | phase | implement -> verify --green
+2026-08-07 11:47:44 | transition | T-019: in-progress -> review
+2026-08-07 11:47:44 | resolve | T-019 (正式发布 0.3.8: 版本统一 + Release)
+2026-08-07 11:47:45 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-114744-verify-review.txt
+2026-08-07 11:47:45 | phase | verify -> review --green
+2026-08-07 11:47:45 | phase | review -> commit --pass
