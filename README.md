@@ -2,6 +2,8 @@
 
 一套**轻量、可插拔**的"技能运行时环境"：将 AI 技能从"一次性指令"升级为**可安装、可组合、可记忆、可进化**的能力产品。只需维护一个技能仓库，就能在任意 AI 工具（Claude Code、Cursor、Codex、Gemini CLI 等）中获得一致的工作流能力，且针对本地部署的小模型做了专门优化。
 
+> **不是程序员?** 请读 [docs/通俗说明.md](docs/通俗说明.md)——用大白话讲清 Zcode 是什么、有什么用、怎么用，无需任何编程基础。
+
 ## 快速开始
 
 ```bash
@@ -55,7 +57,7 @@ bash scripts/install.sh
 │   └── tests/        # 单元测试（unittest 零依赖，python3 -m unittest discover -s adapters/tests）
 ├── hooks/            # git 安全守卫钩子
 ├── scripts/          # install.sh 跨平台一键安装脚本
-├── docs/             # 需求与设计（基本构思 / 开发偏好 / CONTEXT 状态中枢 / UBIQUITOUS_LANGUAGE 术语表 / ADR）
+├── docs/             # 需求与设计（基本构思 / 通俗说明（非技术读者） / 开发偏好 / CONTEXT 状态中枢 / UBIQUITOUS_LANGUAGE 术语表 / ADR）
 ├── bin/              # npm CLI 分发入口（package.json）
 ├── marketplace.json  # 技能市场清单（market validate 质量校验）
 └── .claude-plugin/   # Claude Code 深度插件（plugin.json）
