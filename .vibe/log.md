@@ -128,3 +128,26 @@
 2026-08-07 11:02:41 | phase | review -> commit --pass
 2026-08-07 11:02:42 | branch | merged vibe/T-012 -> main and deleted
 2026-08-07 11:02:42 | close | T-012 (通俗版使用说明: 面向非技术读者的功能与框架说明)
+2026-08-07 11:08:53 | add | T-013 (术语表欠账补齐 + 登记时机改为 close 前人工核对)
+2026-08-07 11:08:53 | branch | created vibe/T-013 (from main)
+2026-08-07 11:08:53 | begin | T-013 (术语表欠账补齐 + 登记时机改为 close 前人工核对)
+2026-08-07 11:09:02 | gloss | add 工单
+2026-08-07 11:09:02 | gloss | add 阶段
+2026-08-07 11:09:02 | gloss | add 守卫
+2026-08-07 11:09:02 | gloss | add 锚点
+2026-08-07 11:09:02 | gloss | add 状态机
+2026-08-07 11:09:02 | gloss | add 会话接力
+2026-08-07 11:09:02 | gloss | add 测试门禁
+2026-08-07 11:09:02 | gloss | add 变更日志
+2026-08-07 11:09:02 | gloss | add 适配层
+2026-08-07 11:09:02 | gloss | add 记忆层
+2026-08-07 11:09:03 | gloss | add 验证证据
+2026-08-07 11:09:03 | gloss | add close收尾
+2026-08-07 11:09:57 | phase | analyze -> plan
+2026-08-07 11:09:57 | phase | plan -> implement
+2026-08-07 11:09:57 | phase | implement -> verify --green
+2026-08-07 11:09:57 | transition | T-013: in-progress -> review
+2026-08-07 11:09:57 | resolve | T-013 (术语表欠账补齐 + 登记时机改为 close 前人工核对)
+2026-08-07 11:09:58 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-110958-verify-review.txt
+2026-08-07 11:09:58 | phase | verify -> review --green
+2026-08-07 11:09:58 | phase | review -> commit --pass

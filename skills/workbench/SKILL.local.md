@@ -37,7 +37,7 @@ description: 工单驱动开发（本地精简版）——两个状态机推进�
 ## close 前文档核对
 
 - 自动管（close 处理）：CHANGELOG 补录 / 状态文件提交 / 分支合并
-- 人工管（随工单提交）：README/AGENTS/技能清单按变更同步
+- 人工管（随工单提交）：README/AGENTS/技能清单按变更同步；**新术语 gloss add**（写入靠命令，登记靠核对，validate 不拦漏登记）
 
 ## 兜底
 

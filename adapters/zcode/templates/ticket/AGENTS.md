@@ -41,8 +41,8 @@ backlog → in-progress → review → done
 5. 状态文件（`docs/CONTEXT.md`、`tickets.md`）的**内容**可以自由写，但**锚点行**（`Phase:`、`Status:`、`Current Ticket:`、`Domain:`、`Depends:`、`Resolution:`、`TestCommand:`、`BranchMode:`）必须格式正确。
 6. `BranchMode: auto` 时，`begin` 自动切到 `vibe/T-XXX` 分支、`close` 自动合并回主分支——**不要手动改分支**，除非工作流出错。
 7. 遇到领域术语（歧义、专有名词、命名约定）立即用 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
-8. **close 自动收尾**（无需人工）：`CHANGELOG.md` 缺本工单号时自动从 Resolution 补录（版本自动 bump）；`tickets.md` / `STATUS.md` / `docs/CONTEXT.md` 锚点 / `docs/UBIQUITOUS_LANGUAGE.md` / `.vibe/` / `CHANGELOG.md` 自动提交（`T-XXX 状态收尾`），工作区保持干净。
-9. **人工同步**（随工单提交）：`README.md` / `AGENTS.md` / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步——**不允许关单后文档未更新**。
+8. **close 自动收尾**（无需人工）：`CHANGELOG.md` 缺本工单号时自动从 Resolution 补录（版本自动 bump）；`tickets.md` / `STATUS.md` / `docs/CONTEXT.md` 锚点 / `.vibe/` / `CHANGELOG.md` 自动提交（`T-XXX 状态收尾`），工作区保持干净。
+9. **人工同步**（随工单提交）：`README.md` / `AGENTS.md` / **术语表（本次引入的新术语 gloss add）** / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步——**不允许关单后文档未更新**。
 
 ## 修复类工单流程（记录修复情况）
 1. `zcode ticket add "修复: <问题>"` → `zcode ticket begin T-XXX`

@@ -118,8 +118,9 @@ backlog → in-progress → review → done
 | `tickets.md` | `zcode ticket add/begin/transition/resolve/close` 自动维护 |
 | `STATUS.md` | 状态命令自动刷新；validate / pre-commit 发现过期直接拦截 |
 | `docs/CONTEXT.md` | 仅 `Phase:`/`Current Ticket:` 等锚点由命令写；`Domain:`/`TestCommand:` 人工填 |
-| `docs/UBIQUITOUS_LANGUAGE.md` | `zcode ticket gloss add` 管理；格式错误 validate 拦截 |
 | `.vibe/`（log/evidence/meta/hooks） | 命令自动维护，随工单提交 |
+
+> `docs/UBIQUITOUS_LANGUAGE.md`（术语表）：**写入**靠 `zcode ticket gloss add` 命令，但**何时登记由人工判断**——列入下方 B 表 close 前核对。
 
 ### B. 人工同步（close 前逐项核对，随工单一起 git commit）
 
@@ -128,9 +129,10 @@ backlog → in-progress → review → done
 | **`CHANGELOG.md`** | **自动兜底**：缺本工单号时 close 自动从 Resolution 补录（版本自动 bump）；已有记录不重复 |
 | `README.md` | 命令/能力/用例数/目录结构有变化时同步 |
 | `AGENTS.md` | 当前状态（技能数/能力清单/仓库信息）、构建测试命令、协议条款有变化时同步 |
+| **术语表 `docs/UBIQUITOUS_LANGUAGE.md`** | 本次工单引入的新术语是否已 `gloss add`（写入命令自动，登记决策人工——validate 只拦空表与格式，漏登记不会自动发现） |
 | 技能清单 | 改 `skills/` 时：`ask-zcode` 路由、`skills/README.md`、`marketplace.json`（`zcode market validate` 通过） |
 
-> CHANGELOG 与状态文件由 close 自动处理；README / AGENTS / 技能清单仍需人工核对后随工单提交，**不允许关单后文档未更新**。
+> CHANGELOG 与状态文件由 close 自动处理；README / AGENTS / 术语表 / 技能清单仍需人工核对后随工单提交，**不允许关单后文档未更新**。
 
 ## 建议下一步
 
