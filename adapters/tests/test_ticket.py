@@ -323,6 +323,18 @@ class TestLifecycle(TicketBase):
             ticket.cmd_close(["T-001"])  # 未提交
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "review")
 
+    def test_repo_clean_ignores_docs_and_state_files(self):
+        root = self.make_project()
+        _git(root, "config", "user.email", "t@t")
+        _git(root, "config", "user.name", "t")
+        self.assertEqual(self._commit_no_hook(root, "seed"), 0)
+        (root / "README.md").write_text("改文档", encoding="utf-8")
+        (root / "CHANGELOG.md").write_text("改日志", encoding="utf-8")
+        (root / "tickets.md").write_text("改工单", encoding="utf-8")
+        self.assertTrue(ticket.repo_clean(root))  # 文档+状态文件不算脏
+        (root / "src_code.py").write_text("print(1)", encoding="utf-8")
+        self.assertFalse(ticket.repo_clean(root))  # 源码改动算脏
+
     def test_auto_branch_create_and_merge(self):
         root = self.make_project()
         _git(root, "config", "user.email", "t@t")

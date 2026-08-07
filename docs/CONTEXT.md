@@ -5,13 +5,13 @@
 ## Status
 
 Phase: commit
-Current Ticket: T-005
+Current Ticket: T-006
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 
 ## 配置
 
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
-BranchMode: auto
+BranchMode: manual
 
 > - `TestCommand:` 验证阶段真实执行的测试命令（如 `pytest` / `npm test`）。留空则 `--green` 退回自证 flag。
 > - `BranchMode:` `auto` = begin 自动开 `vibe/T-XXX` 分支、close 自动合并删除；`manual` = 关闭自动分支。

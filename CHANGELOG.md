@@ -2,6 +2,26 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.2.1] - 2026-08-07
+
+**测试**：测试补齐与回归防线（T-005）——4 用例 → 54 用例 + 提交测试门禁。
+
+### 测试覆盖（unittest 零依赖）
+- `adapters/tests/test_ticket.py`（33 用例）：锚点读写、工单/术语表解析、状态机跃迁矩阵、守卫（Domain/验证产物/--green/--red/--pass/--reject）、依赖环检测、STATUS 生成器保鲜（CRLF / GENERATED-BY 注释归一化）、init --existing 不覆盖已有文件、完整命令流集成（begin 自动开分支 + close 自动合并删除）、check-commit 门禁（含开关）
+- `adapters/tests/test_modules.py`（17 用例）：workflow 引擎（加载/条件跳过/命令失败传播）、handoff（项目级/全局/空节）、marketplace（12 技能全有效）、profile（必填字段/真实 profile）
+- 回归命令：`python3 -m unittest discover -s adapters/tests`
+
+### 提交测试门禁（check-commit）
+- 配了 `TestCommand:` 的项目，提交时真实执行测试，失败拦截提交（含最近 3 行错误输出提示）
+- 关闭开关：`git config zcode.test-gate false`
+- 已验证：坏测试提交被 pre-commit hook 真实拦截（55 tests FAILED → 拦截）
+
+### 修复
+- `ticket.py` Depends 锚点解析：元素未 strip 前导空格（vibe-workbench 原版 Trim 了），导致 `Depends: T-001, T-002` 解析出 `" T-002"`——测试抓出的移植 bug
+
+### 验证
+- 54/54 用例通过；`zcode market validate` 12/12 通过；坏测试拦截 + 门禁开关端到端验证
+
 ## [0.2.0] - 2026-08-07
 
 **新增**：工单驱动开发工作台（Layer 2，vibe-workbench 移植）——双状态机 + 可执行强制。

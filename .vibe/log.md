@@ -37,3 +37,15 @@
 2026-08-07 09:45:18 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-094517-verify-review.txt
 2026-08-07 09:45:18 | phase | verify -> review --green
 2026-08-07 09:45:18 | phase | review -> commit --pass
+2026-08-07 09:45:25 | branch | merged vibe/T-005 -> main and deleted
+2026-08-07 09:45:25 | close | T-005 (测试补齐与回归防线)
+2026-08-07 09:49:06 | add | T-006 (记录 T-005 变更到 CHANGELOG)
+2026-08-07 09:49:55 | begin | T-006 (记录 CHANGELOG + 文档类改动不再阻塞 begin)
+2026-08-07 09:49:55 | phase | analyze -> plan
+2026-08-07 09:49:55 | phase | plan -> implement
+2026-08-07 09:49:55 | phase | implement -> verify --green
+2026-08-07 09:49:55 | transition | T-006: in-progress -> review
+2026-08-07 09:49:55 | resolve | T-006 (记录 CHANGELOG + 文档类改动不再阻塞 begin)
+2026-08-07 09:49:55 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-094955-verify-review.txt
+2026-08-07 09:49:55 | phase | verify -> review --green
+2026-08-07 09:49:55 | phase | review -> commit --pass

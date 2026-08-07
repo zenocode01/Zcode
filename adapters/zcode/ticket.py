@@ -41,10 +41,12 @@ PHASE_TRANSITIONS = {
     "review": ["commit", "implement"],
     "commit": [],
 }
-# 状态文件前缀：工作区脏判定时这些文件的改动不算源码改动
+# 状态/元文件前缀：工作区脏判定时这些文件的改动不算源码改动
+# （状态文件 + 仓库级文档 README/AGENTS/CHANGELOG/docs：随工单提交，不阻塞 begin 自动开分支）
 STATE_PREFIXES = (
     "tickets.md", "docs/CONTEXT.md", "docs/UBIQUITOUS_LANGUAGE.md",
     "STATUS.md", "docs/ADR/", ".vibe/",
+    "README.md", "CHANGELOG.md", "AGENTS.md", "docs/",
 )
 VERIFY_ARTIFACT_PATTERNS = (
     "test_*.py", "*_test.py", "*.test.js", "*.test.ts", "*.spec.js", "*.spec.ts",
