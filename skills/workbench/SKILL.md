@@ -104,13 +104,28 @@ backlog → in-progress → review → done
 
 ## 文档同步（close 前必须）
 
-**任何工单在 close 之前**，必须同步本次变更涉及的相关文档，否则 close 会被拒绝：
+**任何工单在 close 之前**，必须核对本次变更涉及的全部相关文件。工作台文件分两类，职责不同：
 
-- **CHANGELOG.md**（硬强制）：仓库存在 `CHANGELOG.md` 时，条目必须包含本工单号 `T-XXX`（close 守卫检查，缺则拒绝）。先写条目再 commit，再 close。
-- **README.md**：命令/能力/目录结构有变化时同步"快速开始 / 目录结构 / 当前状态"。
-- **AGENTS.md**：当前状态（技能数/能力清单）、构建测试命令有变化时同步。
-- **技能变更**：改 `skills/` 时同步 `ask-zcode` 路由、`skills/README.md` 清单、`marketplace.json`（`zcode market validate` 通过）。
-- 更新后：改文档也要随工单一起 git commit（文档类文件不阻塞 begin，但随工单提交）。
+### A. 命令自动管理（无需人工，改了状态也会被保鲜/校验拦截）
+
+| 文件 | 管理方式 |
+|---|---|
+| `tickets.md` | `zcode ticket add/begin/transition/resolve/close` 自动维护 |
+| `STATUS.md` | 状态命令自动刷新；validate / pre-commit 发现过期直接拦截 |
+| `docs/CONTEXT.md` | 仅 `Phase:`/`Current Ticket:` 等锚点由命令写；`Domain:`/`TestCommand:` 人工填 |
+| `docs/UBIQUITOUS_LANGUAGE.md` | `zcode ticket gloss add` 管理；格式错误 validate 拦截 |
+| `.vibe/`（log/evidence/meta/hooks） | 命令自动维护，随工单提交 |
+
+### B. 人工同步（close 前逐项核对，随工单一起 git commit）
+
+| 文件 | 检查点 |
+|---|---|
+| **`CHANGELOG.md`** | **硬强制**：存在该文件时条目必须含本工单号 `T-XXX`（close 守卫检查，缺则拒绝） |
+| `README.md` | 命令/能力/用例数/目录结构/版本引用（如 CHANGELOG 版本号）有变化时同步 |
+| `AGENTS.md` | 当前状态（技能数/能力清单/仓库信息）、构建测试命令、协议条款有变化时同步 |
+| 技能清单 | 改 `skills/` 时：`ask-zcode` 路由、`skills/README.md`、`marketplace.json`（`zcode market validate` 通过） |
+
+> 更新完文档再 git commit，然后 close；**不允许关单后文档未更新**。
 
 ## 建议下一步
 

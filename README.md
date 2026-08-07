@@ -71,7 +71,7 @@ bash scripts/install.sh
 
 ## 当前状态
 
-Phase 1/2/3 核心能力全部落地 + Phase 4 起步（2025-08）：
+Phase 1/2/3 核心能力全部落地 + Phase 4 起步（2026-08）：
 
 - **技能库（Layer 1）**：12 个技能双版本（`SKILL.md` 云 / `SKILL.local.md` 本地小模型）+ `_template/` 模板（含 `.memory/` 技能级记忆）
 - **适配层（Layer 0）**：Python 包 `zcode`（profile / Provider / 工具三层降级 / MemStore / CLI / 工具映射表）、8 平台 `INSTALL.md`、`scripts/install.sh` 一键安装、npm 分发入口
@@ -79,7 +79,7 @@ Phase 1/2/3 核心能力全部落地 + Phase 4 起步（2025-08）：
 - **工单驱动工作台（Layer 2，移植 vibe-workbench）**：`zcode ticket` 命令族（init/add/begin/phase/transition/close/resolve/context/gloss/status/validate/next/log/install/projects/switch/ask）——双状态机（Agent 阶段机 + 工单生命周期机）+ 可执行强制（守卫 / 依赖环检测 / 验证证据 / STATUS 自刷新 / pre-commit 闸门 / 自动分支）+ `skills/workbench` 技能；与 vibe-workbench 文件格式与注册表兼容，两 CLI 可混用
 - **记忆与迭代（Layer 3）**：`zcode memory`（mem0 + Qwen3-Embedding-8B + Qdrant 本地，BM25/实体增强已启用）；会话接力 `zcode handoff`；EvoSkills 自我迭代 `zcode skill log/audit`（阈值 70% / 2 条）
 - **生态（Phase 4 起步）**：技能市场 `zcode market list/validate/generate`（marketplace.json 质量校验）+ Claude Code 深度插件
-- **测试**：`adapters/tests/` 55 用例（unittest 零依赖，`python3 -m unittest discover -s adapters/tests`）；提交测试门禁——配了 `TestCommand:` 的项目提交前真实执行测试，失败拦截（`git config zcode.test-gate false` 可关）；close 前 CHANGELOG 必须已记录工单号（守卫强制）
+- **测试**：`adapters/tests/` 57 用例（unittest 零依赖，`python3 -m unittest discover -s adapters/tests`）；提交测试门禁——配了 `TestCommand:` 的项目提交前真实执行测试，失败拦截（`git config zcode.test-gate false` 可关）；close 前 CHANGELOG 必须已记录工单号（守卫强制）
 
 尚未实现：技能市场远程分发与社区贡献、其余平台深度插件、技能市场发布。路线图见 `docs/基本构思.md`。
 
@@ -87,5 +87,5 @@ Phase 1/2/3 核心能力全部落地 + Phase 4 起步（2025-08）：
 
 - `docs/基本构思.md` — 四层架构 + 本地小模型优化定稿（唯一需求来源）
 - `docs/开发偏好与默认配置.md` — 已确认的开发偏好与默认配置
-- `CHANGELOG.md` — 变更记录（0.1.0 四层落地 / 0.1.1 打磨迭代 / 0.2.0 工单工作台 / 0.2.1 测试防线）
+- `CHANGELOG.md` — 变更记录（0.1.0 起逐版本累积，最新版本见文件顶部）
 - `mem0/` — mem0 源码，仅作记忆层学习参考，不提交 git
