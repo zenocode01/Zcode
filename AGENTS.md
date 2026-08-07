@@ -158,3 +158,11 @@
 6. **人工同步**（随工单一起提交）：`README.md` / `AGENTS.md` / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步——**不允许关单后文档未更新**。
 7. 新术语立即 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
 8. 当前工单在 `tickets.md`；`zcode ticket next` 看可拾取项。
+
+### 三系统分工（workbench × handoff × mem0）
+
+| 系统 | 管什么 | 接手路径 |
+|---|---|---|
+| workbench（`zcode ticket`） | 项目级状态源：工单/阶段/验证证据/术语表（单一事实来源） | `zcode ticket context` |
+| handoff（`zcode handoff`） | 会话级接力：目标/下一步；工作台项目"进行中"自动引用工单状态（缺省自动、传参覆盖） | 会话开始 `load` / 结束 `save` |
+| mem0（`zcode memory`） | 跨会话语义记忆：自由事实/偏好/经验检索（与术语表互补：术语表=规范词条强制，mem0=自由事实） | `zcode memory search <查询>` |

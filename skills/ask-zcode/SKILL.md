@@ -35,7 +35,7 @@ code-review —— 分级反馈（Critical 立即修 / Important 修完再继续
 | **报告 bug / 东西坏了 / 变慢** | `diagnose` → 紧致反馈回路 → 修复 + 回归测试；复盘发现是架构问题 → 移交 `improve-arch` |
 | **代码库架构恶化 / 可测试性差** | `improve-arch`（仅用户调用）→ 扫描加深机会 → 逐项决策 |
 | **有实现计划、任务相互独立、宿主支持子代理** | `subagent-driven-development` → 每任务独立子代理 + 逐任务审查 |
-| **会话交接 / 新会话恢复上下文** | `handoff` → 会话开始 load、结束 save |
+| **会话交接 / 新会话恢复上下文** | `handoff` → 会话开始 load、结束 save；**工作台项目先 `zcode ticket context` 拿项目状态，再 handoff load 拿会话意图**（两者互补不重复） |
 | **技能反复失败 / 质量下滑** | `evoskills` → audit → 达阈值生成改进版本 |
 | **项目里有 tickets.md 工作台 / 要拾取工单、推进阶段、关单** | `workbench` → `zcode ticket` 命令推进两个状态机（守卫强制、状态自刷新） |
 

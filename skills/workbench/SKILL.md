@@ -11,7 +11,8 @@ Zcode 的 Layer 2 工单驱动开发能力（移植自 vibe-workbench）。两�
 
 1. 先跑 `zcode ticket context`（或读 `STATUS.md`）：Phase / Current Ticket / 当前工单全文 / 依赖 / 最近流转，一屏足够开工。
 2. 需要细节再按需读：`docs/UBIQUITOUS_LANGUAGE.md`（术语）、`docs/ADR/`（决策）、`docs/CONTEXT.md`（领域细节）。
-3. 不要一次性读完全部项目文件——按需读取，节省上下文。
+3. 跨会话接力：`zcode handoff load` 拿会话级意图（目标/下一步）——与项目状态互补，不重复。
+4. 不要一次性读完全部项目文件——按需读取，节省上下文。
 
 ## 两个状态机
 
@@ -152,6 +153,9 @@ backlog → in-progress → review → done
 
 ## 与相邻能力的分工
 
-- **workbench / zcode ticket**（Layer 2）管"项目级实时状态"：阶段、工单、守卫、提交闸门。
-- **handoff**（Layer 3）管"会话级接力快照"：当前目标/决策/验证，会话间恢复。
-- 两者互补：接手工单项目先 `zcode ticket context`；跨会话先 `zcode handoff load`。
+| 系统 | 管什么 | 接手路径 |
+|---|---|---|
+| **workbench / zcode ticket** | 项目级实时状态：工单、阶段、验证证据、术语表（单一事实来源） | `zcode ticket context`（或读 STATUS.md） |
+| **handoff** | 会话级接力：目标/下一步/决策结论；工作台项目"进行中"自动引用工单状态，不重复存 | `zcode handoff load`（会话开始）/ `save`（结束） |
+| **mem0 / zcode memory** | 跨会话语义记忆：自由事实/偏好/经验，语义检索 | `zcode memory search <查询>` |
+| 术语表 vs mem0 | 术语表=规范词条（校验强制）；mem0=自由事实（不强制） | — |

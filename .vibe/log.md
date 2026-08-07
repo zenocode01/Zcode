@@ -102,3 +102,14 @@
 2026-08-07 10:51:17 | phase | review -> commit --pass
 2026-08-07 10:51:18 | branch | merged vibe/T-010 -> main and deleted
 2026-08-07 10:51:18 | close | T-010 (close 自动化: 状态文件自动提交 + CHANGELOG 自动生成, 消灭收尾/欠账工单)
+2026-08-07 10:56:01 | add | T-011 (三系统分工: handoff×mem0×workbench 去重联动)
+2026-08-07 10:56:02 | branch | created vibe/T-011 (from main)
+2026-08-07 10:56:02 | begin | T-011 (三系统分工: handoff×mem0×workbench 去重联动)
+2026-08-07 10:58:21 | phase | analyze -> plan
+2026-08-07 10:58:21 | phase | plan -> implement
+2026-08-07 10:58:21 | phase | implement -> verify --green
+2026-08-07 10:58:21 | transition | T-011: in-progress -> review
+2026-08-07 10:58:21 | resolve | T-011 (三系统分工: handoff×mem0×workbench 去重联动)
+2026-08-07 10:58:22 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-105821-verify-review.txt
+2026-08-07 10:58:22 | phase | verify -> review --green
+2026-08-07 10:58:22 | phase | review -> commit --pass

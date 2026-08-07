@@ -81,6 +81,17 @@ class TestHandoff(unittest.TestCase):
         self.base = Path(self._tmp.name)
         self.addCleanup(self._tmp.cleanup)
 
+    def _workbench_project(self) -> Path:
+        """造一个 workbench 项目（有 tickets.md + CONTEXT 锚点）。"""
+        proj = self.base / "wb"
+        proj.mkdir()
+        (proj / "tickets.md").write_text("## T-003 干活\nStatus: in-progress\n", encoding="utf-8")
+        (proj / "docs").mkdir()
+        (proj / "docs" / "CONTEXT.md").write_text(
+            "Phase: implement\nCurrent Ticket: T-003\n", encoding="utf-8"
+        )
+        return proj
+
     def test_save_load_project_level(self):
         proj = self.base / "p"
         proj.mkdir()
@@ -93,6 +104,31 @@ class TestHandoff(unittest.TestCase):
         self.assertIn("目标", content)
         self.assertIn("a", content)
         self.assertIn("d1", content)
+
+    def test_auto_ticket_status_in_workbench_project(self):
+        proj = self._workbench_project()
+        content = handoff.load_handoff(project_dir=proj)
+        self.assertEqual(content, "")  # 尚未保存
+        handoff.save_handoff(project_dir=proj, goal="G")
+        content = handoff.load_handoff(project_dir=proj)
+        self.assertIn("工单 T-003", content)  # 自动引用工单状态
+        self.assertIn("阶段: implement", content)
+        self.assertIn("STATUS.md", content)  # 指向单一事实来源
+
+    def test_explicit_in_progress_overrides_auto(self):
+        proj = self._workbench_project()
+        handoff.save_handoff(project_dir=proj, goal="G", in_progress=["自定义事项"])
+        content = handoff.load_handoff(project_dir=proj)
+        self.assertIn("自定义事项", content)
+        self.assertNotIn("工单 T-003", content)
+
+    def test_auto_status_skipped_in_plain_project(self):
+        proj = self.base / "plain"
+        proj.mkdir()
+        handoff.save_handoff(project_dir=proj, goal="G")
+        content = handoff.load_handoff(project_dir=proj)
+        self.assertIn("（空）", content)  # 无工作台 → 进行中为空节
+        self.assertNotIn("工单 T-", content)
 
     def test_global_store(self):
         path = handoff.save_handoff(global_store=True, goal="全局")
