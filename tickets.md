@@ -73,4 +73,4 @@ Status: done
 
 ## T-015 上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装
 Resolution: 根因: 新项目要手动编辑 CONTEXT/AGENTS, --existing 提示人工并入协议段, install.sh 不装 CLI; 修复: init 交互引导 Domain/TestCommand(非交互跳过), --existing 自动追加协议段到 AGENTS.md(幂等), install.sh 装 ~/.local/bin/zcode 包装器, 手册/README 更新 1 分钟上手路径; 验证: 64 用例绿, 实机嵌入验证通过
-Status: review
+Status: done
