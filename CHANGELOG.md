@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.8] - 2026-08-07
+
+**完整测试发现的 3 个缺陷修复**（T-018）：根因: ① adapters/zcode 缺 __main__.py 导致 python -m zcode 失败(npm 入口 bin/zcode.js 依赖它); ② install.sh UNINSTALL 分支忽略 --project 误删全局 ~/.agents/skills; ③ _auto_commit_state_files 对不存在的 CHANGELOG.md 执行 git add exit 128 静默失败致 close 后工作区残留; 修复: ① 新增 __main__.py; ② 卸载分支支持项目级; ③ add 前过滤不存在的路径; 验证: 67 用例绿(含 3 新增回归), 真机验证 python -m zcode/项目级卸载仅动项目/新项目 close 后工作区干净, 全局软链已恢复
+
 ## [0.3.7] - 2026-08-07
 
 **pwsh 真机验证 install.ps1 + 修复路径 bug**（T-017）：根因: install.ps1 用 $PSScriptRoot 定位技能目录(实为 scripts/ 而非仓库根), 且从未真机验证; 修复: $src 改为仓库根(Split-Path -Parent); 验证: pwsh 7.6.4 已装, Unix 分支实跑通过, Windows 分支模拟($env:OS=Windows_NT)通过(Junction 失败退复制), 空 HOME 全量 12 技能安装成功, zcode.cmd/ps1 生成, 包装器 zcode 命令可用

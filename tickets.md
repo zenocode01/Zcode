@@ -85,4 +85,4 @@ Status: done
 
 ## T-018 完整测试发现的 3 个缺陷修复
 Resolution: 根因: ① adapters/zcode 缺 __main__.py 导致 python -m zcode 失败(npm 入口 bin/zcode.js 依赖它); ② install.sh UNINSTALL 分支忽略 --project 误删全局 ~/.agents/skills; ③ _auto_commit_state_files 对不存在的 CHANGELOG.md 执行 git add exit 128 静默失败致 close 后工作区残留; 修复: ① 新增 __main__.py; ② 卸载分支支持项目级; ③ add 前过滤不存在的路径; 验证: 67 用例绿(含 3 新增回归), 真机验证 python -m zcode/项目级卸载仅动项目/新项目 close 后工作区干净, 全局软链已恢复
-Status: review
+Status: done

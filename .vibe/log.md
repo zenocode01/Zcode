@@ -216,3 +216,5 @@
 2026-08-07 11:44:50 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-114449-verify-review.txt
 2026-08-07 11:44:50 | phase | verify -> review --green
 2026-08-07 11:44:50 | phase | review -> commit --pass
+2026-08-07 11:44:56 | branch | merged vibe/T-018 -> main and deleted
+2026-08-07 11:44:56 | close | T-018 (完整测试发现的 3 个缺陷修复)
