@@ -41,4 +41,8 @@ Status: done
 
 ## T-007 状态文件收尾入库 + 推送远程
 Resolution: 根因: close 后状态文件改动待入库; 修复: 随 T-007 一并提交(tickets/STATUS/CONTEXT/.vibe/log); 验证: 55 用例绿
+Status: done
+
+## T-008 close 前文档同步强制: CHANGELOG 必须含工单号
+Resolution: 根因: 文档同步靠事后追补(T-005 漏 CHANGELOG 被质疑), 无强制; 修复: close 守卫检查 CHANGELOG 含工单号(缺则拒), workbench/模板/AGENTS/README 同步文档同步条款, 新增 2 测试; 验证: 57 用例绿, 拒绝/放行路径测试覆盖
 Status: review

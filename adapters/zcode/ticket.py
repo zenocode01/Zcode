@@ -779,6 +779,12 @@ def cmd_close(args: list[str]) -> None:
         raise TicketError(f"工单 {tid} 缺少修复记录（Resolution: 为空）。先 zcode ticket resolve {tid} <根因+修复+验证> 再 close")
     if not ticket_committed(root, tid):
         raise TicketError(f"当前分支没有含 {tid} 的提交，拒绝 close（先 git commit，再 transition review + phase review）")
+    # 文档同步守卫：仓库存在 CHANGELOG.md 时必须已记录本次工单（close 前补记，杜绝"关了单文档没更新"）
+    changelog = root / "CHANGELOG.md"
+    if changelog.exists() and tid not in (read_text(changelog) or ""):
+        raise TicketError(
+            f"{tid} 未在 CHANGELOG.md 中记录，拒绝 close。请在 CHANGELOG.md 顶部新增条目（含 {tid} 与变更摘要）后再 close"
+        )
 
     mode = branch_mode(ctx_file)
     branch = get_meta(root, "branch")

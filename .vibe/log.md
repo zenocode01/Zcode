@@ -61,3 +61,16 @@
 2026-08-07 09:53:59 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-095358-verify-review.txt
 2026-08-07 09:53:59 | phase | verify -> review --green
 2026-08-07 09:53:59 | phase | review -> commit --pass
+2026-08-07 09:53:59 | branch | merged vibe/T-007 -> main and deleted
+2026-08-07 09:53:59 | close | T-007 (状态文件收尾入库 + 推送远程)
+2026-08-07 09:59:15 | add | T-008 (close 前文档同步强制: CHANGELOG 必须含工单号)
+2026-08-07 09:59:15 | branch | created vibe/T-008 (from main)
+2026-08-07 09:59:15 | begin | T-008 (close 前文档同步强制: CHANGELOG 必须含工单号)
+2026-08-07 10:01:35 | phase | analyze -> plan
+2026-08-07 10:01:35 | phase | plan -> implement
+2026-08-07 10:01:35 | phase | implement -> verify --green
+2026-08-07 10:01:35 | transition | T-008: in-progress -> review
+2026-08-07 10:01:35 | resolve | T-008 (close 前文档同步强制: CHANGELOG 必须含工单号)
+2026-08-07 10:01:36 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-100135-verify-review.txt
+2026-08-07 10:01:36 | phase | verify -> review --green
+2026-08-07 10:01:36 | phase | review -> commit --pass

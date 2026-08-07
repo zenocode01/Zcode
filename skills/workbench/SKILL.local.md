@@ -24,12 +24,14 @@ description: 工单驱动开发（本地精简版）——两个状态机推进�
 5. `zcode ticket transition T-XXX review`
 6. `zcode ticket resolve T-XXX "根因+修复+验证"`
 7. `zcode ticket phase review --green` → `commit --pass`
-8. git commit 后 `zcode ticket close T-XXX`
+8. 更新相关文档（CHANGELOG 必须含 T-XXX；README/AGENTS/技能清单按需）
+9. git commit 后 `zcode ticket close T-XXX`
 
 ## 硬规则
 
 - 绝不手动改 `Phase:`/`Status:`/`Current Ticket:`/`Domain:`/`Resolution:` 锚点
 - close 前必须 resolve；Domain 填了术语表必须非空
+- 有 CHANGELOG.md 时 close 前必须已记录本工单号（守卫强制）
 - 状态命令自动刷新 STATUS.md
 
 ## 兜底
