@@ -2,6 +2,24 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.0] - 2026-08-07
+
+**close 自动化**（T-010）：状态文件自动提交 + CHANGELOG 自动补录，消灭"收尾/欠账"类无用工单。
+
+### close 自动收尾（adapters/zcode/ticket.py）
+- **状态文件自动提交**：close 后 tickets.md / STATUS.md / docs/CONTEXT.md / 术语表 / `.vibe/` / CHANGELOG.md 自动 `git commit`（`T-XXX 状态收尾`，绕过 hook——属协议内部收尾），工作区保持干净 → 不再需要"状态文件收尾"类工单（原 T-007 场景消失）
+- **CHANGELOG 自动补录**：`CHANGELOG.md` 缺本工单号时，close 自动从 Resolution 生成条目（`## [0.x.y+1] - 日期`，版本自动 bump，插入顶部），不再"拒绝+人工补"→ 不再需要"补 CHANGELOG"类工单（原 T-006 场景消失）
+- 原守卫语义保留：已有记录不重复追加；无 CHANGELOG 文件不创建；人工写的条目仍被识别
+
+### 文档同步
+- `skills/workbench`（双版本）：标准循环第 10 步 close 自动收尾说明；文档同步章节改为"CHANGELOG 自动兜底 + README/AGENTS/技能清单人工核对"
+- 模板 `adapters/zcode/templates/ticket/AGENTS.md`：第 8 条 close 自动收尾 / 第 9 条人工同步
+- 本仓库 `AGENTS.md` 协议段：第 5 条 close 自动收尾（明示"不再需要收尾类工单"）/ 第 6 条人工同步
+- `README.md`：测试条目更新（58 用例 + close 自动收尾）
+
+### 验证
+- 59 用例全绿（38 ticket + 17 modules + 4 evoskills）；新增 3 用例：自动补录+提交、不重复追加、无文件不创建
+
 ## [0.2.3] - 2026-08-07
 
 **文档同步清单完整化**（T-009）：六类相关文件职责分类 + 修历史欠账。

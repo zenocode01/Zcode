@@ -87,3 +87,16 @@
 2026-08-07 10:32:36 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-103236-verify-review.txt
 2026-08-07 10:32:36 | phase | verify -> review --green
 2026-08-07 10:32:37 | phase | review -> commit --pass
+2026-08-07 10:32:37 | branch | merged vibe/T-009 -> main and deleted
+2026-08-07 10:32:37 | close | T-009 (文档同步清单完整化: 六文件职责分类 + 修欠账)
+2026-08-07 10:48:47 | add | T-010 (close 自动化: 状态文件自动提交 + CHANGELOG 自动生成, 消灭收尾/欠账工单)
+2026-08-07 10:48:47 | branch | created vibe/T-010 (from main)
+2026-08-07 10:48:47 | begin | T-010 (close 自动化: 状态文件自动提交 + CHANGELOG 自动生成, 消灭收尾/欠账工单)
+2026-08-07 10:51:16 | phase | analyze -> plan
+2026-08-07 10:51:16 | phase | plan -> implement
+2026-08-07 10:51:16 | phase | implement -> verify --green
+2026-08-07 10:51:16 | transition | T-010: in-progress -> review
+2026-08-07 10:51:16 | resolve | T-010 (close 自动化: 状态文件自动提交 + CHANGELOG 自动生成, 消灭收尾/欠账工单)
+2026-08-07 10:51:17 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-105116-verify-review.txt
+2026-08-07 10:51:17 | phase | verify -> review --green
+2026-08-07 10:51:17 | phase | review -> commit --pass
