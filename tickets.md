@@ -69,4 +69,4 @@ Status: done
 
 ## T-014 普通用户实操手册: 零基础照做指南
 Resolution: 根因: 通俗说明只讲概念无操作步骤, 无零基础实操指南; 修复: docs/使用手册.md(安装4步/建工作台/完整走一遍/对话驱动/看进度/接力/FAQ/速查表), README 入口引导+目录结构同步; 验证: 62 用例绿
-Status: review
+Status: done
