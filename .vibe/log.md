@@ -308,3 +308,5 @@
 2026-08-07 14:55:10 | phase | verify -> review --green
 2026-08-07 14:55:11 | resolve | T-025 (zcode update 自更新命令)
 2026-08-07 14:55:11 | phase | review -> commit --pass
+2026-08-07 14:55:28 | branch | merged vibe/T-025 -> main and deleted
+2026-08-07 14:55:28 | close | T-025 (zcode update 自更新命令)

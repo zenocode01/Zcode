@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.14] - 2026-08-07
+
+**zcode update 自更新命令**（T-025）：根因: CLI 无自更新命令, 用户需手动 git pull + 重装多步; 实现: 新增 adapters/zcode/update.py + zcode update [--dry-run]——前置检查(工作区干净, 未提交改动拒绝防覆盖)→ git fetch(失败附网络/凭据提示)→ rev-list 已最新退出→ pull --ff-only→ 当前解释器 pip install -e→ npm link(可选, 失败仅警告)→ scripts/install.sh→ 变更摘要; 每步失败即停报告已完成步骤+重跑指引; 验证: 84 用例绿(新增 6: precheck 脏/净/dry-run 零执行/成功序列/已最新退出/失败中止), 真机 dry-run 与脏工作区拦截实测通过
+
 ## [0.3.13] - 2026-08-07
 
 **zcode version 子命令 + __version__ 第五处版本统一**（T-024）：根因: CLI 无版本查看命令, 且 __init__.py __version__ 停在 0.1.0(T-019 版本统一四文件漏第五处); 修复: __version__ 同步 0.3.8(与 pyproject/package.json/marketplace/plugin 一致), 注册 zcode version 子命令输出代码内版本; 验证: 78 用例绿(新增 2: __version__ 与 pyproject 一致性防漂移/version 命令输出格式), zcode version 输出 zcode 0.3.8

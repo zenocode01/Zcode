@@ -3,22 +3,12 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: commit
-Current Ticket: T-025
+Phase: analyze
+Current Ticket: 
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 14 条 (docs/UBIQUITOUS_LANGUAGE.md)
-
-## 当前工单 T-025 (zcode update 自更新命令) [review]
-## T-025 zcode update 自更新命令
-Resolution: 根因: CLI 无自更新命令, 用户需手动 git pull + 重装多步; 实现: 新增 adapters/zcode/update.py + zcode update [--dry-run]——前置检查(工作区干净, 未提交改动拒绝防覆盖)→ git fetch(失败附网络/凭据提示)→ rev-list 已最新退出→ pull --ff-only→ 当前解释器 pip install -e→ npm link(可选, 失败仅警告)→ scripts/install.sh→ 变更摘要; 每步失败即停报告已完成步骤+重跑指引; 验证: 84 用例绿(新增 6: precheck 脏/净/dry-run 零执行/成功序列/已最新退出/失败中止), 真机 dry-run 与脏工作区拦截实测通过
-Status: review
-
-- [ ] - [ ] 实现: zcode update [--dry-run]——前置检查(仓库根/工作区干净/分支 main)→ git fetch 对比(已最新退出)→ git pull --ff-only → 当前解释器 pip install -e adapters → npm link(失败仅警告) → bash scripts/install.sh 刷新技能/钩子 → 输出变更摘要(git log 最近条目)
-- [ ] 每步失败即停并报告已完成步骤与手动处理提示; 非 TTY 直接执行
-- [ ] 验证: --dry-run 只打印不执行; 脏工作区拒绝; 更新后 zcode version/测试可用
-
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -45,7 +35,7 @@ Status: review
 - [x] **T-022** memory add 静默 0 条: infer 提取失败自动降级 + 提示 — done  ✓已记录修复
 - [x] **T-023** install.sh 包装器生成逻辑修复: 优先项目 venv — done  ✓已记录修复
 - [x] **T-024** zcode version 子命令 + __version__ 第五处版本统一 — done  ✓已记录修复
-- [ ] **T-025** zcode update 自更新命令 — review  ✓已记录修复
+- [x] **T-025** zcode update 自更新命令 — done  ✓已记录修复
 
 ## 阻塞
 (无)
