@@ -3,18 +3,12 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: commit
-Current Ticket: T-016
+Phase: analyze
+Current Ticket: 
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 14 条 (docs/UBIQUITOUS_LANGUAGE.md)
-
-## 当前工单 T-016 (Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档) [review]
-## T-016 Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档
-Resolution: 根因: 安装/钩子/文档仅 Linux, Windows 用户无法使用; 修复: scripts/install.ps1(Junction/复制免管理员+zcode.cmd/ps1 包装器+用户 PATH+配置), 模板 hook 跨平台宿主(Unix 用 zcode/python, Windows 经 powershell.exe 调 zcode.cmd), git config zcode.cli 路径加引号(Windows 空格路径), 测试适配(权限断言/分支名动态), README/使用手册/AGENTS Windows 分支; 验证: 64 用例绿, hook sh 语法过, ps1 待 Windows 真机验证
-Status: review
-
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -32,7 +26,7 @@ Status: review
 - [x] **T-013** 术语表欠账补齐 + 登记时机改为 close 前人工核对 — done  ✓已记录修复
 - [x] **T-014** 普通用户实操手册: 零基础照做指南 — done  ✓已记录修复
 - [x] **T-015** 上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装 — done  ✓已记录修复
-- [ ] **T-016** Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档 — review  ✓已记录修复
+- [x] **T-016** Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档 — done  ✓已记录修复
 
 ## 阻塞
 (无)

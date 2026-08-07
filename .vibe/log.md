@@ -190,3 +190,5 @@
 2026-08-07 11:23:51 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-112350-verify-review.txt
 2026-08-07 11:23:51 | phase | verify -> review --green
 2026-08-07 11:23:51 | phase | review -> commit --pass
+2026-08-07 11:23:52 | branch | merged vibe/T-016 -> main and deleted
+2026-08-07 11:23:52 | close | T-016 (Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档)
