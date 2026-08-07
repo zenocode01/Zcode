@@ -6,6 +6,8 @@ STATUS 生成器保鲜（CRLF / 生成器注释兼容）、init --existing、
 """
 from __future__ import annotations
 
+import contextlib
+import io
 import os
 import subprocess
 import sys
@@ -236,6 +238,38 @@ class TestLifecycle(TicketBase):
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "in-progress")
         self.assertEqual(ticket.get_anchor(root / "docs/CONTEXT.md", "Phase"), "analyze")
         self.assertEqual(ticket.get_anchor(root / "docs/CONTEXT.md", "Current Ticket"), "T-001")
+
+    def test_add_with_deps_and_body(self):
+        """cmd_add 参数不再被丢弃（曾条件反写: 有参时取空串，Depends/描述静默丢失）。"""
+        root = self.make_project()
+        ticket.cmd_add(["实现 A"])  # T-001
+        ticket.cmd_add(["实现 B", "T-001", "依赖 A 完成后做"])  # T-002: 依赖 + 描述
+        t2 = ticket.get_ticket(root / "tickets.md", "T-002")
+        self.assertEqual(t2.depends, ["T-001"])
+        text = (root / "tickets.md").read_text(encoding="utf-8")
+        self.assertIn("- [ ] 依赖 A 完成后做", text)
+
+    def test_add_help_does_not_create_ticket(self):
+        """附带发现: zcode ticket add --help 显示帮助，而非把 --help 当标题建空单。"""
+        root = self._full_project()
+        before = (root / "tickets.md").read_text(encoding="utf-8")
+        rc = ticket.run(["add", "--help"])
+        self.assertEqual(rc, 0)
+        self.assertEqual((root / "tickets.md").read_text(encoding="utf-8"), before)
+
+    def test_gloss_list_lists_all(self):
+        """T-021: gloss list 识别为列出全部，不再报「术语『list』不存在」。"""
+        root = self._full_project()  # 含术语 CLI
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            ticket.cmd_gloss(["list"])
+        self.assertIn("CLI", buf.getvalue())
+
+    def test_gloss_missing_term_hints_usage(self):
+        """T-021: 查询未命中时提示完整用法（列出 / 添加）。"""
+        root = self._full_project()
+        with self.assertRaisesRegex(ticket.TicketError, "列出全部"):
+            ticket.cmd_gloss(["不存在的术语"])
 
     def test_phase_guard_blocks_analyze_to_plan_without_domain(self):
         root = self.make_project()

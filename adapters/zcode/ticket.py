@@ -686,8 +686,9 @@ def cmd_add(args: list[str]) -> None:
         title = _ask("工单标题（必填）: ")
         if not title:
             raise TicketError("标题不能为空")
-    dep_input = _ask("依赖工单（可选，逗号分隔，回车跳过）: ") if len(args) < 2 else ""
-    body = _ask("描述（可选，回车跳过）: ") if len(args) < 3 else ""
+    # 修复（T-021）: 曾条件反写——有参时取空串、无参才提问，Depends/描述参数静默丢失
+    dep_input = args[1] if len(args) >= 2 else _ask("依赖工单（可选，逗号分隔，回车跳过）: ")
+    body = args[2] if len(args) >= 3 else _ask("描述（可选，回车跳过）: ")
 
     deps = [d for d in re.split(r"[,;]", strip_inline_comment(dep_input)) if d.strip()]
     by_id = {t.id: t for t in all_tickets}
@@ -1182,10 +1183,15 @@ def cmd_gloss(args: list[str]) -> None:
         print(f"✓ 已记录术语「{term}」")
         return
 
+    # T-021: list/ls 识别为"列出全部"子命令（曾把 list 当术语查询报不存在）
+    if sub in ("list", "ls"):
+        sub = ""
     if sub:
         hits = [e for e in entries if e["term"].lower() == sub]
         if not hits:
-            raise TicketError(f"术语「{sub}」不存在（zcode ticket gloss 看全部）")
+            raise TicketError(
+                f"术语「{sub}」不存在。zcode ticket gloss 列出全部术语；gloss add <术语> <定义> 添加新词"
+            )
         print(f"## {hits[0]['term']}")
         print(f"- **含义**：{hits[0]['definition']}")
         return
@@ -1377,7 +1383,7 @@ def show_help() -> None:
     print()
     print("  init <project|.>      铺工作台骨架（含 git init + hook + 项目登记；已有项目加 --existing）")
     print("  ask [topic]           情境路由：这个情况该用什么（如 zcode ticket ask commit）")
-    print("  add [title]           交互式新增工单（自动编号，可带标题跳过提问）")
+    print("  add [title] [依赖] [描述]  新增工单（自动编号；参数可省略，省略则交互提问）")
     print("  begin <ticket>        拾取工单 → in-progress, Phase=analyze（依赖守卫 + 自动开分支）")
     print("  phase <name> [flags]  推进阶段（守卫校验 + 验证证据留痕）")
     print("                         flags: --green 验证绿 | --red 验证红 | --pass 审查过 | --reject 打回 | --force 跳过产物守卫")
@@ -1385,7 +1391,7 @@ def show_help() -> None:
     print("  close <ticket>        review→done（校验 Resolution + 已提交 + 自动合并分支），Phase 复位 analyze")
     print("  resolve <t> <note>    记录工单修复情况（根因+修复+验证）；close 前必须")
     print("  context [ticket]      按需上下文摘要（接手仓库先跑它，省 token）")
-    print("  gloss [term|add]      术语表：列出 / 查询 / zcode ticket gloss add <术语> <定义>")
+    print("  gloss [term|list|add]  术语表：列出 / 查询 / zcode ticket gloss add <术语> <定义>")
     print("  status                生成 STATUS.md 单屏总览（状态命令会自动刷新）")
     print("  validate              全量一致性校验（含依赖环、术语表、STATUS 保鲜）")
     print("  next                  建议下一步：可拾取/依赖未满足/进行中")
@@ -1408,6 +1414,10 @@ def run(argv: list[str]) -> int:
         return 0
     command = argv[0].lower()
     args = argv[1:]
+    # 统一 --help：`zcode ticket add --help` 等显示帮助，而非把 --help 当参数（曾把标题建成空单）
+    if args and args[0] in ("-h", "--help"):
+        show_help()
+        return 0
     try:
         if command == "init":
             cmd_init(args)
