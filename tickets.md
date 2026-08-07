@@ -97,4 +97,9 @@ Resolution: 根因: ① cmd_close 在合并分支前执行 _auto_changelog 改 C
 Status: done
 
 ## T-021 gloss list 报「术语『list』不存在」应提示用法
-Status: backlog
+Resolution: 根因: ① cmd_add 条件反写——有参时取空串、无参才提问(dep_input/body), Depends 与描述参数静默丢失(登记工单时描述从未写入); ② gloss list 把 list 当术语查询报不存在, 查询未命中提示不完整; ③ add --help 把 --help 当标题建空单; 修复: ① 条件修正为有参取参、无参提问; ② gloss list/ls 识别为列出全部, 未命中提示完整用法(列出/添加); ③ run() 统一处理子命令 -h/--help 显示帮助, show_help 同步 add/gloss 用法; 验证: 72 用例绿(新增 4: add 依赖+描述写入/--help 不建单/gloss list 列出/未命中提示), 真机冒烟 add 带参写入成功
+Status: review
+
+- [ ] ① gloss list/ls 识别为列出全部（曾报「术语『list』不存在」）；查询未命中时提示完整用法（列出/添加）
+- [ ] ② 附带发现: cmd_add 参数反写——有参时取空串，Depends/描述静默丢失（登记工单时描述全丢）
+- [ ] ③ 附带发现: ticket add --help 把 --help 当标题建空单；统一子命令 --help 处理
