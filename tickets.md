@@ -61,4 +61,4 @@ Status: done
 
 ## T-012 通俗版使用说明: 面向非技术读者的功能与框架说明
 Resolution: 根因: 无面向非技术读者的文档, README 面向开发者门槛高; 修复: docs/通俗说明.md(类比讲解: 员工手册/施工看板/记事本, 四层框架, 高频操作, 小词典), README 顶部引导入口+目录结构同步; 验证: 62 用例绿
-Status: review
+Status: done
