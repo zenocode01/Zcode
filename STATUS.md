@@ -3,12 +3,21 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: analyze
-Current Ticket: 
+Phase: commit
+Current Ticket: T-023
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 14 条 (docs/UBIQUITOUS_LANGUAGE.md)
+
+## 当前工单 T-023 (install.sh 包装器生成逻辑修复: 优先项目 venv) [review]
+## T-023 install.sh 包装器生成逻辑修复: 优先项目 venv
+Resolution: 根因: install.sh 的 install_cli 写死 exec python3(系统解释器), 且包检查基于系统 python3; 重跑 install.sh 会覆盖手工修好的 venv 包装器(Bug 1 复发, ModuleNotFoundError); 修复: 解释器优先 REPO_ROOT/.venv/bin/python(PEP 668 环境), 回退 python3; 包装器与检查逻辑同步用实际解释器; 验证: 重跑 install.sh 后包装器指向 venv 且任意目录 zcode 可用(无 ModuleNotFoundError), 76 用例全绿
+Status: review
+
+- [ ] - [ ] 修复: install.sh 生成 CLI 包装器时写死 exec python3(系统解释器), 重跑 install.sh 会覆盖已修好的 venv 包装器(Bug 1 复发); 改为优先 REPO_ROOT/.venv/bin/python(PEP 668 环境必须 venv), 回退 python3; 包检查逻辑同步用实际解释器
+- [ ] 验证: 重跑 install.sh 后包装器指向 venv, 任意目录 zcode 可用, 无 ModuleNotFoundError
+
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -33,6 +42,7 @@ BranchMode: auto
 - [x] **T-020** close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过 — done  ✓已记录修复
 - [x] **T-021** gloss list 报「术语『list』不存在」应提示用法 — done  ✓已记录修复
 - [x] **T-022** memory add 静默 0 条: infer 提取失败自动降级 + 提示 — done  ✓已记录修复
+- [ ] **T-023** install.sh 包装器生成逻辑修复: 优先项目 venv — review  ✓已记录修复
 
 ## 阻塞
 (无)
