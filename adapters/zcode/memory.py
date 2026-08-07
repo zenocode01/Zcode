@@ -111,16 +111,26 @@ class MemStore:
         infer_mode:
           - none/skip  → infer=False（L0：纯 embedding，零 LLM）
           - simplified → infer=True + 简化提取提示词（L1，默认）
+
+        T-022 降级：infer 提取返回 0 条（LLM 端点不可用/提取为空）时自动回退
+        L0 原文写入（记忆不丢），返回 dict 附带 degraded=True 供 CLI 提示。
         """
         infer = self.infer_mode not in ("none", "skip", "off")
         prompt = SIMPLIFIED_PROMPT if (infer and self.infer_mode == "simplified") else None
-        return self._mem.add(
+        result = self._mem.add(
             content,
             user_id=user_id,
             metadata=metadata,
             infer=infer,
             prompt=prompt,
         )
+        ids = result.get("results", []) if isinstance(result, dict) else []
+        if infer and not ids:
+            # 降级：LLM 提取 0 条 → 纯 embedding 原文写入，记忆不丢
+            result = self._mem.add(content, user_id=user_id, metadata=metadata, infer=False)
+            result = dict(result) if isinstance(result, dict) else {"results": result or []}
+            result["degraded"] = True
+        return result
 
     def search(self, query: str, user_id: str = "default", top_k: int = 5) -> list[dict]:
         """检索记忆（mem0 v2 检索零 LLM：embedding + 混合打分）。"""

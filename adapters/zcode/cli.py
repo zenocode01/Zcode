@@ -214,6 +214,8 @@ def cmd_memory_add(args: argparse.Namespace) -> int:
         print(f"错误: {e}", file=sys.stderr)
         return 1
     ids = result.get("results", []) if isinstance(result, dict) else []
+    if result.get("degraded"):
+        print("⚠ LLM 提取 0 条记忆，已自动降级为原文直接写入（infer 提取不可用或无结果）", file=sys.stderr)
     print(f"已写入 {len(ids)} 条记忆")
     for r in ids:
         print(f"  [{r.get('id')}] {r.get('memory', '')[:80]}")

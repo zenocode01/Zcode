@@ -103,3 +103,11 @@ Status: done
 - [ ] ① gloss list/ls 识别为列出全部（曾报「术语『list』不存在」）；查询未命中时提示完整用法（列出/添加）
 - [ ] ② 附带发现: cmd_add 参数反写——有参时取空串，Depends/描述静默丢失（登记工单时描述全丢）
 - [ ] ③ 附带发现: ticket add --help 把 --help 当标题建空单；统一子命令 --help 处理
+
+## T-022 memory add 静默 0 条: infer 提取失败自动降级 + 提示
+Resolution: 根因: MemStore.add 在 infer(simplified) 模式下直接透传 mem0, LLM 提取返回 0 条时静默返回空 results, CLI 只打印『已写入 0 条记忆』无任何提示/降级, 用户感知为写入失败且记忆丢失; 修复: ① MemStore.add 在 infer 且提取 0 条时自动降级 L0(原文纯 embedding 第二次写入, 参数透传), 返回 dict 附 degraded=True; ② CLI 检测 degraded 向 stderr 打印明确提示; 验证: 76 用例绿(新增 4: 降级两次调用/成功不降级/L0 不重试/CLI 提示), 真机 memory add 触发降级提示+写入成功; 已知环境限制: BM25 encoder 加载失败(fastembed 下载被 Steam++ 证书拦截), 检索降级纯 embedding 不影响核心
+Status: review
+
+- [ ] - [ ] 修复: MemStore.add 在 infer 提取返回 0 条时自动降级 L0(原文纯 embedding 写入, 记忆不丢), 返回带 degraded 标记; CLI 打印明确提示(提取失败/降级原因)
+- [ ] 验证: mock mem0.add 两次调用(infer=True 空 → infer=False 成功), 全量测试绿; 真机 memory add 走降级路径写入成功
+- [ ] 已知环境限制(不进本工单): BM25 encoder 加载失败——fastembed 从 HuggingFace 下载模型被 Steam++ 证书拦截(SSL_CERT_FILE 后下载源仍不可达), 检索降级为纯 embedding, 不影响核心功能
