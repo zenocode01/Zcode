@@ -231,3 +231,6 @@
 2026-08-07 11:47:45 | phase | review -> commit --pass
 2026-08-07 11:47:52 | branch | merged vibe/T-019 -> main and deleted
 2026-08-07 11:47:52 | close | T-019 (正式发布 0.3.8: 版本统一 + Release)
+2026-08-07 13:42:19 | add | T-020 (--help)
+2026-08-07 13:44:12 | add | T-020 (close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过)
+2026-08-07 13:44:20 | add | T-021 (gloss list 报「术语『list』不存在」应提示用法)

@@ -90,3 +90,10 @@ Status: done
 ## T-019 正式发布 0.3.8: 版本统一 + Release
 Resolution: 发布 0.3.8: package.json/pyproject.toml/marketplace.json/plugin.json 版本统一 0.1.0→0.3.8(与 CHANGELOG 对齐); 验证: 67 用例绿
 Status: done
+
+
+## T-020 close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过
+Status: backlog
+
+## T-021 gloss list 报「术语『list』不存在」应提示用法
+Status: backlog

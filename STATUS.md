@@ -30,6 +30,8 @@ BranchMode: auto
 - [x] **T-017** pwsh 真机验证 install.ps1 + 修复路径 bug — done  ✓已记录修复
 - [x] **T-018** 完整测试发现的 3 个缺陷修复 — done  ✓已记录修复
 - [x] **T-019** 正式发布 0.3.8: 版本统一 + Release — done  ✓已记录修复
+- [ ] **T-020** close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过 — backlog
+- [ ] **T-021** gloss list 报「术语『list』不存在」应提示用法 — backlog
 
 ## 阻塞
 (无)
