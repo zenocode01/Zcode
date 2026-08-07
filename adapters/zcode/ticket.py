@@ -845,11 +845,13 @@ def _auto_changelog(root: Path, t: Ticket) -> str | None:
 
 
 def _auto_commit_state_files(root: Path, tid: str, title: str) -> bool:
-    """自动提交状态文件 + CHANGELOG（绕过 hook：Phase=analyze 属协议内部收尾）。"""
-    code, _ = run_git(root, ["add", "--", *CLOSE_AUTO_COMMIT_PATHS])
+    """自动提交状态文件 + CHANGELOG（绕过 hook：Phase=analyze 属协议内部收尾）。
+    只 add 实际存在的路径（曾因 CHANGELOG.md 不存在导致 git add exit 128 静默失败）。"""
+    paths = [p for p in CLOSE_AUTO_COMMIT_PATHS if (root / p).exists()]
+    code, _ = run_git(root, ["add", "--", *paths])
     if code != 0:
         return False
-    _, out = run_git(root, ["status", "--porcelain", "--", *CLOSE_AUTO_COMMIT_PATHS])
+    _, out = run_git(root, ["status", "--porcelain", "--", *paths])
     if not out:
         return False
     code, _ = run_git(root, ["-c", "core.hooksPath=/dev/null", "commit", "-q", "-m", f"{tid} 状态收尾（{title}）"])

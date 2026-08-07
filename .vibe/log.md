@@ -205,3 +205,8 @@
 2026-08-07 11:32:03 | phase | review -> commit --pass
 2026-08-07 11:32:04 | branch | merged vibe/T-017 -> main and deleted
 2026-08-07 11:32:04 | close | T-017 (pwsh 真机验证 install.ps1 + 修复路径 bug)
+2026-08-07 11:41:22 | add | T-018 (--help)
+2026-08-07 11:41:54 | branch | created vibe/T-018 (from main)
+2026-08-07 11:41:54 | begin | T-018 (完整测试发现的 3 个缺陷修复)
+2026-08-07 11:44:38 | transition | T-018: in-progress -> review
+2026-08-07 11:44:38 | resolve | T-018 (完整测试发现的 3 个缺陷修复)
