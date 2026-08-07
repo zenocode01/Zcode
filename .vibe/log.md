@@ -115,3 +115,14 @@
 2026-08-07 10:58:22 | phase | review -> commit --pass
 2026-08-07 10:58:23 | branch | merged vibe/T-011 -> main and deleted
 2026-08-07 10:58:23 | close | T-011 (三系统分工: handoff×mem0×workbench 去重联动)
+2026-08-07 11:01:53 | add | T-012 (通俗版使用说明: 面向非技术读者的功能与框架说明)
+2026-08-07 11:01:53 | branch | created vibe/T-012 (from main)
+2026-08-07 11:01:53 | begin | T-012 (通俗版使用说明: 面向非技术读者的功能与框架说明)
+2026-08-07 11:02:40 | phase | analyze -> plan
+2026-08-07 11:02:40 | phase | plan -> implement
+2026-08-07 11:02:41 | phase | implement -> verify --green
+2026-08-07 11:02:41 | transition | T-012: in-progress -> review
+2026-08-07 11:02:41 | resolve | T-012 (通俗版使用说明: 面向非技术读者的功能与框架说明)
+2026-08-07 11:02:41 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-110241-verify-review.txt
+2026-08-07 11:02:41 | phase | verify -> review --green
+2026-08-07 11:02:41 | phase | review -> commit --pass
