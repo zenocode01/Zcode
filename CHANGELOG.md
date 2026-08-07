@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.7] - 2026-08-07
+
+**pwsh 真机验证 install.ps1 + 修复路径 bug**（T-017）：根因: install.ps1 用 $PSScriptRoot 定位技能目录(实为 scripts/ 而非仓库根), 且从未真机验证; 修复: $src 改为仓库根(Split-Path -Parent); 验证: pwsh 7.6.4 已装, Unix 分支实跑通过, Windows 分支模拟($env:OS=Windows_NT)通过(Junction 失败退复制), 空 HOME 全量 12 技能安装成功, zcode.cmd/ps1 生成, 包装器 zcode 命令可用
+
 ## [0.3.6] - 2026-08-07
 
 **Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档**（T-016）：根因: 安装/钩子/文档仅 Linux, Windows 用户无法使用; 修复: scripts/install.ps1(Junction/复制免管理员+zcode.cmd/ps1 包装器+用户 PATH+配置), 模板 hook 跨平台宿主(Unix 用 zcode/python, Windows 经 powershell.exe 调 zcode.cmd), git config zcode.cli 路径加引号(Windows 空格路径), 测试适配(权限断言/分支名动态), README/使用手册/AGENTS Windows 分支; 验证: 64 用例绿, hook sh 语法过, ps1 待 Windows 真机验证

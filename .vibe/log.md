@@ -203,3 +203,5 @@
 2026-08-07 11:32:03 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-113202-verify-review.txt
 2026-08-07 11:32:03 | phase | verify -> review --green
 2026-08-07 11:32:03 | phase | review -> commit --pass
+2026-08-07 11:32:04 | branch | merged vibe/T-017 -> main and deleted
+2026-08-07 11:32:04 | close | T-017 (pwsh 真机验证 install.ps1 + 修复路径 bug)
