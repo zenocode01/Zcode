@@ -93,7 +93,7 @@ Phase 1/2/3 核心能力全部落地 + Phase 4 起步（2026-08）：
 - **工单驱动工作台（Layer 2，移植 vibe-workbench）**：`zcode ticket` 命令族（init/add/begin/phase/transition/close/resolve/context/gloss/status/validate/next/log/install/projects/switch/ask）——双状态机（Agent 阶段机 + 工单生命周期机）+ 可执行强制（守卫 / 依赖环检测 / 验证证据 / STATUS 自刷新 / pre-commit 闸门 / 自动分支）+ `skills/workbench` 技能；与 vibe-workbench 文件格式与注册表兼容，两 CLI 可混用
 - **记忆与迭代（Layer 3）**：`zcode memory`（mem0 + Qwen3-Embedding-8B + Qdrant 本地，BM25/实体增强已启用）；会话接力 `zcode handoff`；EvoSkills 自我迭代 `zcode skill log/audit`（阈值 70% / 2 条）
 - **生态（Phase 4 起步）**：技能市场 `zcode market list/validate/generate`（marketplace.json 质量校验）+ Claude Code 深度插件
-- **测试**：`adapters/tests/` 68 用例（unittest 零依赖，`python3 -m unittest discover -s adapters/tests`）；提交测试门禁——配了 `TestCommand:` 的项目提交前真实执行测试，失败拦截（`git config zcode.test-gate false` 可关）；close 自动收尾——CHANGELOG 缺工单号自动补录（版本自动 bump，文件不存在自动创建基线）+ 状态文件自动提交，工作区常净
+- **测试**：`adapters/tests/` 72 用例（unittest 零依赖，`python3 -m unittest discover -s adapters/tests`）；提交测试门禁——配了 `TestCommand:` 的项目提交前真实执行测试，失败拦截（`git config zcode.test-gate false` 可关）；close 自动收尾——CHANGELOG 缺工单号自动补录（版本自动 bump，文件不存在自动创建基线）+ 状态文件自动提交，工作区常净
 
 尚未实现：技能市场远程分发与社区贡献、其余平台深度插件、技能市场发布。路线图见 `docs/基本构思.md`。
 
