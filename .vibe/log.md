@@ -25,3 +25,15 @@
 2026-08-07 09:34:09 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-093408-verify-review.txt
 2026-08-07 09:34:09 | phase | verify -> review --green
 2026-08-07 09:34:09 | phase | review -> commit --pass
+2026-08-07 09:34:17 | close | T-004 (同步 README 与 AGENTS.md 文档)
+2026-08-07 09:37:56 | add | T-005 (测试补齐与回归防线)
+2026-08-07 09:37:56 | branch | created vibe/T-005 (from main)
+2026-08-07 09:37:56 | begin | T-005 (测试补齐与回归防线)
+2026-08-07 09:45:07 | phase | analyze -> plan
+2026-08-07 09:45:07 | phase | plan -> implement
+2026-08-07 09:45:17 | phase | implement -> verify --green
+2026-08-07 09:45:17 | transition | T-005: in-progress -> review
+2026-08-07 09:45:17 | resolve | T-005 (测试补齐与回归防线)
+2026-08-07 09:45:18 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-094517-verify-review.txt
+2026-08-07 09:45:18 | phase | verify -> review --green
+2026-08-07 09:45:18 | phase | review -> commit --pass
