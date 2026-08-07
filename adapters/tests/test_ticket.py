@@ -388,6 +388,8 @@ class TestLifecycle(TicketBase):
         _git(root, "config", "user.name", "t")
         (root / "seed.txt").write_text("x", encoding="utf-8")
         self.assertEqual(self._commit_no_hook(root, "seed"), 0)
+        _, base_out = ticket.run_git(root, ["branch", "--show-current"])
+        base_branch = base_out[0].strip()  # master 或 main（取决于 git 配置）
         ticket.cmd_add(["带分支工单"])
         ticket.cmd_begin(["T-001"])
         code, out = ticket.run_git(root, ["branch", "--show-current"])
@@ -396,7 +398,7 @@ class TestLifecycle(TicketBase):
         self.assertEqual(self._commit_no_hook(root, "T-001 带分支工单"), 0)
         ticket.cmd_close(["T-001"])
         code, out = ticket.run_git(root, ["branch", "--show-current"])
-        self.assertEqual(out[0].strip(), "master")
+        self.assertEqual(out[0].strip(), base_branch)  # 回到原基线分支
         code, _ = ticket.run_git(root, ["rev-parse", "--verify", "refs/heads/vibe/T-001"])
         self.assertNotEqual(code, 0)  # 分支已删除
         self.assertTrue(ticket.ticket_committed(root, "T-001"))
@@ -418,7 +420,8 @@ class TestInitExisting(TicketBase):
         self.assertTrue((proj / "tickets.md").exists())
         self.assertTrue((proj / "docs/CONTEXT.md").exists())
         self.assertTrue((proj / ".vibe" / "hooks" / "pre-commit").exists())
-        self.assertTrue((proj / ".vibe" / "hooks" / "pre-commit").stat().st_mode & 0o111)
+        if os.name != "nt":  # Windows 无 POSIX 权限位
+            self.assertTrue((proj / ".vibe" / "hooks" / "pre-commit").stat().st_mode & 0o111)
 
     def test_init_refuses_nonempty_without_flag(self):
         proj = self.base / "n" 

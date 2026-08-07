@@ -642,7 +642,7 @@ def cmd_install(args: list[str], quiet_root: Path | None = None) -> None:
     else:
         raise TicketError("模板缺少 .vibe/hooks/pre-commit")
     run_git(root, ["config", "core.hooksPath", ".vibe/hooks"])
-    cli = f"{sys.executable} -m zcode.cli"
+    cli = f'"{sys.executable}" -m zcode.cli'  # 引号包裹: Windows 路径可能含空格, hook eval 安全
     run_git(root, ["config", "zcode.cli", cli])
     print("✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)")
 
