@@ -2,11 +2,9 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
-## [0.3.9] - 2026-08-07
-
-**正式发布 0.3.8: 版本统一 + Release**（T-019）：发布 0.3.8: package.json/pyproject.toml/marketplace.json/plugin.json 版本统一 0.1.0→0.3.8(与 CHANGELOG 对齐); 验证: 67 用例绿
-
 ## [0.3.8] - 2026-08-07
+
+**正式发布 0.3.8**（T-019）：package.json/pyproject.toml/marketplace.json/plugin.json 版本统一 0.1.0→0.3.8(与 CHANGELOG 对齐); 验证: 67 用例绿
 
 **完整测试发现的 3 个缺陷修复**（T-018）：根因: ① adapters/zcode 缺 __main__.py 导致 python -m zcode 失败(npm 入口 bin/zcode.js 依赖它); ② install.sh UNINSTALL 分支忽略 --project 误删全局 ~/.agents/skills; ③ _auto_commit_state_files 对不存在的 CHANGELOG.md 执行 git add exit 128 静默失败致 close 后工作区残留; 修复: ① 新增 __main__.py; ② 卸载分支支持项目级; ③ add 前过滤不存在的路径; 验证: 67 用例绿(含 3 新增回归), 真机验证 python -m zcode/项目级卸载仅动项目/新项目 close 后工作区干净, 全局软链已恢复
 
