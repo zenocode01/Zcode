@@ -3,22 +3,12 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: commit
-Current Ticket: T-021
+Phase: analyze
+Current Ticket: 
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 14 条 (docs/UBIQUITOUS_LANGUAGE.md)
-
-## 当前工单 T-021 (gloss list 报「术语『list』不存在」应提示用法) [review]
-## T-021 gloss list 报「术语『list』不存在」应提示用法
-Resolution: 根因: ① cmd_add 条件反写——有参时取空串、无参才提问(dep_input/body), Depends 与描述参数静默丢失(登记工单时描述从未写入); ② gloss list 把 list 当术语查询报不存在, 查询未命中提示不完整; ③ add --help 把 --help 当标题建空单; 修复: ① 条件修正为有参取参、无参提问; ② gloss list/ls 识别为列出全部, 未命中提示完整用法(列出/添加); ③ run() 统一处理子命令 -h/--help 显示帮助, show_help 同步 add/gloss 用法; 验证: 72 用例绿(新增 4: add 依赖+描述写入/--help 不建单/gloss list 列出/未命中提示), 真机冒烟 add 带参写入成功
-Status: review
-
-- [ ] ① gloss list/ls 识别为列出全部（曾报「术语『list』不存在」）；查询未命中时提示完整用法（列出/添加）
-- [ ] ② 附带发现: cmd_add 参数反写——有参时取空串，Depends/描述静默丢失（登记工单时描述全丢）
-- [ ] ③ 附带发现: ticket add --help 把 --help 当标题建空单；统一子命令 --help 处理
-
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -41,7 +31,7 @@ Status: review
 - [x] **T-018** 完整测试发现的 3 个缺陷修复 — done  ✓已记录修复
 - [x] **T-019** 正式发布 0.3.8: 版本统一 + Release — done  ✓已记录修复
 - [x] **T-020** close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过 — done  ✓已记录修复
-- [ ] **T-021** gloss list 报「术语『list』不存在」应提示用法 — review  ✓已记录修复
+- [x] **T-021** gloss list 报「术语『list』不存在」应提示用法 — done  ✓已记录修复
 
 ## 阻塞
 (无)

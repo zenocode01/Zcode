@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.10] - 2026-08-07
+
+**gloss list 报「术语『list』不存在」应提示用法**（T-021）：根因: ① cmd_add 条件反写——有参时取空串、无参才提问(dep_input/body), Depends 与描述参数静默丢失(登记工单时描述从未写入); ② gloss list 把 list 当术语查询报不存在, 查询未命中提示不完整; ③ add --help 把 --help 当标题建空单; 修复: ① 条件修正为有参取参、无参提问; ② gloss list/ls 识别为列出全部, 未命中提示完整用法(列出/添加); ③ run() 统一处理子命令 -h/--help 显示帮助, show_help 同步 add/gloss 用法; 验证: 72 用例绿(新增 4: add 依赖+描述写入/--help 不建单/gloss list 列出/未命中提示), 真机冒烟 add 带参写入成功
+
 ## [0.3.9] - 2026-08-07
 
 **close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过**（T-020）：根因: ① cmd_close 在合并分支前执行 _auto_changelog 改 CHANGELOG.md, 而 repo_clean 只查非状态文件(CHANGELOG 在 STATE_PREFIXES 内), CHANGELOG 为分支独有文件时 git switch 被拒, close 中止在中间态(工单仍 review/条目已追加/分支未合并)且无恢复指引; ② _auto_changelog 文件缺失时直接 return None 不创建不提示, 与 SKILL.md 承诺不符; ③ repo_clean 命名误导(叫整仓干净实查源码); 修复: ① close 重排——先合并分支(switch 前预检 base 不存在的脏文件并阻止+指引, switch/merge 失败附恢复指引, 可幂等重跑)再补录 CHANGELOG; ② _auto_changelog 缺失时创建 [0.1.0] 基线并提示; ③ repo_clean 改名 dirty_source_paths 返回路径列表, 错误文案列具体文件; 验证: 68 用例绿(新增 Bug2 回归分支独有 CHANGELOG/预检脏文件, Bug3 基线创建, 函数改名 3 处)

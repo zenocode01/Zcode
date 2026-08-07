@@ -256,3 +256,5 @@
 2026-08-07 13:57:12 | phase | verify -> review --green
 2026-08-07 13:57:13 | resolve | T-021 (gloss list 报「术语『list』不存在」应提示用法)
 2026-08-07 13:57:13 | phase | review -> commit --pass
+2026-08-07 13:57:20 | branch | merged vibe/T-021 -> main and deleted
+2026-08-07 13:57:20 | close | T-021 (gloss list 报「术语『list』不存在」应提示用法)
