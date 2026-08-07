@@ -99,10 +99,10 @@ backlog → in-progress → review → done
 7. `zcode ticket phase review --green` — 验证绿进审查
 8. `zcode ticket phase commit --pass` — 审查过
 9. git commit（pre-commit hook 校验：Phase 在 verify/review/commit、当前工单不在 in-progress、STATUS.md 保鲜、术语表非空、测试门禁）
-10. `zcode ticket close T-XXX` — 关单（校验 Resolution + 已提交 → **自动补录 CHANGELOG（缺则加）→ 自动提交状态文件** → 合并分支 → Phase 复位）
+10. `zcode ticket close T-XXX` — 关单（校验 Resolution + 已提交 → **合并分支 → 自动补录 CHANGELOG（缺则加，文件不存在自动创建基线）→ 自动提交状态文件** → Phase 复位）
 
 > close 自动完成两件事，无需再开"收尾"工单：
-> - **CHANGELOG 自动补录**：`CHANGELOG.md` 缺 `T-XXX` 时自动从 Resolution 生成条目（版本自动 bump）
+> - **CHANGELOG 自动补录**：`CHANGELOG.md` 缺 `T-XXX` 时自动从 Resolution 生成条目（版本自动 bump）；文件不存在时自动创建 `[0.1.0]` 基线
 > - **状态文件自动提交**：tickets.md / STATUS.md / CONTEXT / 术语表 / `.vibe/` / CHANGELOG 自动 commit（`T-XXX 状态收尾`），工作区保持干净
 
 > 关键：工单必须在**提交前**流转到 review，修复记录必须在 close 前用 resolve 写好。若提交被拦提示 in-progress，先 `zcode ticket transition T-XXX review` 再提交。
@@ -126,7 +126,7 @@ backlog → in-progress → review → done
 
 | 文件 | 检查点 |
 |---|---|
-| **`CHANGELOG.md`** | **自动兜底**：缺本工单号时 close 自动从 Resolution 补录（版本自动 bump）；已有记录不重复 |
+| **`CHANGELOG.md`** | **自动兜底**：缺本工单号时 close 自动从 Resolution 补录（版本自动 bump）；文件不存在自动创建 `[0.1.0]` 基线；已有记录不重复 |
 | `README.md` | 命令/能力/用例数/目录结构有变化时同步 |
 | `AGENTS.md` | 当前状态（技能数/能力清单/仓库信息）、构建测试命令、协议条款有变化时同步 |
 | **术语表 `docs/UBIQUITOUS_LANGUAGE.md`** | 本次工单引入的新术语是否已 `gloss add`（写入命令自动，登记决策人工——validate 只拦空表与格式，漏登记不会自动发现） |

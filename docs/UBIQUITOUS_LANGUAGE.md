@@ -42,7 +42,7 @@
 - **含义**：pre-commit 提交前真实跑测试, 失败拦截; git config zcode.test-gate false 可关
 
 ## 变更日志
-- **含义**：CHANGELOG.md: 每次工单 close 自动补录, 版本自动 bump
+- **含义**：CHANGELOG.md: 每次工单 close 自动补录(版本自动 bump, 文件不存在自动创建基线)
 
 ## 适配层
 - **含义**：Layer 0: 万能插座, 一套技能软链 8 平台
@@ -54,4 +54,4 @@
 - **含义**：.vibe/evidence/: TestCommand 真实执行的退出码+输出留痕
 
 ## close收尾
-- **含义**：close 自动: CHANGELOG 补录+状态文件提交, 工作区常净
+- **含义**：close 自动: 先合并分支再 CHANGELOG 补录(缺则建基线)+状态文件提交, 工作区常净

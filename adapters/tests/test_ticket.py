@@ -323,7 +323,7 @@ class TestLifecycle(TicketBase):
             ticket.cmd_close(["T-001"])  # 未提交
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "review")
 
-    def test_repo_clean_ignores_docs_and_state_files(self):
+    def test_dirty_source_paths_ignores_docs_and_state_files(self):
         root = self.make_project()
         _git(root, "config", "user.email", "t@t")
         _git(root, "config", "user.name", "t")
@@ -331,9 +331,9 @@ class TestLifecycle(TicketBase):
         (root / "README.md").write_text("改文档", encoding="utf-8")
         (root / "CHANGELOG.md").write_text("改日志", encoding="utf-8")
         (root / "tickets.md").write_text("改工单", encoding="utf-8")
-        self.assertTrue(ticket.repo_clean(root))  # 文档+状态文件不算脏
+        self.assertEqual(ticket.dirty_source_paths(root), [])  # 文档+状态文件不算源码改动
         (root / "src_code.py").write_text("print(1)", encoding="utf-8")
-        self.assertFalse(ticket.repo_clean(root))  # 源码改动算脏
+        self.assertEqual(ticket.dirty_source_paths(root), ["src_code.py"])  # 源码改动算脏
 
     def test_close_auto_appends_changelog_and_commits(self):
         """缺 CHANGELOG 记录 → 自动补录（含 T-XXX）+ 状态文件自动提交，close 通过。"""
@@ -365,21 +365,18 @@ class TestLifecycle(TicketBase):
         text = (root / "CHANGELOG.md").read_text(encoding="utf-8")
         self.assertEqual(text.count("T-001"), 1)  # 只保留原有那条
 
-    def test_close_no_changelog_file_no_create(self):
+    def test_close_missing_changelog_creates_baseline(self):
+        """Bug 3 回归: CHANGELOG.md 不存在时 close 自动创建 [0.1.0] 基线并记录（不再静默跳过）。"""
         root = self._full_project()  # 无 CHANGELOG.md
         ticket.cmd_begin(["T-001"])
         self._drive_to_commit_phase(root)
         self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
         ticket.cmd_close(["T-001"])
-        self.assertFalse((root / "CHANGELOG.md").exists())  # 不创建
-        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
-
-    def test_close_allows_no_changelog_file(self):
-        root = self._full_project()  # 无 CHANGELOG.md → 守卫跳过
-        ticket.cmd_begin(["T-001"])
-        self._drive_to_commit_phase(root)
-        self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
-        ticket.cmd_close(["T-001"])
+        changelog = root / "CHANGELOG.md"
+        self.assertTrue(changelog.exists())  # 自动创建，不再静默跳过
+        text = changelog.read_text(encoding="utf-8")
+        self.assertIn("## [0.1.0]", text)  # 基线版本
+        self.assertIn("T-001", text)
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
 
     def test_close_no_changelog_still_commits_state_files(self):
@@ -394,6 +391,46 @@ class TestLifecycle(TicketBase):
         _, out = ticket.run_git(root, ["status", "--porcelain"])
         dirty = [l for l in out if "tickets.md" in l or "STATUS.md" in l or ".vibe/" in l]
         self.assertEqual(dirty, [], f"状态文件未自动提交: {out}")
+
+    def test_close_branch_only_changelog_merges_and_records(self):
+        """Bug 2 回归: CHANGELOG.md 为分支独有文件时 close 不再中止在中间态——
+        自动补录挪到合并成功后执行，分支独有文件随合并带回并正常记录。"""
+        root = self.make_project()
+        _git(root, "config", "user.email", "t@t")
+        _git(root, "config", "user.name", "t")
+        (root / "seed.txt").write_text("x", encoding="utf-8")
+        self.assertEqual(self._commit_no_hook(root, "seed"), 0)
+        ticket.cmd_add(["分支独有 CHANGELOG"])
+        ticket.cmd_begin(["T-001"])
+        (root / "CHANGELOG.md").write_text("# Changelog\n", encoding="utf-8")
+        self.assertEqual(self._commit_no_hook(root, "CHANGELOG 基线（分支独有）"), 0)
+        self._drive_to_commit_phase(root)
+        self.assertEqual(self._commit_no_hook(root, "T-001 实现"), 0)
+        ticket.cmd_close(["T-001"])
+        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
+        text = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+        self.assertIn("T-001", text)  # 合并后补录成功（修复前: switch 被拒中止在中间态）
+
+    def test_close_blocks_dirty_branch_only_file_with_guidance(self):
+        """预检: switch 前发现 base 分支不存在的脏文件 → 阻止 close 并给出指引，状态不变可重跑。"""
+        root = self.make_project()
+        _git(root, "config", "user.email", "t@t")
+        _git(root, "config", "user.name", "t")
+        (root / "seed.txt").write_text("x", encoding="utf-8")
+        self.assertEqual(self._commit_no_hook(root, "seed"), 0)
+        ticket.cmd_add(["分支独有脏文件"])
+        ticket.cmd_begin(["T-001"])
+        (root / "branch_only.txt").write_text("v1", encoding="utf-8")
+        self.assertEqual(self._commit_no_hook(root, "分支独有文件"), 0)
+        self._drive_to_commit_phase(root)
+        self.assertEqual(self._commit_no_hook(root, "T-001 实现"), 0)
+        (root / "branch_only.txt").write_text("v2", encoding="utf-8")  # 工作区改脏分支独有文件
+        with self.assertRaisesRegex(ticket.TicketError, "branch_only.txt"):
+            ticket.cmd_close(["T-001"])
+        # 状态不变：工单仍 review、分支未合并未删除、可重跑 close
+        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "review")
+        code, _ = ticket.run_git(root, ["rev-parse", "--verify", "refs/heads/vibe/T-001"])
+        self.assertEqual(code, 0)
 
     def test_auto_branch_create_and_merge(self):
         root = self.make_project()
