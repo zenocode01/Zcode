@@ -111,3 +111,10 @@ Status: done
 - [ ] - [ ] 修复: MemStore.add 在 infer 提取返回 0 条时自动降级 L0(原文纯 embedding 写入, 记忆不丢), 返回带 degraded 标记; CLI 打印明确提示(提取失败/降级原因)
 - [ ] 验证: mock mem0.add 两次调用(infer=True 空 → infer=False 成功), 全量测试绿; 真机 memory add 走降级路径写入成功
 - [ ] 已知环境限制(不进本工单): BM25 encoder 加载失败——fastembed 从 HuggingFace 下载模型被 Steam++ 证书拦截(SSL_CERT_FILE 后下载源仍不可达), 检索降级为纯 embedding, 不影响核心功能
+
+## T-023 install.sh 包装器生成逻辑修复: 优先项目 venv
+Resolution: 根因: install.sh 的 install_cli 写死 exec python3(系统解释器), 且包检查基于系统 python3; 重跑 install.sh 会覆盖手工修好的 venv 包装器(Bug 1 复发, ModuleNotFoundError); 修复: 解释器优先 REPO_ROOT/.venv/bin/python(PEP 668 环境), 回退 python3; 包装器与检查逻辑同步用实际解释器; 验证: 重跑 install.sh 后包装器指向 venv 且任意目录 zcode 可用(无 ModuleNotFoundError), 76 用例全绿
+Status: review
+
+- [ ] - [ ] 修复: install.sh 生成 CLI 包装器时写死 exec python3(系统解释器), 重跑 install.sh 会覆盖已修好的 venv 包装器(Bug 1 复发); 改为优先 REPO_ROOT/.venv/bin/python(PEP 668 环境必须 venv), 回退 python3; 包检查逻辑同步用实际解释器
+- [ ] 验证: 重跑 install.sh 后包装器指向 venv, 任意目录 zcode 可用, 无 ModuleNotFoundError

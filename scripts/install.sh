@@ -107,22 +107,26 @@ EOF
 }
 
 install_cli() {
-    # 全局 CLI 包装器: 任何目录直接 `zcode`（依赖 zcode 包已装入 python3 环境）
+    # 全局 CLI 包装器: 任何目录直接 `zcode`
+    # 解释器优先级: 项目 venv（PEP 668 环境系统 python3 装不了包）→ 系统 python3。
+    # T-023 修复: 曾写死 exec python3，重跑 install.sh 会覆盖手工修好的 venv 包装器（Bug 1 复发）。
     local bindir="$HOME/.local/bin"
     mkdir -p "$bindir"
     local wrapper="$bindir/zcode"
+    local pyexe="python3"
+    if [[ -x "$REPO_ROOT/.venv/bin/python" ]]; then
+        pyexe="$REPO_ROOT/.venv/bin/python"
+    fi
     cat > "$wrapper" <<EOF
 #!/bin/sh
-# Zcode CLI 包装器（install.sh 生成）。若 python3 环境未装 zcode 包，先:
-#   python3 -m pip install -e "$REPO_ROOT/adapters"
-exec python3 -m zcode.cli "\$@"
+# Zcode CLI 包装器（install.sh 生成）。解释器: $pyexe
+# 若该解释器环境未装 zcode 包，先: "$pyexe" -m pip install -e "$REPO_ROOT/adapters"
+exec "$pyexe" -m zcode.cli "\$@"
 EOF
     chmod +x "$wrapper"
-    echo "  ✓ 已安装 CLI 包装器: $wrapper（任何目录直接 \`zcode\`）"
-    if ! command -v python3 >/dev/null 2>&1; then
-        echo "  ⚠ 未找到 python3，请先安装 Python 3.10+ 后重跑"
-    elif ! python3 -c "import zcode" >/dev/null 2>&1; then
-        echo "  ⚠ zcode 包未装入 python3 环境，先执行: python3 -m pip install -e '$REPO_ROOT/adapters'"
+    echo "  ✓ 已安装 CLI 包装器: $wrapper（任何目录直接 \`zcode\`，解释器: $pyexe）"
+    if ! "$pyexe" -c "import zcode" >/dev/null 2>&1; then
+        echo "  ⚠ $pyexe 环境未装 zcode 包，先执行: '$pyexe' -m pip install -e '$REPO_ROOT/adapters'"
     fi
 }
 

@@ -271,3 +271,14 @@
 2026-08-07 14:42:07 | phase | review -> commit --pass
 2026-08-07 14:42:28 | branch | merged vibe/T-022 -> main and deleted
 2026-08-07 14:42:28 | close | T-022 (memory add 静默 0 条: infer 提取失败自动降级 + 提示)
+2026-08-07 14:45:25 | add | T-023 (install.sh 包装器生成逻辑修复: 优先项目 venv)
+2026-08-07 14:45:25 | branch | created vibe/T-023 (from main)
+2026-08-07 14:45:25 | begin | T-023 (install.sh 包装器生成逻辑修复: 优先项目 venv)
+2026-08-07 14:46:22 | phase | analyze -> plan
+2026-08-07 14:46:22 | phase | plan -> implement
+2026-08-07 14:46:22 | phase | implement -> verify
+2026-08-07 14:46:22 | transition | T-023: in-progress -> review
+2026-08-07 14:46:25 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-144622-verify-review.txt
+2026-08-07 14:46:25 | phase | verify -> review --green
+2026-08-07 14:46:26 | resolve | T-023 (install.sh 包装器生成逻辑修复: 优先项目 venv)
+2026-08-07 14:46:26 | phase | review -> commit --pass
