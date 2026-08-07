@@ -121,7 +121,7 @@ Status: done
 
 ## T-024 zcode version 子命令 + __version__ 第五处版本统一
 Resolution: 根因: CLI 无版本查看命令, 且 __init__.py __version__ 停在 0.1.0(T-019 版本统一四文件漏第五处); 修复: __version__ 同步 0.3.8(与 pyproject/package.json/marketplace/plugin 一致), 注册 zcode version 子命令输出代码内版本; 验证: 78 用例绿(新增 2: __version__ 与 pyproject 一致性防漂移/version 命令输出格式), zcode version 输出 zcode 0.3.8
-Status: review
+Status: done
 
 - [ ] - [ ] 修复: adapters/zcode/__init__.py __version__ 停在 0.1.0(T-019 版本统一四文件漏了这处), 且 CLI 无版本查看命令
 - [ ] 实现: __version__ 同步 0.3.8(与 pyproject/package.json/marketplace/plugin 四文件一致); cli.py 注册 version 子命令输出 __version__

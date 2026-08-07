@@ -296,3 +296,5 @@
 2026-08-07 14:51:06 | phase | verify -> review --green
 2026-08-07 14:51:06 | resolve | T-024 (zcode version 子命令 + __version__ 第五处版本统一)
 2026-08-07 14:51:06 | phase | review -> commit --pass
+2026-08-07 14:51:10 | branch | merged vibe/T-024 -> main and deleted
+2026-08-07 14:51:10 | close | T-024 (zcode version 子命令 + __version__ 第五处版本统一)

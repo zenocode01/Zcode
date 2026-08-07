@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.13] - 2026-08-07
+
+**zcode version 子命令 + __version__ 第五处版本统一**（T-024）：根因: CLI 无版本查看命令, 且 __init__.py __version__ 停在 0.1.0(T-019 版本统一四文件漏第五处); 修复: __version__ 同步 0.3.8(与 pyproject/package.json/marketplace/plugin 一致), 注册 zcode version 子命令输出代码内版本; 验证: 78 用例绿(新增 2: __version__ 与 pyproject 一致性防漂移/version 命令输出格式), zcode version 输出 zcode 0.3.8
+
 ## [0.3.12] - 2026-08-07
 
 **install.sh 包装器生成逻辑修复: 优先项目 venv**（T-023）：根因: install.sh 的 install_cli 写死 exec python3(系统解释器), 且包检查基于系统 python3; 重跑 install.sh 会覆盖手工修好的 venv 包装器(Bug 1 复发, ModuleNotFoundError); 修复: 解释器优先 REPO_ROOT/.venv/bin/python(PEP 668 环境), 回退 python3; 包装器与检查逻辑同步用实际解释器; 验证: 重跑 install.sh 后包装器指向 venv 且任意目录 zcode 可用(无 ModuleNotFoundError), 76 用例全绿
