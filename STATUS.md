@@ -3,12 +3,18 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: analyze
-Current Ticket: 
+Phase: commit
+Current Ticket: T-013
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
-术语表: 2 条 (docs/UBIQUITOUS_LANGUAGE.md)
+术语表: 14 条 (docs/UBIQUITOUS_LANGUAGE.md)
+
+## 当前工单 T-013 (术语表欠账补齐 + 登记时机改为 close 前人工核对) [review]
+## T-013 术语表欠账补齐 + 登记时机改为 close 前人工核对
+Resolution: 根因: 术语表登记时机是软约束(validate 只拦空表/格式), 13 工单仅 2 词条欠账明显; 修复: 补登 12 条核心术语(工单/阶段/守卫/锚点/状态机/会话接力/测试门禁/变更日志/适配层/记忆层/验证证据/close收尾), 分类修正(术语表从'命令自动管理'移入'close 前人工核对', 写入命令自动但登记决策人工), workbench 双版本/模板/协议段同步; 验证: 62 用例绿, validate 过
+Status: review
+
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -23,6 +29,7 @@ BranchMode: auto
 - [x] **T-010** close 自动化: 状态文件自动提交 + CHANGELOG 自动生成, 消灭收尾/欠账工单 — done  ✓已记录修复
 - [x] **T-011** 三系统分工: handoff×mem0×workbench 去重联动 — done  ✓已记录修复
 - [x] **T-012** 通俗版使用说明: 面向非技术读者的功能与框架说明 — done  ✓已记录修复
+- [ ] **T-013** 术语表欠账补齐 + 登记时机改为 close 前人工核对 — review  ✓已记录修复
 
 ## 阻塞
 (无)
