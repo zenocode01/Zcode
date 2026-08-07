@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.1] - 2026-08-07
+
+**三系统分工: handoff×mem0×workbench 去重联动**（T-011）：根因: workbench×handoff×mem0 三系统首次同仓, 进行中/决策/验证双写漂移, 无联动; 修复: handoff save 自动引用工单状态(缺省自动传参覆盖), 三技能接手路径统一(先 ticket context 后 handoff load), AGENTS/README 三系统职责表, 测试 4 新增; 验证: 62 用例绿, 实机 handoff 自动带出 T-011
+
 ## [0.3.0] - 2026-08-07
 
 **close 自动化**（T-010）：状态文件自动提交 + CHANGELOG 自动补录，消灭"收尾/欠账"类无用工单。
