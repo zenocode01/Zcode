@@ -89,4 +89,4 @@ Status: done
 
 ## T-019 正式发布 0.3.8: 版本统一 + Release
 Resolution: 发布 0.3.8: package.json/pyproject.toml/marketplace.json/plugin.json 版本统一 0.1.0→0.3.8(与 CHANGELOG 对齐); 验证: 67 用例绿
-Status: review
+Status: done

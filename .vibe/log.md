@@ -229,3 +229,5 @@
 2026-08-07 11:47:45 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-114744-verify-review.txt
 2026-08-07 11:47:45 | phase | verify -> review --green
 2026-08-07 11:47:45 | phase | review -> commit --pass
+2026-08-07 11:47:52 | branch | merged vibe/T-019 -> main and deleted
+2026-08-07 11:47:52 | close | T-019 (正式发布 0.3.8: 版本统一 + Release)

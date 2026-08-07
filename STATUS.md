@@ -3,18 +3,12 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: commit
-Current Ticket: T-019
+Phase: analyze
+Current Ticket: 
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 14 条 (docs/UBIQUITOUS_LANGUAGE.md)
-
-## 当前工单 T-019 (正式发布 0.3.8: 版本统一 + Release) [review]
-## T-019 正式发布 0.3.8: 版本统一 + Release
-Resolution: 发布 0.3.8: package.json/pyproject.toml/marketplace.json/plugin.json 版本统一 0.1.0→0.3.8(与 CHANGELOG 对齐); 验证: 67 用例绿
-Status: review
-
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -35,7 +29,7 @@ Status: review
 - [x] **T-016** Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档 — done  ✓已记录修复
 - [x] **T-017** pwsh 真机验证 install.ps1 + 修复路径 bug — done  ✓已记录修复
 - [x] **T-018** 完整测试发现的 3 个缺陷修复 — done  ✓已记录修复
-- [ ] **T-019** 正式发布 0.3.8: 版本统一 + Release — review  ✓已记录修复
+- [x] **T-019** 正式发布 0.3.8: 版本统一 + Release — done  ✓已记录修复
 
 ## 阻塞
 (无)
