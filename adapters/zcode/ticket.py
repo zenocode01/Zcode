@@ -515,6 +515,48 @@ def status_fresh(root: Path) -> bool:
 
 
 # ---------- 命令实现 ----------
+AGENTS_PROTOCOL_MARK = "工单工作台协议"
+AGENTS_PROTOCOL_SECTION = f"""
+
+## {AGENTS_PROTOCOL_MARK}（本仓库已启用）
+
+本仓库已启用工单驱动工作台（Layer 2，`zcode ticket`）：双状态机 + 可执行强制。任何 Agent 在本仓库干活时：
+
+1. **接手先看**：`zcode ticket context`（或读 `STATUS.md`），一屏拿全貌，细节按需再读。
+2. **状态推进一律走命令**，绝不手动改锚点行（`Phase:` / `Status:` / `Current Ticket:` / `Domain:` / `Resolution:` / `TestCommand:` / `BranchMode:`）。
+3. 干活前 `zcode ticket begin T-XXX`；修复类工单 close 前必须 `zcode ticket resolve T-XXX "根因+修复+验证"`；`zcode ticket validate` 通过后才提交。
+4. pre-commit hook 会拦截：Phase 未到 verify/review/commit、当前工单 in-progress、STATUS.md 过期、Domain 已填但术语表为空、测试门禁（TestCommand 失败，`git config zcode.test-gate false` 可关）。
+5. **close 自动收尾**：CHANGELOG 缺工单号自动补录（版本自动 bump）；tickets/STATUS/CONTEXT/术语表/`.vibe/`/CHANGELOG 自动提交（`T-XXX 状态收尾`），工作区保持干净。
+6. **人工同步**（随工单提交）：README / AGENTS / 术语表（新术语 `zcode ticket gloss add`）/ 技能清单按本次变更同步——不允许关单后文档未更新。
+7. 当前工单在 `tickets.md`；`zcode ticket next` 看可拾取项。
+"""
+
+
+def _append_agents_protocol(dest: Path) -> bool:
+    """已有 AGENTS.md 的项目自动追加工作台协议段（不覆盖原内容，幂等）。"""
+    agents = dest / "AGENTS.md"
+    if not agents.exists() or AGENTS_PROTOCOL_MARK in agents.read_text(encoding="utf-8"):
+        return False
+    agents.write_text(agents.read_text(encoding="utf-8").rstrip("\n") + AGENTS_PROTOCOL_SECTION, encoding="utf-8")
+    print("✓ 已自动追加「工单工作台协议」段到 AGENTS.md（原内容保留）")
+    return True
+
+
+def _init_guided_setup(dest: Path) -> None:
+    """交互引导：Domain / TestCommand 自动写入 CONTEXT.md（非交互环境跳过）。"""
+    ctx = dest / "docs/CONTEXT.md"
+    if not ctx.exists():
+        return
+    domain = _ask("项目简介（Domain，一句话，回车跳过）: ")
+    if domain:
+        set_anchor(ctx, "Domain", domain)
+    test_cmd = _ask("验证命令（TestCommand，如 pytest，回车跳过）: ")
+    if test_cmd:
+        set_anchor(ctx, "TestCommand", test_cmd)
+    if domain or test_cmd:
+        print("✓ 已写入 docs/CONTEXT.md")
+
+
 def _copy_missing(src: Path, dst: Path, skipped: list[str]) -> None:
     """递归复制模板：已存在的文件跳过，目录递归合并（不覆盖任何已有文件）。"""
     for item in src.iterdir():
@@ -558,6 +600,7 @@ def cmd_init(args: list[str]) -> None:
         _copy_missing(template, dest, skipped)
         if skipped:
             print(f"已跳过 {len(skipped)} 个已存在文件（不覆盖）；只新增缺失文件: {', '.join(sorted(set(skipped)))}")
+        _append_agents_protocol(dest)
     else:
         _copy_missing(template, dest, [])
 
@@ -577,11 +620,11 @@ def cmd_init(args: list[str]) -> None:
     register_project(str(dest))
     add_log(dest, "init", "zcode 工单工作台初始化")
     cmd_status(["-q"], root=dest)
+    _init_guided_setup(dest)
+    cmd_status(["-q"], root=dest)  # Domain 写入后刷新 STATUS
     print(f"✓ 工单工作台已就绪: {dest}")
     print(f"  已登记到项目注册表 (~/.vibe/projects.json)")
-    if existing:
-        print("  已在已有项目上启用；AGENTS.md 已存在未覆盖，协议入口需手动并入")
-    print("下一步: 写 docs/CONTEXT.md 的 Domain:，然后 zcode ticket add / zcode ticket begin")
+    print("下一步: zcode ticket add \"标题\" 登记工单，然后 zcode ticket begin T-001 开工")
 
 
 def cmd_install(args: list[str], quiet_root: Path | None = None) -> None:
