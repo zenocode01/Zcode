@@ -13,6 +13,10 @@ python3 -m venv .venv && .venv/bin/pip install -e ./adapters
 # 2. 跨平台安装技能（全局，软链到 ~/.agents/skills 等；--project <dir> 项目级）
 bash scripts/install.sh
 
+# Windows（PowerShell）:
+#   py -m venv .venv && .venv\Scripts\pip install -e ./adapters
+#   powershell -ExecutionPolicy Bypass -File ./scripts/install.ps1   # 装技能 + 全局 zcode 命令
+
 # 3. 常用命令（`install.sh` 已装全局命令,任何目录直接 `zcode`；npm link 后亦可）
 .venv/bin/zcode skills list                      # 技能清单
 .venv/bin/zcode --profile local-qwen3.6-35b info # 本地小模型 profile

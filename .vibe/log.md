@@ -179,3 +179,14 @@
 2026-08-07 11:19:56 | phase | review -> commit --pass
 2026-08-07 11:19:57 | branch | merged vibe/T-015 -> main and deleted
 2026-08-07 11:19:57 | close | T-015 (上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装)
+2026-08-07 11:21:32 | add | T-016 (Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档)
+2026-08-07 11:21:32 | branch | created vibe/T-016 (from main)
+2026-08-07 11:21:32 | begin | T-016 (Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档)
+2026-08-07 11:23:50 | phase | analyze -> plan
+2026-08-07 11:23:50 | phase | plan -> implement
+2026-08-07 11:23:50 | phase | implement -> verify --green
+2026-08-07 11:23:50 | transition | T-016: in-progress -> review
+2026-08-07 11:23:50 | resolve | T-016 (Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档)
+2026-08-07 11:23:51 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-112350-verify-review.txt
+2026-08-07 11:23:51 | phase | verify -> review --green
+2026-08-07 11:23:51 | phase | review -> commit --pass

@@ -134,7 +134,7 @@
 
 - **安装 zcode CLI**:`python3 -m venv .venv && .venv/bin/pip install -e ./adapters`(PEP 668 环境必须用 venv)
 - **CLI 验证命令**:`.venv/bin/zcode skills list`、`.venv/bin/zcode --profile local-qwen3.6-35b info`、`.venv/bin/zcode platforms list`、`.venv/bin/zcode workflow list`、`.venv/bin/zcode workflow run feature-dev --dry-run`、`.venv/bin/zcode ticket context`(接手先看)、`.venv/bin/zcode ticket validate`(提交前校验)
-- **跨平台安装**:`bash scripts/install.sh`(全局,主目标 `~/.agents/skills`);`--project <dir>` 项目级;`--uninstall` 卸载
+- **跨平台安装**:`bash scripts/install.sh`(全局,主目标 `~/.agents/skills`);`--project <dir>` 项目级;`--uninstall` 卸载;Windows 用 `powershell -ExecutionPolicy Bypass -File ./scripts/install.ps1`(装技能 + `zcode.cmd` 全局命令,自动加用户 PATH)
 - **npm 分发**:`npm link` 后 `zcode` 可用(需先安装 Python 包)
 - **测试命令**:`python3 -m unittest discover -s adapters/tests`(unittest 零依赖);技能质量评估用 `zcode market validate`(Phase 4)
 - **部署流程**:Layer 0 交付物已就绪(`install.sh` + 8 平台 `INSTALL.md`);各平台深度插件(`plugin.json`)与技能市场发布待后续
