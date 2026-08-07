@@ -153,6 +153,7 @@
 1. **接手先看**：`zcode ticket context`（或读 `STATUS.md`），一屏拿全貌，细节按需再读。
 2. **状态推进一律走命令**，绝不手动改锚点行（`Phase:` / `Status:` / `Current Ticket:` / `Domain:` / `Resolution:` / `TestCommand:` / `BranchMode:`）。
 3. 干活前 `zcode ticket begin T-XXX`；修复类工单 close 前必须 `zcode ticket resolve T-XXX "根因+修复+验证"`；`zcode ticket validate` 通过后才提交。
-4. pre-commit hook 会拦截：Phase 未到 verify/review/commit、当前工单 in-progress、STATUS.md 过期、Domain 已填但术语表为空。
-5. 新术语立即 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
-6. 当前工单在 `tickets.md`；`zcode ticket next` 看可拾取项。
+4. pre-commit hook 会拦截：Phase 未到 verify/review/commit、当前工单 in-progress、STATUS.md 过期、Domain 已填但术语表为空、TestCommand 运行失败（测试门禁，`git config zcode.test-gate false` 可关）。
+5. **close 前文档同步**：`CHANGELOG.md` 条目必须含本工单号 `T-XXX`（close 守卫强制，缺则拒绝）；README / AGENTS.md / 技能清单（ask-zcode / skills/README / marketplace.json）按本次变更同步，并随工单一起提交——**不允许关单后文档未更新**。
+6. 新术语立即 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
+7. 当前工单在 `tickets.md`；`zcode ticket next` 看可拾取项。

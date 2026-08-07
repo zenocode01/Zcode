@@ -97,10 +97,20 @@ backlog → in-progress → review → done
 6. `zcode ticket resolve T-XXX "根因+修复+验证"` — 记录修复情况（close 前必须）
 7. `zcode ticket phase review --green` — 验证绿进审查
 8. `zcode ticket phase commit --pass` — 审查过
-9. git commit（pre-commit hook 校验：Phase 在 verify/review/commit、当前工单不在 in-progress、STATUS.md 保鲜、术语表非空）
-10. `zcode ticket close T-XXX` — 关单（校验 Resolution + 已提交 → review→done → 合并分支 → Phase 复位 analyze）
+9. git commit（pre-commit hook 校验：Phase 在 verify/review/commit、当前工单不在 in-progress、STATUS.md 保鲜、术语表非空、测试门禁）
+10. `zcode ticket close T-XXX` — 关单（校验 Resolution + 已提交 + **CHANGELOG 已记录 T-XXX** → review→done → 合并分支 → Phase 复位 analyze）
 
 > 关键：工单必须在**提交前**流转到 review，修复记录必须在 close 前用 resolve 写好。若提交被拦提示 in-progress，先 `zcode ticket transition T-XXX review` 再提交。
+
+## 文档同步（close 前必须）
+
+**任何工单在 close 之前**，必须同步本次变更涉及的相关文档，否则 close 会被拒绝：
+
+- **CHANGELOG.md**（硬强制）：仓库存在 `CHANGELOG.md` 时，条目必须包含本工单号 `T-XXX`（close 守卫检查，缺则拒绝）。先写条目再 commit，再 close。
+- **README.md**：命令/能力/目录结构有变化时同步"快速开始 / 目录结构 / 当前状态"。
+- **AGENTS.md**：当前状态（技能数/能力清单）、构建测试命令有变化时同步。
+- **技能变更**：改 `skills/` 时同步 `ask-zcode` 路由、`skills/README.md` 清单、`marketplace.json`（`zcode market validate` 通过）。
+- 更新后：改文档也要随工单一起 git commit（文档类文件不阻塞 begin，但随工单提交）。
 
 ## 建议下一步
 

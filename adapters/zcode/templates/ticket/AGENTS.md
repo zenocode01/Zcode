@@ -41,6 +41,7 @@ backlog → in-progress → review → done
 5. 状态文件（`docs/CONTEXT.md`、`tickets.md`）的**内容**可以自由写，但**锚点行**（`Phase:`、`Status:`、`Current Ticket:`、`Domain:`、`Depends:`、`Resolution:`、`TestCommand:`、`BranchMode:`）必须格式正确。
 6. `BranchMode: auto` 时，`begin` 自动切到 `vibe/T-XXX` 分支、`close` 自动合并回主分支——**不要手动改分支**，除非工作流出错。
 7. 遇到领域术语（歧义、专有名词、命名约定）立即用 `zcode ticket gloss add <术语> <定义>` 记入 `docs/UBIQUITOUS_LANGUAGE.md`。
+8. **close 前文档同步**：仓库存在 `CHANGELOG.md` 时，条目必须含本工单号 `T-XXX`（close 守卫强制，缺则拒绝）；README / AGENTS / 技能清单等按本次变更同步，并随工单一起提交。
 
 ## 修复类工单流程（记录修复情况）
 1. `zcode ticket add "修复: <问题>"` → `zcode ticket begin T-XXX`
@@ -49,8 +50,9 @@ backlog → in-progress → review → done
 4. `zcode ticket phase verify`：跑测试（配了 `TestCommand:` 会真实执行；否则 `--green`）
 5. `zcode ticket transition T-XXX review`：实现完成，工单进 review
 6. `zcode ticket resolve T-XXX "根因: ...；修复: ...；验证: ..."` ← 修复记录，close 前必须
-7. `zcode ticket phase review --green` → `zcode ticket phase commit --pass` → git commit
-8. `zcode ticket close T-XXX`（校验 Resolution 非空 + 已提交 → 合并分支 → Phase 复位）
+7. 更新相关文档：`CHANGELOG.md` 条目必须含 `T-XXX`（否则 close 被拒）；README/AGENTS/技能清单按需同步
+8. `zcode ticket phase review --green` → `zcode ticket phase commit --pass` → git commit
+9. `zcode ticket close T-XXX`（校验 Resolution 非空 + 已提交 + CHANGELOG 已记录 → 合并分支 → Phase 复位）
 
 ## 常用命令
 

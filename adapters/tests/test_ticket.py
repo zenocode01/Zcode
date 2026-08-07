@@ -335,6 +335,30 @@ class TestLifecycle(TicketBase):
         (root / "src_code.py").write_text("print(1)", encoding="utf-8")
         self.assertFalse(ticket.repo_clean(root))  # 源码改动算脏
 
+    def test_close_requires_changelog_entry(self):
+        root = self._full_project()
+        (root / "CHANGELOG.md").write_text("# Changelog\n\n## [0.0.1]\n- 其他变更\n", encoding="utf-8")
+        ticket.cmd_begin(["T-001"])
+        self._drive_to_commit_phase(root)
+        self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
+        with self.assertRaises(ticket.TicketError):
+            ticket.cmd_close(["T-001"])  # CHANGELOG 无 T-001 → 拒绝
+        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "review")
+        # 补记 CHANGELOG 后可 close
+        changelog = root / "CHANGELOG.md"
+        changelog.write_text("# Changelog\n\n## [0.0.2]\n- T-001 实现 foo\n", encoding="utf-8")
+        self.assertEqual(self._commit_no_hook(root, "T-001 changelog"), 0)
+        ticket.cmd_close(["T-001"])
+        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
+
+    def test_close_allows_no_changelog_file(self):
+        root = self._full_project()  # 无 CHANGELOG.md → 守卫跳过
+        ticket.cmd_begin(["T-001"])
+        self._drive_to_commit_phase(root)
+        self.assertEqual(self._commit_no_hook(root, "T-001 实现 foo"), 0)
+        ticket.cmd_close(["T-001"])
+        self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
+
     def test_auto_branch_create_and_merge(self):
         root = self.make_project()
         _git(root, "config", "user.email", "t@t")

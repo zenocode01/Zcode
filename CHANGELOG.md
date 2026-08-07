@@ -2,6 +2,23 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.2.2] - 2026-08-07
+
+**文档同步强制**（T-008）：close 前相关文档必须随工单更新，杜绝"关了单文档没更新"。
+
+### close 守卫（adapters/zcode/ticket.py）
+- 仓库存在 `CHANGELOG.md` 时，`zcode ticket close T-XXX` 校验 CHANGELOG 已含 `T-XXX`，缺则拒绝并提示补记
+- 新增测试：`test_close_requires_changelog_entry`（缺记录拒绝 / 补记后可 close）、`test_close_allows_no_changelog_file`（无 CHANGELOG 的项目放行）
+
+### 文档同步
+- `skills/workbench`（双版本）：标准循环第 10 步 + 新增"文档同步（close 前必须）"章节（CHANGELOG 硬强制 / README / AGENTS / 技能清单）
+- 模板 `adapters/zcode/templates/ticket/AGENTS.md`：职责第 8 条 + 修复流程第 7 步加文档同步
+- 本仓库 `AGENTS.md` 协议段：第 5 条"close 前文档同步"（CHANGELOG 必须含工单号，README/AGENTS/技能清单随工单提交）；第 4 条补测试门禁
+- `README.md`：测试条目更新（55 用例 + 测试门禁 + close 守卫）
+
+### 验证
+- 57 用例全绿（36 ticket + 17 modules + 4 evoskills）；T-008 自身完整演示：close 守卫在无 CHANGELOG 记录时拒绝、补记后通过
+
 ## [0.2.1] - 2026-08-07
 
 **测试**：测试补齐与回归防线（T-005）——4 用例 → 54 用例 + 提交测试门禁。
