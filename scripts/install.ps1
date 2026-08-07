@@ -12,7 +12,7 @@ function Write-Ok($msg) { Write-Host $msg -ForegroundColor Green }
 function Write-Warn($msg) { Write-Host $msg -ForegroundColor Yellow }
 
 $isWin = ($env:OS -eq "Windows_NT")
-$src = $PSScriptRoot
+$src = Split-Path $PSScriptRoot -Parent   # 仓库根（PSScriptRoot 是 scripts/）
 $skillsSrc = Join-Path $src "skills"
 $agentsSkills = Join-Path $HOME ".agents/skills"
 $zcodeHome = Join-Path $HOME ".zcode"
