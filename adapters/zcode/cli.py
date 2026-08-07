@@ -287,6 +287,17 @@ def cmd_skill_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_update(args: argparse.Namespace) -> int:
+    """自更新：git pull + 重装 Python 包/npm/技能与钩子。"""
+    from .update import UpdateError, run_update
+
+    try:
+        return run_update(dry_run=args.dry_run)
+    except UpdateError as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+
+
 def cmd_version(args: argparse.Namespace) -> int:
     """显示 zcode 版本（代码内 __version__，与 pyproject 等四文件一致）。"""
     print(f"zcode {__version__}")
@@ -401,6 +412,10 @@ def main(argv: list[str] | None = None) -> int:
 
     sp_version = sub.add_parser("version", help="显示 zcode 版本")
     sp_version.set_defaults(func=cmd_version)
+
+    sp_update = sub.add_parser("update", help="自更新（git pull + 重装 Python 包/npm/技能）")
+    sp_update.add_argument("--dry-run", action="store_true", help="只打印步骤计划，不执行")
+    sp_update.set_defaults(func=cmd_update)
 
     sp_workflow = sub.add_parser("workflow", help="确定性工作流（Layer 2）")
     wf_sub = sp_workflow.add_subparsers(dest="workflow_command", required=True)

@@ -298,3 +298,13 @@
 2026-08-07 14:51:06 | phase | review -> commit --pass
 2026-08-07 14:51:10 | branch | merged vibe/T-024 -> main and deleted
 2026-08-07 14:51:10 | close | T-024 (zcode version 子命令 + __version__ 第五处版本统一)
+2026-08-07 14:51:42 | branch | created vibe/T-025 (from main)
+2026-08-07 14:51:42 | begin | T-025 (zcode update 自更新命令)
+2026-08-07 14:51:43 | phase | analyze -> plan
+2026-08-07 14:51:43 | phase | plan -> implement
+2026-08-07 14:55:07 | phase | implement -> verify
+2026-08-07 14:55:07 | transition | T-025: in-progress -> review
+2026-08-07 14:55:10 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260807-145507-verify-review.txt
+2026-08-07 14:55:10 | phase | verify -> review --green
+2026-08-07 14:55:11 | resolve | T-025 (zcode update 自更新命令)
+2026-08-07 14:55:11 | phase | review -> commit --pass
