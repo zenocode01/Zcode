@@ -20,7 +20,7 @@
   - `docs/基本构思.md` —— 唯一权威需求来源(四层架构 + 本地小模型优化定稿 + 路线图),开发前务必先读
 - 已落地:
   - `skills/` —— 技能库,双版本(`SKILL.md` 云 / `SKILL.local.md` 本地),12 个技能(grill-me/brainstorming/writing-plans/tdd/diagnose/code-review/improve-arch/handoff/subagent-driven-development/evoskills/workbench/ask-zcode) + `_template/` 模板(含 `.memory/` 记忆模板)
-  - `adapters/` —— Python 包 `zcode`(profile/Provider/工具三层降级/MemStore/CLI/工具映射表)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
+  - `adapters/` —— Python 包 `zcode`(profile/Provider/工具三层降级/MemStore/CLI/工具映射表/gitcore/gitcli/gittui)、`profiles/local-qwen3.6-35b.yaml`、8 平台 `platforms/*/INSTALL.md`
   - `workflows/` —— 确定性工作流模板(Layer 2):`feature-dev` / `ticket-dev` + 引擎(支持 skill/prompt/command/subagent 步骤)
   - 工单驱动工作台(Layer 2,移植 vibe-workbench):`zcode ticket` 命令族(init/add/begin/phase/transition/close/resolve/context/gloss/status/validate/next/log/install/projects/switch/ask)——双状态机(Agent 阶段机 + 工单生命周期机) + 可执行强制(守卫/依赖环检测/验证证据/STATUS 自刷新/pre-commit 闸门/自动分支) + `skills/workbench` 技能;与 vibe-workbench 文件格式与注册表兼容,两 CLI 可混用
   - `metaskills/` —— MetaSkill 自由编排(Layer 2):模型生成计划 + 复用执行器
@@ -133,7 +133,7 @@
 ## 构建 / 测试 / 部署
 
 - **安装 zcode CLI**:`python3 -m venv .venv && .venv/bin/pip install -e ./adapters`(PEP 668 环境必须用 venv)
-- **CLI 验证命令**:`.venv/bin/zcode skills list`、`.venv/bin/zcode --profile local-qwen3.6-35b info`、`.venv/bin/zcode platforms list`、`.venv/bin/zcode workflow list`、`.venv/bin/zcode workflow run feature-dev --dry-run`、`.venv/bin/zcode version`(版本)、`.venv/bin/zcode update --dry-run`(自更新预览)、`.venv/bin/zcode ticket context`(接手先看)、`.venv/bin/zcode ticket validate`(提交前校验)
+- **CLI 验证命令**:`.venv/bin/zcode skills list`、`.venv/bin/zcode --profile local-qwen3.6-35b info`、`.venv/bin/zcode platforms list`、`.venv/bin/zcode workflow list`、`.venv/bin/zcode workflow run feature-dev --dry-run`、`.venv/bin/zcode version`(版本)、`.venv/bin/zcode update --dry-run`(自更新预览)、`.venv/bin/zcode ticket context`(接手先看)、`.venv/bin/zcode ticket validate`(提交前校验)、`.venv/bin/zcode git status`(git 管理，TTY 进 TUI)
 - **跨平台安装**:`bash scripts/install.sh`(全局,主目标 `~/.agents/skills`);`--project <dir>` 项目级;`--uninstall` 卸载;Windows 用 `powershell -ExecutionPolicy Bypass -File ./scripts/install.ps1`(装技能 + `zcode.cmd` 全局命令,自动加用户 PATH)
 - **npm 分发**:`npm link` 后 `zcode` 可用(需先安装 Python 包)
 - **测试命令**:`python3 -m unittest discover -s adapters/tests`(unittest 零依赖);技能质量评估用 `zcode market validate`(Phase 4)

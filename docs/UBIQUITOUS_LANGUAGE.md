@@ -61,3 +61,12 @@
 
 ## pi 插件
 - **含义**：pi-agent 的 TypeScript 扩展（Extension），可注册命令/工具/事件，经 Pi Package 打包分发；Zcode 提供三合一插件（命令透传 + 只读工具 + package 打包）
+
+## TUI
+- **含义**：文本用户界面（Text User Interface）：在终端内的全屏交互界面，zcode git 用 textual 实现，光标/快捷键操作 git 仓库
+
+## porcelain v2
+- **含义**：git status 的机器可读输出格式（--porcelain=v2），zcode gitcore 据此解析文件状态/分支/领先落后
+
+## 冲突解决
+- **含义**：merge/rebase 产生冲突时逐文件选择保留本地(ours)/远端(theirs)/手动编辑，解决后 add 并继续提交或变基

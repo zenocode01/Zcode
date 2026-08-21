@@ -136,7 +136,7 @@ Status: done
 - [ ] 验证: --dry-run 只打印不执行; 脏工作区拒绝; 更新后 zcode version/测试可用
 
 ## T-026 zcode git 交互式 TUI 仓库管理
-Status: backlog
+Status: review
 
 - [ ] 新增 zcode git 子命令族：逻辑层 gitcore.py 零依赖封装 + textual TUI 全屏界面 + 非 TTY 逐条命令后备。面板覆盖 status/diff/commit/log/branch/stash/remote/rebase 进阶/cherry-pick/tag/reset/revert/冲突解决。
 
