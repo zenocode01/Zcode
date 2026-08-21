@@ -339,3 +339,5 @@
 2026-08-21 17:37:46 | transition | T-026: in-progress -> review
 2026-08-21 17:38:10 | resolve | T-026 (zcode git 交互式 TUI 仓库管理)
 2026-08-21 17:38:10 | phase | review -> commit --pass
+2026-08-21 17:38:26 | branch | merged vibe/T-026 -> main and deleted
+2026-08-21 17:38:26 | close | T-026 (zcode git 交互式 TUI 仓库管理)

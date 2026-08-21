@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.16] - 2026-08-21
+
+**zcode git 交互式 TUI 仓库管理**（T-026）：根因: zcode 无面向用户的 git 管理命令, git 能力仅内部使用(update/ticket/hooks); 修复: 新增 gitcore.py 零依赖逻辑层(status/log/branch/stash/diff 解析+写操作封装+危险命令识别) + gitcli.py 非 TTY 逐条命令彩色渲染 + gittui.py textual 全屏 TUI(8 面板+空格暂存+冲突 ours/theirs 解决) + cli.py 注册 TTY 分发 + pyproject 加 textual 依赖; 验证: 111 用例全绿(新增 21 gitcore+6 gitcli), textual 8.2.8 兼容 Python 3.14, TUI 冒烟 8 面板渲染+stage/unstage+冲突 ours 解决, 非 TTY zcode git status/log 正常
+
 ## [0.3.15] - 2026-08-21
 
 **pi-agent 插件三合一完整支持**（T-027）：根因: zcode 对 pi-agent 仅技能软链说明(INSTALL.md), 无深度插件; 修复: 新增 adapters/platforms/pi/extension 三合一插件(/zcode 命令透传 + 4 个只读工具 zcode_ticket_context/memory_search/skills_list/glossary + package.json pi 键打包), 根 package.json 加 pi-package, INSTALL/README/AGENTS/术语表同步; 验证: 84 用例全绿, tsx 验证 runZcode, pi -e 加载成功, zcode_skills_list/zcode_ticket_context 工具被 LLM 真实调用, pi install 打包识别成功
