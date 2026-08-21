@@ -1,0 +1,10 @@
+{
+  "name": "zcode-pi-extension",
+  "version": "0.3.8",
+  "description": "Zcode 技能的 pi-agent 深度插件：/zcode 命令透传 + zcode_* 只读工具",
+  "type": "module",
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  }
+}

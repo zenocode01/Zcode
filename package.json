@@ -8,6 +8,10 @@
   "scripts": {
     "postinstall": "echo '提示: 还需执行 cd adapters && pip install -e . 安装 Python 适配层'"
   },
-  "keywords": ["skills", "agent", "llm", "local-model", "zcode"],
+  "keywords": ["skills", "agent", "llm", "local-model", "zcode", "pi-package"],
+  "pi": {
+    "extensions": ["./adapters/platforms/pi/extension"],
+    "skills": ["./skills"]
+  },
   "license": "MIT"
 }

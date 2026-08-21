@@ -55,3 +55,9 @@
 
 ## close收尾
 - **含义**：close 自动: 先合并分支再 CHANGELOG 补录(缺则建基线)+状态文件提交, 工作区常净
+
+## 命令透传
+- **含义**：pi-agent 深度插件将 zcode CLI 子命令经 /zcode 命令转发到本机执行、结果回显到 pi 界面，供人手动调用
+
+## pi 插件
+- **含义**：pi-agent 的 TypeScript 扩展（Extension），可注册命令/工具/事件，经 Pi Package 打包分发；Zcode 提供三合一插件（命令透传 + 只读工具 + package 打包）
