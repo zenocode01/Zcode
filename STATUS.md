@@ -3,20 +3,12 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: commit
-Current Ticket: T-028
+Phase: analyze
+Current Ticket: 
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 21 条 (docs/UBIQUITOUS_LANGUAGE.md)
-
-## 当前工单 T-028 (zcode release 版本迭代工具) [review]
-## T-028 zcode release 版本迭代工具
-Resolution: 根因: 版本号散落五处人工维护+CHANGELOG 关单自动 bump 与代码版本脱节(0.3.16 vs 0.3.8)+marketplace.py 三处写死 0.1.0; 修复: 新增 release.py(zcode release patch/minor/major/X.Y.Z, 统一写五处版本号+归并未发布区块为正式版本+打 tag+可选 push)+marketplace.py 三处 0.1.0 改读 __version__+ticket._auto_changelog 改写未发布区块不再 bump+cli 注册 release; 验证: 123 用例全绿(新增 12 release), zcode release --dry-run 输出计划, marketplace build version=0.3.8, close 写未发布区块测试更新
-Status: review
-
-- [ ] 新增 zcode release 命令：统一 bump 五处版本号 + 对齐 CHANGELOG(未发布区块转正式版本) + 打 git tag + 可选推送；修复 marketplace.py 三处写死 0.1.0；改 close 逻辑不再每次 bump CHANGELOG 版本号
-
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -46,7 +38,7 @@ Status: review
 - [x] **T-025** zcode update 自更新命令 — done  ✓已记录修复
 - [x] **T-026** zcode git 交互式 TUI 仓库管理 — done  ✓已记录修复
 - [x] **T-027** pi-agent 插件三合一完整支持 — done  ✓已记录修复
-- [ ] **T-028** zcode release 版本迭代工具 — review  ✓已记录修复
+- [x] **T-028** zcode release 版本迭代工具 — done  ✓已记录修复
 
 ## 阻塞
 (无)

@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [未发布]
+
+**zcode release 版本迭代工具**（T-028）：根因: 版本号散落五处人工维护+CHANGELOG 关单自动 bump 与代码版本脱节(0.3.16 vs 0.3.8)+marketplace.py 三处写死 0.1.0; 修复: 新增 release.py(zcode release patch/minor/major/X.Y.Z, 统一写五处版本号+归并未发布区块为正式版本+打 tag+可选 push)+marketplace.py 三处 0.1.0 改读 __version__+ticket._auto_changelog 改写未发布区块不再 bump+cli 注册 release; 验证: 123 用例全绿(新增 12 release), zcode release --dry-run 输出计划, marketplace build version=0.3.8, close 写未发布区块测试更新
+
 ## [0.3.16] - 2026-08-21
 
 **zcode git 交互式 TUI 仓库管理**（T-026）：根因: zcode 无面向用户的 git 管理命令, git 能力仅内部使用(update/ticket/hooks); 修复: 新增 gitcore.py 零依赖逻辑层(status/log/branch/stash/diff 解析+写操作封装+危险命令识别) + gitcli.py 非 TTY 逐条命令彩色渲染 + gittui.py textual 全屏 TUI(8 面板+空格暂存+冲突 ours/theirs 解决) + cli.py 注册 TTY 分发 + pyproject 加 textual 依赖; 验证: 111 用例全绿(新增 21 gitcore+6 gitcli), textual 8.2.8 兼容 Python 3.14, TUI 冒烟 8 面板渲染+stage/unstage+冲突 ours 解决, 非 TTY zcode git status/log 正常

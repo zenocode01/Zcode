@@ -354,3 +354,5 @@
 2026-08-21 17:51:57 | transition | T-028: in-progress -> review
 2026-08-21 17:52:26 | resolve | T-028 (zcode release 版本迭代工具)
 2026-08-21 17:52:26 | phase | review -> commit --pass
+2026-08-21 17:52:36 | branch | merged vibe/T-028 -> main and deleted
+2026-08-21 17:52:36 | close | T-028 (zcode release 版本迭代工具)
