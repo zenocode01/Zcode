@@ -4,7 +4,7 @@
 
 ## Status
 
-Phase: review
+Phase: commit
 Current Ticket: T-027
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 
