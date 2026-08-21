@@ -2,78 +2,53 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
-## [未发布]
+## [0.4.0] - 2026-08-21
 
 **zcode release 版本迭代工具**（T-028）：根因: 版本号散落五处人工维护+CHANGELOG 关单自动 bump 与代码版本脱节(0.3.16 vs 0.3.8)+marketplace.py 三处写死 0.1.0; 修复: 新增 release.py(zcode release patch/minor/major/X.Y.Z, 统一写五处版本号+归并未发布区块为正式版本+打 tag+可选 push)+marketplace.py 三处 0.1.0 改读 __version__+ticket._auto_changelog 改写未发布区块不再 bump+cli 注册 release; 验证: 123 用例全绿(新增 12 release), zcode release --dry-run 输出计划, marketplace build version=0.3.8, close 写未发布区块测试更新
 
-## [0.3.16] - 2026-08-21
-
 **zcode git 交互式 TUI 仓库管理**（T-026）：根因: zcode 无面向用户的 git 管理命令, git 能力仅内部使用(update/ticket/hooks); 修复: 新增 gitcore.py 零依赖逻辑层(status/log/branch/stash/diff 解析+写操作封装+危险命令识别) + gitcli.py 非 TTY 逐条命令彩色渲染 + gittui.py textual 全屏 TUI(8 面板+空格暂存+冲突 ours/theirs 解决) + cli.py 注册 TTY 分发 + pyproject 加 textual 依赖; 验证: 111 用例全绿(新增 21 gitcore+6 gitcli), textual 8.2.8 兼容 Python 3.14, TUI 冒烟 8 面板渲染+stage/unstage+冲突 ours 解决, 非 TTY zcode git status/log 正常
-
-## [0.3.15] - 2026-08-21
 
 **pi-agent 插件三合一完整支持**（T-027）：根因: zcode 对 pi-agent 仅技能软链说明(INSTALL.md), 无深度插件; 修复: 新增 adapters/platforms/pi/extension 三合一插件(/zcode 命令透传 + 4 个只读工具 zcode_ticket_context/memory_search/skills_list/glossary + package.json pi 键打包), 根 package.json 加 pi-package, INSTALL/README/AGENTS/术语表同步; 验证: 84 用例全绿, tsx 验证 runZcode, pi -e 加载成功, zcode_skills_list/zcode_ticket_context 工具被 LLM 真实调用, pi install 打包识别成功
 
-## [0.3.14] - 2026-08-07
-
 **zcode update 自更新命令**（T-025）：根因: CLI 无自更新命令, 用户需手动 git pull + 重装多步; 实现: 新增 adapters/zcode/update.py + zcode update [--dry-run]——前置检查(工作区干净, 未提交改动拒绝防覆盖)→ git fetch(失败附网络/凭据提示)→ rev-list 已最新退出→ pull --ff-only→ 当前解释器 pip install -e→ npm link(可选, 失败仅警告)→ scripts/install.sh→ 变更摘要; 每步失败即停报告已完成步骤+重跑指引; 验证: 84 用例绿(新增 6: precheck 脏/净/dry-run 零执行/成功序列/已最新退出/失败中止), 真机 dry-run 与脏工作区拦截实测通过
-
-## [0.3.13] - 2026-08-07
 
 **zcode version 子命令 + __version__ 第五处版本统一**（T-024）：根因: CLI 无版本查看命令, 且 __init__.py __version__ 停在 0.1.0(T-019 版本统一四文件漏第五处); 修复: __version__ 同步 0.3.8(与 pyproject/package.json/marketplace/plugin 一致), 注册 zcode version 子命令输出代码内版本; 验证: 78 用例绿(新增 2: __version__ 与 pyproject 一致性防漂移/version 命令输出格式), zcode version 输出 zcode 0.3.8
 
-## [0.3.12] - 2026-08-07
-
 **install.sh 包装器生成逻辑修复: 优先项目 venv**（T-023）：根因: install.sh 的 install_cli 写死 exec python3(系统解释器), 且包检查基于系统 python3; 重跑 install.sh 会覆盖手工修好的 venv 包装器(Bug 1 复发, ModuleNotFoundError); 修复: 解释器优先 REPO_ROOT/.venv/bin/python(PEP 668 环境), 回退 python3; 包装器与检查逻辑同步用实际解释器; 验证: 重跑 install.sh 后包装器指向 venv 且任意目录 zcode 可用(无 ModuleNotFoundError), 76 用例全绿
-
-## [0.3.11] - 2026-08-07
 
 **memory add 静默 0 条: infer 提取失败自动降级 + 提示**（T-022）：根因: MemStore.add 在 infer(simplified) 模式下直接透传 mem0, LLM 提取返回 0 条时静默返回空 results, CLI 只打印『已写入 0 条记忆』无任何提示/降级, 用户感知为写入失败且记忆丢失; 修复: ① MemStore.add 在 infer 且提取 0 条时自动降级 L0(原文纯 embedding 第二次写入, 参数透传), 返回 dict 附 degraded=True; ② CLI 检测 degraded 向 stderr 打印明确提示; 验证: 76 用例绿(新增 4: 降级两次调用/成功不降级/L0 不重试/CLI 提示), 真机 memory add 触发降级提示+写入成功; 已知环境限制: BM25 encoder 加载失败(fastembed 下载被 Steam++ 证书拦截), 检索降级纯 embedding 不影响核心
 
-## [0.3.10] - 2026-08-07
-
 **gloss list 报「术语『list』不存在」应提示用法**（T-021）：根因: ① cmd_add 条件反写——有参时取空串、无参才提问(dep_input/body), Depends 与描述参数静默丢失(登记工单时描述从未写入); ② gloss list 把 list 当术语查询报不存在, 查询未命中提示不完整; ③ add --help 把 --help 当标题建空单; 修复: ① 条件修正为有参取参、无参提问; ② gloss list/ls 识别为列出全部, 未命中提示完整用法(列出/添加); ③ run() 统一处理子命令 -h/--help 显示帮助, show_help 同步 add/gloss 用法; 验证: 72 用例绿(新增 4: add 依赖+描述写入/--help 不建单/gloss list 列出/未命中提示), 真机冒烟 add 带参写入成功
-
-## [0.3.9] - 2026-08-07
 
 **close 流程健壮性修复: 中间态崩溃 + CHANGELOG 静默跳过**（T-020）：根因: ① cmd_close 在合并分支前执行 _auto_changelog 改 CHANGELOG.md, 而 repo_clean 只查非状态文件(CHANGELOG 在 STATE_PREFIXES 内), CHANGELOG 为分支独有文件时 git switch 被拒, close 中止在中间态(工单仍 review/条目已追加/分支未合并)且无恢复指引; ② _auto_changelog 文件缺失时直接 return None 不创建不提示, 与 SKILL.md 承诺不符; ③ repo_clean 命名误导(叫整仓干净实查源码); 修复: ① close 重排——先合并分支(switch 前预检 base 不存在的脏文件并阻止+指引, switch/merge 失败附恢复指引, 可幂等重跑)再补录 CHANGELOG; ② _auto_changelog 缺失时创建 [0.1.0] 基线并提示; ③ repo_clean 改名 dirty_source_paths 返回路径列表, 错误文案列具体文件; 验证: 68 用例绿(新增 Bug2 回归分支独有 CHANGELOG/预检脏文件, Bug3 基线创建, 函数改名 3 处)
 
 ## [0.3.8] - 2026-08-07
-
 **正式发布 0.3.8**（T-019）：package.json/pyproject.toml/marketplace.json/plugin.json 版本统一 0.1.0→0.3.8(与 CHANGELOG 对齐); 验证: 67 用例绿
 
 **完整测试发现的 3 个缺陷修复**（T-018）：根因: ① adapters/zcode 缺 __main__.py 导致 python -m zcode 失败(npm 入口 bin/zcode.js 依赖它); ② install.sh UNINSTALL 分支忽略 --project 误删全局 ~/.agents/skills; ③ _auto_commit_state_files 对不存在的 CHANGELOG.md 执行 git add exit 128 静默失败致 close 后工作区残留; 修复: ① 新增 __main__.py; ② 卸载分支支持项目级; ③ add 前过滤不存在的路径; 验证: 67 用例绿(含 3 新增回归), 真机验证 python -m zcode/项目级卸载仅动项目/新项目 close 后工作区干净, 全局软链已恢复
 
 ## [0.3.7] - 2026-08-07
-
 **pwsh 真机验证 install.ps1 + 修复路径 bug**（T-017）：根因: install.ps1 用 $PSScriptRoot 定位技能目录(实为 scripts/ 而非仓库根), 且从未真机验证; 修复: $src 改为仓库根(Split-Path -Parent); 验证: pwsh 7.6.4 已装, Unix 分支实跑通过, Windows 分支模拟($env:OS=Windows_NT)通过(Junction 失败退复制), 空 HOME 全量 12 技能安装成功, zcode.cmd/ps1 生成, 包装器 zcode 命令可用
 
 ## [0.3.6] - 2026-08-07
-
 **Windows 跨平台支持: install.ps1 + hook 宿主适配 + 测试/文档**（T-016）：根因: 安装/钩子/文档仅 Linux, Windows 用户无法使用; 修复: scripts/install.ps1(Junction/复制免管理员+zcode.cmd/ps1 包装器+用户 PATH+配置), 模板 hook 跨平台宿主(Unix 用 zcode/python, Windows 经 powershell.exe 调 zcode.cmd), git config zcode.cli 路径加引号(Windows 空格路径), 测试适配(权限断言/分支名动态), README/使用手册/AGENTS Windows 分支; 验证: 64 用例绿, hook sh 语法过, ps1 待 Windows 真机验证
 
 ## [0.3.5] - 2026-08-07
-
 **上手体验优化: init 交互引导 + --existing 自动并入协议 + CLI 全局安装**（T-015）：根因: 新项目要手动编辑 CONTEXT/AGENTS, --existing 提示人工并入协议段, install.sh 不装 CLI; 修复: init 交互引导 Domain/TestCommand(非交互跳过), --existing 自动追加协议段到 AGENTS.md(幂等), install.sh 装 ~/.local/bin/zcode 包装器, 手册/README 更新 1 分钟上手路径; 验证: 64 用例绿, 实机嵌入验证通过
 
 ## [0.3.4] - 2026-08-07
-
 **普通用户实操手册: 零基础照做指南**（T-014）：根因: 通俗说明只讲概念无操作步骤, 无零基础实操指南; 修复: docs/使用手册.md(安装4步/建工作台/完整走一遍/对话驱动/看进度/接力/FAQ/速查表), README 入口引导+目录结构同步; 验证: 62 用例绿
 
 ## [0.3.3] - 2026-08-07
-
 **术语表欠账补齐 + 登记时机改为 close 前人工核对**（T-013）：根因: 术语表登记时机是软约束(validate 只拦空表/格式), 13 工单仅 2 词条欠账明显; 修复: 补登 12 条核心术语(工单/阶段/守卫/锚点/状态机/会话接力/测试门禁/变更日志/适配层/记忆层/验证证据/close收尾), 分类修正(术语表从'命令自动管理'移入'close 前人工核对', 写入命令自动但登记决策人工), workbench 双版本/模板/协议段同步; 验证: 62 用例绿, validate 过
 
 ## [0.3.2] - 2026-08-07
-
 **通俗版使用说明: 面向非技术读者的功能与框架说明**（T-012）：根因: 无面向非技术读者的文档, README 面向开发者门槛高; 修复: docs/通俗说明.md(类比讲解: 员工手册/施工看板/记事本, 四层框架, 高频操作, 小词典), README 顶部引导入口+目录结构同步; 验证: 62 用例绿
 
 ## [0.3.1] - 2026-08-07
-
 **三系统分工: handoff×mem0×workbench 去重联动**（T-011）：根因: workbench×handoff×mem0 三系统首次同仓, 进行中/决策/验证双写漂移, 无联动; 修复: handoff save 自动引用工单状态(缺省自动传参覆盖), 三技能接手路径统一(先 ticket context 后 handoff load), AGENTS/README 三系统职责表, 测试 4 新增; 验证: 62 用例绿, 实机 handoff 自动带出 T-011
 
 ## [0.3.0] - 2026-08-07
-
 **close 自动化**（T-010）：状态文件自动提交 + CHANGELOG 自动补录，消灭"收尾/欠账"类无用工单。
 
 ### close 自动收尾（adapters/zcode/ticket.py）
@@ -91,7 +66,6 @@
 - 59 用例全绿（38 ticket + 17 modules + 4 evoskills）；新增 3 用例：自动补录+提交、不重复追加、无文件不创建
 
 ## [0.2.3] - 2026-08-07
-
 **文档同步清单完整化**（T-009）：六类相关文件职责分类 + 修历史欠账。
 
 ### 职责分类（workbench 双版本 / 模板 AGENTS.md / 本仓库 AGENTS.md 协议段）
@@ -103,7 +77,6 @@
 - `README.md`：测试用例 55 → 57；CHANGELOG 引用补 0.2.2；日期 2025-08 → 2026-08
 
 ## [0.2.2] - 2026-08-07
-
 **文档同步强制**（T-008）：close 前相关文档必须随工单更新，杜绝"关了单文档没更新"。
 
 ### close 守卫（adapters/zcode/ticket.py）
@@ -120,7 +93,6 @@
 - 57 用例全绿（36 ticket + 17 modules + 4 evoskills）；T-008 自身完整演示：close 守卫在无 CHANGELOG 记录时拒绝、补记后通过
 
 ## [0.2.1] - 2026-08-07
-
 **测试**：测试补齐与回归防线（T-005）——4 用例 → 54 用例 + 提交测试门禁。
 
 ### 测试覆盖（unittest 零依赖）
@@ -140,7 +112,6 @@
 - 54/54 用例通过；`zcode market validate` 12/12 通过；坏测试拦截 + 门禁开关端到端验证
 
 ## [0.2.0] - 2026-08-07
-
 **新增**：工单驱动开发工作台（Layer 2，vibe-workbench 移植）——双状态机 + 可执行强制。
 
 ### 新命令（adapters/zcode/ticket.py + cli.py）
@@ -159,7 +130,6 @@
 - `zcode market validate` 12/12 通过
 
 ## [0.1.1] - 2026-08-06
-
 **打磨**：EvoSkills 审计闭环修复 + tdd 技能首轮迭代（evoskills 六步循环实战）。
 
 ### 引擎修复（adapters/zcode/evoskills.py）
@@ -177,7 +147,6 @@
 - 4/4 测试通过；`zcode skill audit tdd` 显示已发布修订版；`zcode market validate` 全部通过
 
 ## [0.1.0] - 2025-08-06
-
 **里程碑**：四层架构全部落地 + 真机端到端验证（Qwen3.6-35B / llama.cpp / 256K）。
 
 ### 技能库（Layer 1）

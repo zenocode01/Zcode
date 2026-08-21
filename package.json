@@ -1,6 +1,6 @@
 {
   "name": "zcode-skills",
-  "version": "0.3.8",
+  "version": "0.4.0",
   "description": "Zcode 技能运行时 CLI（跨平台技能安装与本地模型适配）——Python 适配层的 npm 分发入口",
   "bin": {
     "zcode": "./bin/zcode.js"
