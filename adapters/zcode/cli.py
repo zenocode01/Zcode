@@ -33,6 +33,7 @@ from .evoskills import log_skill_use, audit_skill, print_audit
 from .marketplace import build_marketplace, validate_all, write_marketplace, generate_claude_plugin, generate_opencode_config, generate_kimi_plugin
 from . import __version__, ticket
 from . import gitcli, gitcore
+from . import release
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -320,6 +321,15 @@ def cmd_git(args: argparse.Namespace) -> int:
     return gitcli.run(argv)
 
 
+def cmd_release(args: argparse.Namespace) -> int:
+    """版本迭代：统一 bump 版本号 + 归并 CHANGELOG + 打 tag。"""
+    try:
+        return release.run_release(args.kind, dry_run=args.dry_run, push=args.push)
+    except release.ReleaseError as e:
+        print(f"错误: {e}", file=sys.stderr)
+        return 1
+
+
 def cmd_market_list(args: argparse.Namespace) -> int:
     """展示技能市场清单（含质量状态）。"""
     market = build_marketplace()
@@ -488,6 +498,12 @@ def main(argv: list[str] | None = None) -> int:
     sp_git = sub.add_parser("git", help="git 仓库管理（无参数 TTY 进全屏 TUI，非 TTY 逐条命令）")
     sp_git.add_argument("raw", nargs=argparse.REMAINDER, help="子命令及参数（见 zcode git help）")
     sp_git.set_defaults(func=cmd_git)
+
+    sp_release = sub.add_parser("release", help="版本迭代（统一 bump 版本号 + 归并 CHANGELOG + 打 tag）")
+    sp_release.add_argument("kind", nargs="?", default="patch", help="patch / minor / major / X.Y.Z（默认 patch）")
+    sp_release.add_argument("--dry-run", action="store_true", help="只打印计划不执行")
+    sp_release.add_argument("--push", action="store_true", help="推送 origin 与 tag")
+    sp_release.set_defaults(func=cmd_release)
 
     sp_skill = sub.add_parser("skill", help="技能自我迭代（EvoSkills, Layer 3）")
     sk_sub = sp_skill.add_subparsers(dest="skill_command", required=True)

@@ -13,6 +13,8 @@ import json
 import re
 from pathlib import Path
 
+from . import __version__
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
 MARKETPLACE_FILE = REPO_ROOT / "marketplace.json"
@@ -102,7 +104,7 @@ def build_marketplace() -> dict:
     return {
         "name": "zcode-skills",
         "interface": {"displayName": "Zcode 技能库"},
-        "version": "0.1.0",
+        "version": __version__,
         "count": len(skills),
         "skills": skills,
     }
@@ -139,7 +141,7 @@ def generate_claude_plugin() -> Path:
 
     plugin = {
         "name": "zcode",
-        "version": "0.1.0",
+        "version": __version__,
         "description": "Zcode 技能库：" + "、".join(names),
         "skills": names,
     }
@@ -164,7 +166,7 @@ def generate_kimi_plugin() -> dict:
     return {
         "plugins": [{
             "name": "zcode-skills",
-            "version": "0.1.0",
+            "version": __version__,
             "description": "Zcode 技能库",
             "managed": True,
         }],

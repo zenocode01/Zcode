@@ -835,44 +835,30 @@ CLOSE_AUTO_COMMIT_PATHS = (
 )
 
 
-def _bump_changelog_version(content: str) -> str:
-    """从现有最高 [0.x.y] 推断下一版本号；解析失败退回 [0.1.0]。"""
-    versions = [tuple(int(n) for n in m.groups()) for m in re.finditer(r"\[0\.(\d+)\.(\d+)\]", content)]
-    if versions:
-        major, minor = max(versions)
-        return f"0.{major}.{minor + 1}"
-    return "0.1.0"
-
-
 def _auto_changelog(root: Path, t: Ticket) -> str | None:
-    """CHANGELOG.md 缺工单号时自动补录，返回新条目文本；已有记录返回 None。
+    """CHANGELOG.md 缺工单号时自动补录到「未发布」区块，返回新条目文本；已有记录返回 None。
 
-    Bug 3 修复：文件不存在时自动创建 [0.1.0] 基线并写入条目——不再静默跳过
-    （曾与 workbench SKILL.md「自动补录（缺则加）」承诺不符）。"""
+    T-028 变更：不再每次关单 bump 版本号（曾导致 CHANGELOG 版本与代码版本脱节），
+    改为写入「未发布」区块，版本号由 zcode release 统一管理。"""
     changelog = root / "CHANGELOG.md"
-    date = datetime.now().strftime("%Y-%m-%d")
+    entry = f"**{t.title}**（{t.id}）：{t.resolution or '（无修复记录）'}\n\n"
     if not changelog.exists():
-        version = "0.1.0"
-        entry = (
-            f"## [{version}] - {date}\n\n"
-            f"**{t.title}**（{t.id}）：{t.resolution or '（无修复记录）'}\n\n"
-        )
-        write_text(changelog, "# 变更日志\n\n" + entry)
+        write_text(changelog, "# 变更日志\n\n## [未发布]\n\n" + entry)
         return entry
     content = read_text(changelog) or ""
     if t.id in content:
         return None
-    version = _bump_changelog_version(content)
-    entry = (
-        f"## [{version}] - {date}\n\n"
-        f"**{t.title}**（{t.id}）：{t.resolution or '（无修复记录）'}\n\n"
-    )
-    # 插入到第一个 `## [` 之前（保持最新条目在顶部）
-    m = re.search(r"\n## \[", content)
+    m = re.search(r"^## \[未发布\]", content, re.MULTILINE)
     if m:
-        content = content[: m.start() + 1] + entry + content[m.start() + 1:]
+        # 插入到「未发布」标题之后
+        content = content[: m.end()] + "\n\n" + entry + content[m.end():]
     else:
-        content = content.rstrip("\n") + "\n\n" + entry
+        # 顶部创建「未发布」区块（在第一个 ## [ 之前，否则文件末尾）
+        m2 = re.search(r"\n## \[", content)
+        if m2:
+            content = content[: m2.start() + 1] + "## [未发布]\n\n" + entry + content[m2.start() + 1:]
+        else:
+            content = content.rstrip("\n") + "\n\n## [未发布]\n\n" + entry
     write_text(changelog, content)
     return entry
 

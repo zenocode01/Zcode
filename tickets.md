@@ -146,3 +146,8 @@ Resolution: 根因: zcode 对 pi-agent 仅技能软链说明(INSTALL.md), 无深
 Status: done
 
 - [ ] 新增 adapters/platforms/pi/extension 深度插件：/zcode 命令透传 + zcode_* 只读工具注册 + Pi Package 打包（package.json 加 pi 键）。
+
+## T-028 zcode release 版本迭代工具
+Status: review
+
+- [ ] 新增 zcode release 命令：统一 bump 五处版本号 + 对齐 CHANGELOG(未发布区块转正式版本) + 打 git tag + 可选推送；修复 marketplace.py 三处写死 0.1.0；改 close 逻辑不再每次 bump CHANGELOG 版本号
