@@ -9,6 +9,7 @@ description = "Zcode 技能运行时适配层：profile 加载、LLM Provider �
 requires-python = ">=3.10"
 dependencies = [
     "pyyaml>=6.0",
+    "textual",
 ]
 
 [project.scripts]

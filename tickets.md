@@ -136,7 +136,8 @@ Status: done
 - [ ] 验证: --dry-run 只打印不执行; 脏工作区拒绝; 更新后 zcode version/测试可用
 
 ## T-026 zcode git 交互式 TUI 仓库管理
-Status: backlog
+Resolution: 根因: zcode 无面向用户的 git 管理命令, git 能力仅内部使用(update/ticket/hooks); 修复: 新增 gitcore.py 零依赖逻辑层(status/log/branch/stash/diff 解析+写操作封装+危险命令识别) + gitcli.py 非 TTY 逐条命令彩色渲染 + gittui.py textual 全屏 TUI(8 面板+空格暂存+冲突 ours/theirs 解决) + cli.py 注册 TTY 分发 + pyproject 加 textual 依赖; 验证: 111 用例全绿(新增 21 gitcore+6 gitcli), textual 8.2.8 兼容 Python 3.14, TUI 冒烟 8 面板渲染+stage/unstage+冲突 ours 解决, 非 TTY zcode git status/log 正常
+Status: review
 
 - [ ] 新增 zcode git 子命令族：逻辑层 gitcore.py 零依赖封装 + textual TUI 全屏界面 + 非 TTY 逐条命令后备。面板覆盖 status/diff/commit/log/branch/stash/remote/rebase 进阶/cherry-pick/tag/reset/revert/冲突解决。
 

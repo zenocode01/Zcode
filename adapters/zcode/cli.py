@@ -32,6 +32,7 @@ from .handoff import save_handoff, load_handoff
 from .evoskills import log_skill_use, audit_skill, print_audit
 from .marketplace import build_marketplace, validate_all, write_marketplace, generate_claude_plugin, generate_opencode_config, generate_kimi_plugin
 from . import __version__, ticket
+from . import gitcli, gitcore
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -309,6 +310,16 @@ def cmd_ticket(args: argparse.Namespace) -> int:
     return ticket.run(args.raw)
 
 
+def cmd_git(args: argparse.Namespace) -> int:
+    """git 仓库管理：TTY 且无子命令 → 全屏 TUI；否则逐条命令（非 TTY 后备）。"""
+    argv = args.raw
+    if not argv and sys.stdout.isatty():
+        from . import gittui  # 延迟导入：textual 仅 TUI 需要，避免污染其他命令
+        gittui.main()
+        return 0
+    return gitcli.run(argv)
+
+
 def cmd_market_list(args: argparse.Namespace) -> int:
     """展示技能市场清单（含质量状态）。"""
     market = build_marketplace()
@@ -473,6 +484,10 @@ def main(argv: list[str] | None = None) -> int:
     sp_ticket = sub.add_parser("ticket", help="工单驱动开发工作台（Layer 2，vibe-workbench 移植）")
     sp_ticket.add_argument("raw", nargs=argparse.REMAINDER, help="子命令及参数（见 zcode ticket help）")
     sp_ticket.set_defaults(func=cmd_ticket)
+
+    sp_git = sub.add_parser("git", help="git 仓库管理（无参数 TTY 进全屏 TUI，非 TTY 逐条命令）")
+    sp_git.add_argument("raw", nargs=argparse.REMAINDER, help="子命令及参数（见 zcode git help）")
+    sp_git.set_defaults(func=cmd_git)
 
     sp_skill = sub.add_parser("skill", help="技能自我迭代（EvoSkills, Layer 3）")
     sk_sub = sp_skill.add_subparsers(dest="skill_command", required=True)

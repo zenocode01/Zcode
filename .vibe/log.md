@@ -326,3 +326,16 @@
 2026-08-21 17:24:46 | phase | review -> commit --pass
 2026-08-21 17:25:34 | branch | merged vibe/T-027 -> main and deleted
 2026-08-21 17:25:34 | close | T-027 (pi-agent 插件三合一完整支持)
+2026-08-21 17:25:51 | branch | created vibe/T-026 (from main)
+2026-08-21 17:25:51 | begin | T-026 (zcode git 交互式 TUI 仓库管理)
+2026-08-21 17:25:51 | phase | analyze -> plan
+2026-08-21 17:25:51 | phase | plan -> implement
+2026-08-21 17:36:56 | gloss | add TUI
+2026-08-21 17:36:56 | gloss | add porcelain v2
+2026-08-21 17:36:56 | gloss | add 冲突解决
+2026-08-21 17:37:36 | phase | implement -> verify
+2026-08-21 17:37:39 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260821-173736-verify-review.txt
+2026-08-21 17:37:39 | phase | verify -> review --green
+2026-08-21 17:37:46 | transition | T-026: in-progress -> review
+2026-08-21 17:38:10 | resolve | T-026 (zcode git 交互式 TUI 仓库管理)
+2026-08-21 17:38:10 | phase | review -> commit --pass

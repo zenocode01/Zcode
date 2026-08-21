@@ -30,6 +30,7 @@ bash scripts/install.sh
 .venv/bin/zcode market list/validate             # 技能市场与质量校验
 .venv/bin/zcode ticket init <project>            # 工单驱动工作台（双状态机 + 可执行强制）
 .venv/bin/zcode ticket context                   # 接手仓库先看状态（一屏摘要，省 token）
+.venv/bin/zcode git                              # git 仓库管理（TTY 进全屏 TUI，非 TTY 逐条命令）
 ```
 
 > 本项目自身也启用了工单工作台：接手先 `zcode ticket context`（或读 `STATUS.md`），状态推进一律走命令，提交由 pre-commit hook 强制校验。
@@ -56,7 +57,7 @@ bash scripts/install.sh
 ├── tickets.md        # 工单列表（Status/Depends/Resolution 锚点，zcode ticket 管理）
 ├── STATUS.md         # 单屏总览（zcode ticket 状态命令自动刷新）
 ├── .vibe/            # 工作台内部状态（log.md / evidence / hooks / vibe.meta）
-├── adapters/         # 跨平台适配层（Layer 0）：zcode 包（profile/Provider/工具三层降级/MemStore/CLI/工具映射表/ticket）
+├── adapters/         # 跨平台适配层（Layer 0）：zcode 包（profile/Provider/工具三层降级/MemStore/CLI/工具映射表/ticket/gitcore/gitcli/gittui）
 │   ├── platforms/    # 8 平台 INSTALL.md（pi 含三合一深度插件 extension/）
 │   └── tests/        # 单元测试（unittest 零依赖，python3 -m unittest discover -s adapters/tests）
 ├── hooks/            # git 安全守卫钩子
