@@ -352,3 +352,5 @@
 2026-08-21 17:51:57 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260821-175152-verify-review.txt
 2026-08-21 17:51:57 | phase | verify -> review --green
 2026-08-21 17:51:57 | transition | T-028: in-progress -> review
+2026-08-21 17:52:26 | resolve | T-028 (zcode release 版本迭代工具)
+2026-08-21 17:52:26 | phase | review -> commit --pass
