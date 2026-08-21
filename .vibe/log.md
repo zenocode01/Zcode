@@ -324,3 +324,5 @@
 2026-08-21 17:24:23 | transition | T-027: in-progress -> review
 2026-08-21 17:24:41 | resolve | T-027 (pi-agent 插件三合一完整支持)
 2026-08-21 17:24:46 | phase | review -> commit --pass
+2026-08-21 17:25:34 | branch | merged vibe/T-027 -> main and deleted
+2026-08-21 17:25:34 | close | T-027 (pi-agent 插件三合一完整支持)

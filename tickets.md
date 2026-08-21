@@ -142,6 +142,6 @@ Status: backlog
 
 ## T-027 pi-agent 插件三合一完整支持
 Resolution: 根因: zcode 对 pi-agent 仅技能软链说明(INSTALL.md), 无深度插件; 修复: 新增 adapters/platforms/pi/extension 三合一插件(/zcode 命令透传 + 4 个只读工具 zcode_ticket_context/memory_search/skills_list/glossary + package.json pi 键打包), 根 package.json 加 pi-package, INSTALL/README/AGENTS/术语表同步; 验证: 84 用例全绿, tsx 验证 runZcode, pi -e 加载成功, zcode_skills_list/zcode_ticket_context 工具被 LLM 真实调用, pi install 打包识别成功
-Status: review
+Status: done
 
 - [ ] 新增 adapters/platforms/pi/extension 深度插件：/zcode 命令透传 + zcode_* 只读工具注册 + Pi Package 打包（package.json 加 pi 键）。

@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [0.3.15] - 2026-08-21
+
+**pi-agent 插件三合一完整支持**（T-027）：根因: zcode 对 pi-agent 仅技能软链说明(INSTALL.md), 无深度插件; 修复: 新增 adapters/platforms/pi/extension 三合一插件(/zcode 命令透传 + 4 个只读工具 zcode_ticket_context/memory_search/skills_list/glossary + package.json pi 键打包), 根 package.json 加 pi-package, INSTALL/README/AGENTS/术语表同步; 验证: 84 用例全绿, tsx 验证 runZcode, pi -e 加载成功, zcode_skills_list/zcode_ticket_context 工具被 LLM 真实调用, pi install 打包识别成功
+
 ## [0.3.14] - 2026-08-07
 
 **zcode update 自更新命令**（T-025）：根因: CLI 无自更新命令, 用户需手动 git pull + 重装多步; 实现: 新增 adapters/zcode/update.py + zcode update [--dry-run]——前置检查(工作区干净, 未提交改动拒绝防覆盖)→ git fetch(失败附网络/凭据提示)→ rev-list 已最新退出→ pull --ff-only→ 当前解释器 pip install -e→ npm link(可选, 失败仅警告)→ scripts/install.sh→ 变更摘要; 每步失败即停报告已完成步骤+重跑指引; 验证: 84 用例绿(新增 6: precheck 脏/净/dry-run 零执行/成功序列/已最新退出/失败中止), 真机 dry-run 与脏工作区拦截实测通过

@@ -3,20 +3,12 @@
 > 由 zcode ticket status 自动生成，请勿手写。Agent 先读本文件即可了解全貌；细节按需再读对应文件。
 
 ## 关键状态
-Phase: commit
-Current Ticket: T-027
+Phase: analyze
+Current Ticket: 
 Domain: AI 技能运行时: 四层架构(适配层/技能库/编排工作流/记忆迭代), 中文文档, Python CLI 零依赖风格
 TestCommand: .venv/bin/python -m unittest discover -s adapters/tests
 BranchMode: auto
 术语表: 16 条 (docs/UBIQUITOUS_LANGUAGE.md)
-
-## 当前工单 T-027 (pi-agent 插件三合一完整支持) [review]
-## T-027 pi-agent 插件三合一完整支持
-Resolution: 根因: zcode 对 pi-agent 仅技能软链说明(INSTALL.md), 无深度插件; 修复: 新增 adapters/platforms/pi/extension 三合一插件(/zcode 命令透传 + 4 个只读工具 zcode_ticket_context/memory_search/skills_list/glossary + package.json pi 键打包), 根 package.json 加 pi-package, INSTALL/README/AGENTS/术语表同步; 验证: 84 用例全绿, tsx 验证 runZcode, pi -e 加载成功, zcode_skills_list/zcode_ticket_context 工具被 LLM 真实调用, pi install 打包识别成功
-Status: review
-
-- [ ] 新增 adapters/platforms/pi/extension 深度插件：/zcode 命令透传 + zcode_* 只读工具注册 + Pi Package 打包（package.json 加 pi 键）。
-
 
 ## 工单
 - [ ] **T-001** Phase 4: 其余平台深度插件 — backlog
@@ -45,7 +37,7 @@ Status: review
 - [x] **T-024** zcode version 子命令 + __version__ 第五处版本统一 — done  ✓已记录修复
 - [x] **T-025** zcode update 自更新命令 — done  ✓已记录修复
 - [ ] **T-026** zcode git 交互式 TUI 仓库管理 — backlog
-- [ ] **T-027** pi-agent 插件三合一完整支持 — review  ✓已记录修复
+- [x] **T-027** pi-agent 插件三合一完整支持 — done  ✓已记录修复
 
 ## 阻塞
 (无)
