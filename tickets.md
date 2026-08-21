@@ -134,3 +134,14 @@ Status: done
 - [ ] - [ ] 实现: zcode update [--dry-run]——前置检查(仓库根/工作区干净/分支 main)→ git fetch 对比(已最新退出)→ git pull --ff-only → 当前解释器 pip install -e adapters → npm link(失败仅警告) → bash scripts/install.sh 刷新技能/钩子 → 输出变更摘要(git log 最近条目)
 - [ ] 每步失败即停并报告已完成步骤与手动处理提示; 非 TTY 直接执行
 - [ ] 验证: --dry-run 只打印不执行; 脏工作区拒绝; 更新后 zcode version/测试可用
+
+## T-026 zcode git 交互式 TUI 仓库管理
+Status: backlog
+
+- [ ] 新增 zcode git 子命令族：逻辑层 gitcore.py 零依赖封装 + textual TUI 全屏界面 + 非 TTY 逐条命令后备。面板覆盖 status/diff/commit/log/branch/stash/remote/rebase 进阶/cherry-pick/tag/reset/revert/冲突解决。
+
+## T-027 pi-agent 插件三合一完整支持
+Resolution: 根因: zcode 对 pi-agent 仅技能软链说明(INSTALL.md), 无深度插件; 修复: 新增 adapters/platforms/pi/extension 三合一插件(/zcode 命令透传 + 4 个只读工具 zcode_ticket_context/memory_search/skills_list/glossary + package.json pi 键打包), 根 package.json 加 pi-package, INSTALL/README/AGENTS/术语表同步; 验证: 84 用例全绿, tsx 验证 runZcode, pi -e 加载成功, zcode_skills_list/zcode_ticket_context 工具被 LLM 真实调用, pi install 打包识别成功
+Status: review
+
+- [ ] 新增 adapters/platforms/pi/extension 深度插件：/zcode 命令透传 + zcode_* 只读工具注册 + Pi Package 打包（package.json 加 pi 键）。
