@@ -337,3 +337,5 @@
 2026-08-21 17:37:39 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260821-173736-verify-review.txt
 2026-08-21 17:37:39 | phase | verify -> review --green
 2026-08-21 17:37:46 | transition | T-026: in-progress -> review
+2026-08-21 17:38:10 | resolve | T-026 (zcode git 交互式 TUI 仓库管理)
+2026-08-21 17:38:10 | phase | review -> commit --pass
