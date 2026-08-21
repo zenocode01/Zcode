@@ -341,3 +341,16 @@
 2026-08-21 17:38:10 | phase | review -> commit --pass
 2026-08-21 17:38:26 | branch | merged vibe/T-026 -> main and deleted
 2026-08-21 17:38:26 | close | T-026 (zcode git 交互式 TUI 仓库管理)
+2026-08-21 17:46:14 | add | T-028 (zcode release 版本迭代工具)
+2026-08-21 17:46:41 | branch | created vibe/T-028 (from main)
+2026-08-21 17:46:41 | begin | T-028 (zcode release 版本迭代工具)
+2026-08-21 17:46:41 | phase | analyze -> plan
+2026-08-21 17:46:41 | phase | plan -> implement
+2026-08-21 17:51:10 | gloss | add 版本发布
+2026-08-21 17:51:11 | gloss | add 未发布区块
+2026-08-21 17:51:52 | phase | implement -> verify
+2026-08-21 17:51:57 | verify | verify -> review exit=0 [.venv/bin/python -m unittest discover -s adapters/tests] 证据: /home/zeno/ZENO/Zcode/Zcode-0.0/.vibe/evidence/20260821-175152-verify-review.txt
+2026-08-21 17:51:57 | phase | verify -> review --green
+2026-08-21 17:51:57 | transition | T-028: in-progress -> review
+2026-08-21 17:52:26 | resolve | T-028 (zcode release 版本迭代工具)
+2026-08-21 17:52:26 | phase | review -> commit --pass

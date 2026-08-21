@@ -31,6 +31,7 @@ bash scripts/install.sh
 .venv/bin/zcode ticket init <project>            # 工单驱动工作台（双状态机 + 可执行强制）
 .venv/bin/zcode ticket context                   # 接手仓库先看状态（一屏摘要，省 token）
 .venv/bin/zcode git                              # git 仓库管理（TTY 进全屏 TUI，非 TTY 逐条命令）
+.venv/bin/zcode release minor                    # 版本迭代（bump 版本号 + 归并 CHANGELOG + 打 tag；--dry-run 预览）
 ```
 
 > 本项目自身也启用了工单工作台：接手先 `zcode ticket context`（或读 `STATUS.md`），状态推进一律走命令，提交由 pre-commit hook 强制校验。

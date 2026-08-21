@@ -380,7 +380,7 @@ class TestLifecycle(TicketBase):
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
         changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
         self.assertIn("T-001", changelog)
-        self.assertIn("## [0.5.1]", changelog)  # 版本自动 bump
+        self.assertIn("## [未发布]", changelog)  # 写入未发布区块，不再 bump 版本号
         # 状态文件已自动提交：工作区无状态文件残留
         _, out = ticket.run_git(root, ["status", "--porcelain"])
         self.assertFalse(any("tickets.md" in l or "STATUS.md" in l for l in out))
@@ -409,7 +409,7 @@ class TestLifecycle(TicketBase):
         changelog = root / "CHANGELOG.md"
         self.assertTrue(changelog.exists())  # 自动创建，不再静默跳过
         text = changelog.read_text(encoding="utf-8")
-        self.assertIn("## [0.1.0]", text)  # 基线版本
+        self.assertIn("## [未发布]", text)  # 基线为未发布区块
         self.assertIn("T-001", text)
         self.assertEqual(ticket.get_ticket(root / "tickets.md", "T-001").status, "done")
 
