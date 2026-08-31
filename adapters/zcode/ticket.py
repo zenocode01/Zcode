@@ -768,6 +768,32 @@ def cmd_begin(args: list[str]) -> None:
     print("进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表")
 
 
+def _sync_ticket_status(root: Path, ctx_file: Path, phase: str) -> None:
+    """Phase 推进后自动同步 ticket Status，避免两状态机解耦导致遗忘 transition。
+
+    同步规则:
+    - Phase → review  : ticket in-progress → review（自动过渡，无需手动 transition）
+    - Phase → commit  : ticket 必须是 review，若仍在 in-progress 则自动补过渡
+    - Phase → analyze/plan/implement/verify : 保持 in-progress（begin 已设）
+    """
+    tickets_file = root / "tickets.md"
+    cur = get_anchor(ctx_file, "Current Ticket")
+    if not cur:
+        return
+    t = get_ticket(tickets_file, cur)
+    if t is None:
+        return
+    target_status: str | None = None
+    if phase == "review" and t.status == "in-progress":
+        target_status = "review"
+    elif phase == "commit" and t.status == "in-progress":
+        target_status = "review"  # commit 前必须先 review，自动补过渡
+    if target_status and ticket_legal(t.status, target_status):
+        set_ticket_status(tickets_file, cur, target_status)
+        add_log(root, "auto-sync", f"{t.status} -> {target_status} (Phase={phase})")
+        print(f"✓ 自动同步 {cur}: {t.status} → {target_status}")
+
+
 def cmd_phase(args: list[str]) -> None:
     if len(args) < 1:
         raise TicketError("用法: zcode ticket phase <name> [--green|--red|--pass|--reject|--force]")
@@ -790,6 +816,8 @@ def cmd_phase(args: list[str]) -> None:
     if frm == "verify" and test_cmd:
         verify_evidence(root, frm, to, test_cmd)
     set_anchor(ctx_file, "Phase", to)
+    # 自动同步 ticket Status，避免遗忘 transition（两状态机解耦的兜底）
+    _sync_ticket_status(root, ctx_file, to)
     flags = [a for a in args if a.startswith("--")]
     add_log(root, "phase", f"{frm} -> {to}{' ' + ' '.join(flags) if flags else ''}")
     cmd_status(["-q"], root=root)

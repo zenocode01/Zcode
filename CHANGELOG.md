@@ -4,6 +4,8 @@
 
 ## [未发布]
 
+**phase 命令自动同步 ticket Status**：根因: cmd_phase 只更新 CONTEXT.md 的 Phase 锚点，不更新 tickets.md 的 ticket Status；两状态机完全解耦，用户 phase review --green 后忘记手动 transition T-XXX review，pre-commit hook 拦截提交; 修复: 新增 _sync_ticket_status()——Phase→review 时自动将 ticket 从 in-progress 过渡到 review，Phase→commit 时自动补过渡; 验证: 待回归
+
 ## [0.4.1] - 2026-08-31
 
 **新增 find-skills 核心技能**：根因: 用户无法从 skills.sh 生态搜索安装新技能; 修复: 新增 skills/find-skills/SKILL.md(标准版)+SKILL.local.md(本地精简版), 从 vercel-labs/skills 移植, 支持 npx skills find/add/update 搜索验证安装技能; 同步更新 marketplace.json(count 12→13, version 0.4.1)、skills/README.md(技能清单加 find-skills)、ask-zcode/SKILL.md(入口匝道加 find-skills 路由); 验证: marketplace.json 格式校验通过, 13 技能清单完整
