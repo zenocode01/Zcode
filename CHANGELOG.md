@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [未发布]
+
+**更新 ask commit 提示**：移除过时的「手动 transition」说明，补充 phase review 自动同步行为。
+
 ## [0.4.2] - 2026-08-31
 
 **phase 命令自动同步 ticket Status**：根因: cmd_phase 只更新 CONTEXT.md 的 Phase 锚点，不更新 tickets.md 的 ticket Status；两状态机完全解耦，用户 phase review --green 后忘记手动 transition T-XXX review，pre-commit hook 拦截提交; 修复: 新增 _sync_ticket_status()——Phase→review 时自动将 ticket 从 in-progress 过渡到 review，Phase→commit 时自动补过渡; 验证: 待回归
