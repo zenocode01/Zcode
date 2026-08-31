@@ -2,18 +2,16 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
-## [未发布]
+## [0.4.2] - 2026-08-31
 
 **phase 命令自动同步 ticket Status**：根因: cmd_phase 只更新 CONTEXT.md 的 Phase 锚点，不更新 tickets.md 的 ticket Status；两状态机完全解耦，用户 phase review --green 后忘记手动 transition T-XXX review，pre-commit hook 拦截提交; 修复: 新增 _sync_ticket_status()——Phase→review 时自动将 ticket 从 in-progress 过渡到 review，Phase→commit 时自动补过渡; 验证: 待回归
 
 ## [0.4.1] - 2026-08-31
-
 **新增 find-skills 核心技能**：根因: 用户无法从 skills.sh 生态搜索安装新技能; 修复: 新增 skills/find-skills/SKILL.md(标准版)+SKILL.local.md(本地精简版), 从 vercel-labs/skills 移植, 支持 npx skills find/add/update 搜索验证安装技能; 同步更新 marketplace.json(count 12→13, version 0.4.1)、skills/README.md(技能清单加 find-skills)、ask-zcode/SKILL.md(入口匝道加 find-skills 路由); 验证: marketplace.json 格式校验通过, 13 技能清单完整
 
 **使用手册补充 git/release/pi 插件说明**（T-029）：根因: 使用手册未覆盖 0.4.0 新增的 git/release/pi 插件三功能; 修复: docs/使用手册.md 新增第 7 节(zcode git 可视化+逐条命令)/第 8 节(zcode release 版本发布)/第 9 节(pi-agent 插件), 原 FAQ/速查表顺延为 10/11, 同步第 0 节导览与速查表、FAQ; 验证: 章节编号 0-11 连续, 速查表含 git/release 命令
 
 ## [0.4.0] - 2026-08-21
-
 **zcode release 版本迭代工具**（T-028）：根因: 版本号散落五处人工维护+CHANGELOG 关单自动 bump 与代码版本脱节(0.3.16 vs 0.3.8)+marketplace.py 三处写死 0.1.0; 修复: 新增 release.py(zcode release patch/minor/major/X.Y.Z, 统一写五处版本号+归并未发布区块为正式版本+打 tag+可选 push)+marketplace.py 三处 0.1.0 改读 __version__+ticket._auto_changelog 改写未发布区块不再 bump+cli 注册 release; 验证: 123 用例全绿(新增 12 release), zcode release --dry-run 输出计划, marketplace build version=0.3.8, close 写未发布区块测试更新
 
 **zcode git 交互式 TUI 仓库管理**（T-026）：根因: zcode 无面向用户的 git 管理命令, git 能力仅内部使用(update/ticket/hooks); 修复: 新增 gitcore.py 零依赖逻辑层(status/log/branch/stash/diff 解析+写操作封装+危险命令识别) + gitcli.py 非 TTY 逐条命令彩色渲染 + gittui.py textual 全屏 TUI(8 面板+空格暂存+冲突 ours/theirs 解决) + cli.py 注册 TTY 分发 + pyproject 加 textual 依赖; 验证: 111 用例全绿(新增 21 gitcore+6 gitcli), textual 8.2.8 兼容 Python 3.14, TUI 冒烟 8 面板渲染+stage/unstage+冲突 ours 解决, 非 TTY zcode git status/log 正常
