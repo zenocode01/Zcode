@@ -1,0 +1,20 @@
+{
+  "name": "zcode-plugins",
+  "interface": {
+    "displayName": "Zcode 技能库"
+  },
+  "plugins": [
+    {
+      "name": "zcode",
+      "source": {
+        "source": "local",
+        "path": "/home/zeno/ZENO/Zcode/Zcode-0.0"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "OFF"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

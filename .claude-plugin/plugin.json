@@ -1,0 +1,19 @@
+{
+  "name": "zcode",
+  "version": "0.4.1",
+  "description": "Zcode 技能库：ask-zcode、brainstorming、code-review、diagnose、evoskills、grill-me、handoff、improve-arch、subagent-driven-development、tdd、workbench、writing-plans",
+  "skills": [
+    "ask-zcode",
+    "brainstorming",
+    "code-review",
+    "diagnose",
+    "evoskills",
+    "grill-me",
+    "handoff",
+    "improve-arch",
+    "subagent-driven-development",
+    "tdd",
+    "workbench",
+    "writing-plans"
+  ]
+}

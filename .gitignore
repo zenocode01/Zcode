@@ -1,0 +1,19 @@
+# mem0 源码：仅作记忆系统参考学习用，不提交到 git
+/mem0/
+
+# Python 虚拟环境
+/.venv/
+
+# Python 构建产物
+__pycache__/
+*.egg-info/
+
+# 技能运行时记忆（经验/改进/项目快照，本地运行数据不入库）
+.memory/
+# 例外：_template 的记忆模板作为规范入库
+!skills/_template/.memory/
+!skills/_template/.memory/**
+
+# 防护：防止未展开 ~ 的路径误入仓库（曾发生）
+~
+

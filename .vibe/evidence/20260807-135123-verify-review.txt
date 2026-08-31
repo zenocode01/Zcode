@@ -1,0 +1,443 @@
+command: .venv/bin/python -m unittest discover -s adapters/tests
+exit: 0
+--- output ---
+== 工作流: f — d ==
+  [1] [command] exit 3
+    $ exit 3
+    命令失败 (exit=3)
+== 工作流: r — d ==
+  [1] [command] echo SHOULD_NOT_RUN
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp4bs4h3i3/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已新增 T-001：x（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (x) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+commit 被 zcode 拦截:
+  - Phase 是 'analyze'，提交前需到 verify/review/commit（先 zcode ticket phase verify）
+  - 当前工单 T-001 还在 in-progress，需流转到 review/done 再提交
+  - 术语表为空（Domain 已填写），用 zcode ticket gloss add <术语> <定义> 记录
+处理: zcode ticket phase review --green; zcode ticket transition T-001 review; zcode ticket resolve T-001 <修复说明>; zcode ticket status; zcode ticket close T-001
+
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpmkizdsqw/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：x（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (x) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+commit 被 zcode 拦截:
+  - TestCommand 运行失败 (exit 1)，提交被拦截: exit 1
+处理: zcode ticket phase review --green; zcode ticket transition T-001 review; zcode ticket resolve T-001 <修复说明>; zcode ticket status; zcode ticket close T-001
+（测试门禁可用 git config zcode.test-gate false 临时关闭）
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp4yvbqhg7/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：x（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (x) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp3ltjnd9r/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：x（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (x) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp_mgv7t_a/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：x（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (x) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+已跳过 1 个已存在文件（不覆盖）；只新增缺失文件: p/AGENTS.md
+✓ 已自动追加「工单工作台协议」段到 AGENTS.md（原内容保留）
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpao98sghp/p
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+已跳过 8 个已存在文件（不覆盖）；只新增缺失文件: ADR/README.md, docs/CONTEXT.md, docs/UBIQUITOUS_LANGUAGE.md, hooks/pre-commit, p/.gitignore, p/AGENTS.md, p/STATUS.md, p/tickets.md
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpao98sghp/p
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+已跳过 1 个已存在文件（不覆盖）；只新增缺失文件: existing/AGENTS.md
+✓ 已自动追加「工单工作台协议」段到 AGENTS.md（原内容保留）
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpa0y19zu7/existing
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp94tgvusy/g
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已写入 docs/CONTEXT.md
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpecn9pxw2/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpq3g63bl5/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已新增 T-001：带分支工单（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (带分支工单) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+✓ CHANGELOG 已自动记录 T-001（## [0.1.0] - 2026-08-07）
+✓ T-001 (带分支工单) → done，Phase 复位 analyze
+✓ 状态文件已自动提交，工作区干净
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpcadh6mcl/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+✓ CHANGELOG 已自动记录 T-001（## [0.5.1] - 2026-08-07）
+✓ T-001 (实现 foo) → done，Phase 复位 analyze
+✓ 状态文件已自动提交，工作区干净
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpn7t2llid/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已新增 T-001：分支独有脏文件（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (分支独有脏文件) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpcrmu5a_k/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已新增 T-001：分支独有 CHANGELOG（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (分支独有 CHANGELOG) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+✓ CHANGELOG 已自动记录 T-001（## [0.1.0] - 2026-08-07）
+✓ T-001 (分支独有 CHANGELOG) → done，Phase 复位 analyze
+✓ 状态文件已自动提交，工作区干净
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpkrgi9u_3/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+✓ T-001 (实现 foo) → done，Phase 复位 analyze
+✓ 状态文件已自动提交，工作区干净
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpxwosw53e/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+✓ CHANGELOG 已自动记录 T-001（## [0.1.0] - 2026-08-07）
+✓ T-001 (实现 foo) → done，Phase 复位 analyze
+✓ 状态文件已自动提交，工作区干净
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp7yxc5jrq/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+✓ CHANGELOG 已自动记录 T-001（## [0.1.0] - 2026-08-07）
+✓ T-001 (实现 foo) → done，Phase 复位 analyze
+✓ 状态文件已自动提交，工作区干净
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmprdumi0fq/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp_dqtpk6p/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已新增 T-001：依赖 A（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已新增 T-002：依赖 B（Status: backlog）
+拾取: zcode ticket begin T-002
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmplf89bav0/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpwcy63s04/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+✓ T-001: in-progress → review
+✓ 已记录 T-001 修复情况
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+✓ Phase: review → commit
+提示: 提交代码，然后 zcode ticket close 当前工单
+✓ CHANGELOG 已自动记录 T-001（## [0.1.0] - 2026-08-07）
+✓ T-001 (实现 foo) → done，Phase 复位 analyze
+✓ 状态文件已自动提交，工作区干净
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpziz7dfvw/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp7esl2d_s/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已新增 T-001：x（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (x) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+守卫失败: analyze→plan 需要 docs/CONTEXT.md 的 Domain: 非空（记录你对项目的领域理解）
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp_egr4hhr/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「CLI」
+✓ 已新增 T-001：实现 foo（Status: backlog）
+拾取: zcode ticket begin T-001
+✓ 已拾取 T-001 (实现 foo) → in-progress，Phase=analyze
+进入 analyze：更新 docs/CONTEXT.md 的 Domain:，新术语用 zcode ticket gloss add 记入术语表
+✓ Phase: analyze → plan
+提示: 确保 tickets.md 有本次工单及其任务项
+✓ Phase: plan → implement
+提示: 实现工单内容
+✓ Phase: implement → verify
+提示: 运行测试，绿后 zcode ticket phase review --green
+守卫失败: verify→review 需要 --green（验证绿）
+✓ Phase: verify → review
+提示: 对照标准+规范自查，通过后 zcode ticket phase commit --pass
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmp_jvjh7vk/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+✓ 已记录术语「术语」
+✓ 已新增 T-001：一张工单（Status: backlog）
+拾取: zcode ticket begin T-001
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpybo7cmvs/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpq1707e17/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+已 git init
+✓ pre-commit hook 已安装 (core.hooksPath = .vibe/hooks)
+✓ 工单工作台已就绪: /tmp/tmpqz_80gwz/proj
+  已登记到项目注册表 (~/.vibe/projects.json)
+下一步: zcode ticket add "标题" 登记工单，然后 zcode ticket begin T-001 开工
+....................................................................
+----------------------------------------------------------------------
+Ran 68 tests in 0.680s
+
+OK

@@ -1,0 +1,78 @@
+# 通用语言词汇表
+
+本文件记录项目的领域术语，消除歧义。当术语有多个含义、命名不清或需要沉淀时，在此补充词条。
+词条格式机器可解析（`## 术语` + `- **含义**：` 一行），由 `zcode ticket gloss` 命令管理：
+`zcode ticket gloss` 列出、`zcode ticket gloss <术语>` 查询、`zcode ticket gloss add <术语> <定义>` 记录。
+
+### 词条格式
+
+```markdown
+## 术语名
+- **含义**：一句话定义
+- **别名/冲突**：其他叫法或需要澄清的歧义
+```
+
+<!-- 在此补充词条（或使用 zcode ticket gloss add <术语> <定义>） -->
+
+## Layer
+- **含义**：四层架构的分层: Layer 0 适配/1 技能/2 编排/3 记忆迭代
+
+## workbench
+- **含义**：工单驱动开发工作台(zcode ticket): 双状态机+可执行强制, 移植自 vibe-workbench
+
+## 工单
+- **含义**：一件待办事项, 编号 T-XXX, 状态机管理(backlog/in-progress/review/done/blocked)
+
+## 阶段
+- **含义**：工单固定流程: analyze→plan→implement→verify→review→commit
+
+## 守卫
+- **含义**：流程中不许跳步的强制检查(如无测试不许 verify 通过)
+
+## 锚点
+- **含义**：文档中机器可读的关键行(Phase:/Status:/Resolution: 等), 命令维护
+
+## 状态机
+- **含义**：Agent 阶段机+工单生命周期机, 合法跃迁由命令校验
+
+## 会话接力
+- **含义**：handoff: 交接班快照, 让未来会话恢复目标/决策/验证
+
+## 测试门禁
+- **含义**：pre-commit 提交前真实跑测试, 失败拦截; git config zcode.test-gate false 可关
+
+## 变更日志
+- **含义**：CHANGELOG.md: 每次工单 close 自动补录(版本自动 bump, 文件不存在自动创建基线)
+
+## 适配层
+- **含义**：Layer 0: 万能插座, 一套技能软链 8 平台
+
+## 记忆层
+- **含义**：Layer 3: mem0 语义记忆, 与术语表互补(自由事实检索)
+
+## 验证证据
+- **含义**：.vibe/evidence/: TestCommand 真实执行的退出码+输出留痕
+
+## close收尾
+- **含义**：close 自动: 先合并分支再 CHANGELOG 补录(缺则建基线)+状态文件提交, 工作区常净
+
+## 命令透传
+- **含义**：pi-agent 深度插件将 zcode CLI 子命令经 /zcode 命令转发到本机执行、结果回显到 pi 界面，供人手动调用
+
+## pi 插件
+- **含义**：pi-agent 的 TypeScript 扩展（Extension），可注册命令/工具/事件，经 Pi Package 打包分发；Zcode 提供三合一插件（命令透传 + 只读工具 + package 打包）
+
+## TUI
+- **含义**：文本用户界面（Text User Interface）：在终端内的全屏交互界面，zcode git 用 textual 实现，光标/快捷键操作 git 仓库
+
+## porcelain v2
+- **含义**：git status 的机器可读输出格式（--porcelain=v2），zcode gitcore 据此解析文件状态/分支/领先落后
+
+## 冲突解决
+- **含义**：merge/rebase 产生冲突时逐文件选择保留本地(ours)/远端(theirs)/手动编辑，解决后 add 并继续提交或变基
+
+## 版本发布
+- **含义**：zcode release 命令：统一 bump 五处版本号 + 归并 CHANGELOG 未发布条目为正式版本 + 打 git tag，可选推送
+
+## 未发布区块
+- **含义**：CHANGELOG 顶部的未发布变更暂存区（## [未发布]）：关单时写入工单条目，release 时归并为正式版本号
