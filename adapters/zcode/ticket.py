@@ -1374,7 +1374,8 @@ def cmd_ask(args: list[str]) -> None:
         (r"^(install|hook|钩子)$",
          ["→ 安装 pre-commit hook：zcode ticket install（git config core.hooksPath = .vibe/hooks）"]),
         (r"^(commit|提交|拦截|blocked.*commit)$",
-         ["→ 提交被拦：看报错。Phase 未到 verify/review/commit → 先 zcode ticket phase verify；工单 in-progress → 先 zcode ticket transition T-XXX review；STATUS.md 过期 → 先 zcode ticket status。"]),
+         ["→ 提交被拦：看报错。Phase 未到 verify/review/commit → 先 zcode ticket phase verify；STATUS.md 过期 → 先 zcode ticket status。",
+          "  注：phase review --green 会自动同步 ticket in-progress→review，无需手动 transition。"]),
     ]
     matched = False
     for pattern, lines in routes:
