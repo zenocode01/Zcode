@@ -7,14 +7,14 @@
 | 技能 | 类别 | 说明 | 版本 |
 |------|------|------|------|
 | `grill-me` | 需求对齐 | 设计树逐轮拷问，挖沉默假设（仅用户调用） | 标准 + 本地精简 |
-| `brainstorming` | 需求对齐 | 创造性工作前必用：澄清→方案→批准→设计文档 | 标准 + 本地精简 |
-| `writing-plans` | 规划 | 拆文件结构清晰、bite-sized、每任务带测试的计划 | 标准 + 本地精简 |
-| `tdd` | 测试驱动 | 红绿重构流程 | 标准 + 本地精简 |
+| `brainstorming` | 需求对齐 | 创造性工作前必用：澄清→方案→批准→设计文档（+ visual-companion.md 可视化伴侣 + spec-document-reviewer-prompt.md 规格审查模板） | 标准 + 本地精简 |
+| `writing-plans` | 规划 | 拆文件结构清晰、bite-sized、每任务带测试的计划（+ plan-document-reviewer-prompt.md 计划审查模板） | 标准 + 本地精简 |
+| `tdd` | 测试驱动 | 红绿重构流程（+ mocking.md 模拟边界指南 + tests.md 好坏测试范例） | 标准 + 本地精简 |
 | `diagnose` | 调试 | 紧致反馈回路 + 排序假设 + 回归测试 | 标准 + 本地精简 |
 | `code-review` | 代码审查 | SHA 派审 + 分级反馈处理 | 标准 + 本地精简 |
-| `improve-arch` | 架构治理 | 浅模块→深模块，候选报告 + 逐项决策（仅用户调用） | 标准 + 本地精简 |
+| `improve-arch` | 架构治理 | 浅模块→深模块，候选报告 + 逐项决策（+ HTML-REPORT.md 报告格式指南） | 标准 + 本地精简 |
 | `handoff` | 会话接力 | 会话开始读快照恢复、结束存快照（目标/决策/验证） | 标准 + 本地精简 |
-| `subagent-driven-development` | 子代理编排 | 每任务派独立子代理 + 逐任务审查 + 5 轮修复 cap | 标准 + 本地精简 |
+| `subagent-driven-development` | 子代理编排 | 每任务派独立子代理 + 逐任务审查 + 5 轮修复 cap（implementer/task-reviewer/re-review 提示词模板 + scripts/ 工具） | 标准 + 本地精简 |
 | `evoskills` | 自我迭代 | 监控→捕获→评估→迭代→验证→发布，达阈值改进技能 | 标准 + 本地精简 |
 | `workbench` | 工单驱动 | 双状态机 + 可执行强制：begin/phase/transition/resolve/close（zcode ticket） | 标准 + 本地精简 |
 | `find-skills` | 技能发现 | 搜索 skills.sh 生态，验证质量后安装合适的技能 | 标准 + 本地精简 |
