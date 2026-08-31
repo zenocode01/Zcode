@@ -3,7 +3,7 @@
   "interface": {
     "displayName": "Zcode 技能库"
   },
-  "version": "0.4.3",
+  "version": "0.4.4",
   "count": 13,
   "skills": [
     {
