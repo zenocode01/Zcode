@@ -2,6 +2,10 @@
 
 本项目从构思到四层架构落地（Phase 1-4）的变更记录。
 
+## [未发布]
+
+**同步上游 Superpowers/Matt Pocock 技能更新**：根因: 本地技能库长期未同步上游，缺少新增的子文档和提示词模板; 修复: 选择性合并上游高价值新增内容（保留中文适配版 SKILL.md/SKILL.local.md 不动）——tdd/mocking.md + tests.md、brainstorming/visual-companion.md + spec-document-reviewer-prompt.md + scripts/、writing-plans/plan-document-reviewer-prompt.md、improve-arch/HTML-REPORT.md、subagent-driven-development 重写三提示词模板 + scripts/; 验证: 18 文件新增/更新，2683 行新增
+
 ## [0.4.3] - 2026-08-31
 
 **更新 ask commit 提示**：移除过时的「手动 transition」说明，补充 phase review 自动同步行为。
